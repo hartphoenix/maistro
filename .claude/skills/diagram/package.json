@@ -1,0 +1,7 @@
+{
+  "name": "diagram",
+  "private": true,
+  "dependencies": {
+    "beautiful-mermaid": "latest"
+  }
+}

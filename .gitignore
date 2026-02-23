@@ -1,0 +1,7 @@
+node_modules/
+.env
+bun.lock
+bun.lockb
+.DS_Store
+.claude/skills/diagram/output/*
+!.claude/skills/diagram/output/.gitkeep
