@@ -79,16 +79,16 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `CLAUDE.md` (template, replaced by intake) | Done |
 | `.gitignore` (learning/, .hopper/) | Done |
 | `learning/` + `learning/session-logs/` (with .gitkeep) | Done |
-| `.hopper/` (with .gitkeep) | Missing |
-| `.claude/skills/intake/` | Missing |
-| `.claude/skills/session-review/` | Missing |
-| `.claude/skills/startwork/` | Missing |
-| `.claude/skills/quick-ref/` | Missing |
-| `.claude/skills/debugger/` | Missing |
-| `.claude/skills/lesson-scaffold/` | Missing |
-| `.claude/references/developmental-model.md` | Missing |
-| `.claude/references/scoring-rubric.md` | Missing |
-| `.claude/references/context-patterns.md` | Missing |
+| `.hopper/` (with .gitkeep) | Done |
+| `.claude/skills/intake/` | Done |
+| `.claude/skills/session-review/` | Done |
+| `.claude/skills/startwork/` | Done |
+| `.claude/skills/quick-ref/` | Done |
+| `.claude/skills/debugger/` | Done |
+| `.claude/skills/lesson-scaffold/` | Done |
+| `.claude/references/developmental-model.md` | Done |
+| `.claude/references/scoring-rubric.md` | Done |
+| `.claude/references/context-patterns.md` | Done |
 | `.claude/feedback.json` (pre-populated for testers) | Done |
 | `gh` CLI documented as prerequisite in README | Done |
 | Create `rhhart/maestro-signals` repo | Missing (pre-deploy checkpoint) |
