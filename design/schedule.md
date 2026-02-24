@@ -1,6 +1,6 @@
 # Schedule & Task Tracker
 
-**Week 4 build:** 2026-02-24 → 2026-03-01 (demo Saturday)
+**Week 4 build:** 2026-02-23 → 2026-02-28 (demo Saturday)
 
 Living tracker for milestones and tasks. Specs live in their respective
 design docs; this file tracks execution status.
@@ -11,12 +11,12 @@ design docs; this file tracks execution status.
 
 | Day | Target | Status |
 |-----|--------|--------|
-| Mon 2/24 | PRD submitted. Group pitch sent. Both repos scaffolded. Coordination layer extraction started. | Done |
-| Tue 2/25 | Personal harness installable with intake interview + data hopper. Coordination layer extracted and generalized — startwork, triage, dependency protocol all configurable. Team intake flow working. | In progress |
-| Wed 2/26 | Coordination layer installable. At least one team running it if collaborators signed on. Personal /startwork working. Iterate on early tester feedback. | Planned |
-| Thu 2/27 | Signal return path working end-to-end. Both tools documented with README + quickstart. Compound engineer skill (stretch) if coordination stable. | Planned |
-| Fri 2/28 | Compounding indicators (stretch). Demo prep. Everything peer-tested. | Planned |
-| Sat 3/1 | Demo. | Planned |
+| Mon 2/23 | PRD submitted. Group pitch sent. Both repos scaffolded. Coordination layer extraction started. | Done |
+| Tue 2/24 | Personal harness installable with intake interview + data hopper. Coordination layer extracted and generalized — startwork, triage, dependency protocol all configurable. Team intake flow working. | In progress |
+| Wed 2/25 | Coordination layer installable. At least one team running it if collaborators signed on. Personal /startwork working. Iterate on early tester feedback. | Planned |
+| Thu 2/26 | Signal return path working end-to-end. Both tools documented with README + quickstart. Compound engineer skill (stretch) if coordination stable. | Planned |
+| Fri 2/27 | Compounding indicators (stretch). Demo prep. Everything peer-tested. | Planned |
+| Sat 2/28 | Demo. | Planned |
 
 ---
 
