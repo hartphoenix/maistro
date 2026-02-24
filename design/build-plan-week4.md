@@ -1,7 +1,7 @@
 # Build Plan — Week 4
 
 **Week:** 2026-02-23 → 2026-02-28 (demo Saturday)
-**Updated:** 2026-02-24
+**Updated:** 2026-02-24 (evening)
 
 Execution plan for the week. Task status lives in `design/schedule.md`;
 this document captures the build decisions and current state.
@@ -26,12 +26,12 @@ this document captures the build decisions and current state.
 
 4. **Privacy** — `.gitignore` updated: `learning/`, `.hopper/*`.
 
-5. **Directory restructure** — `daily-notes/` → `learning/`.
+5. **Directory restructure** — `session-logs/` → `learning/`.
    All learning state now lives under `learning/`:
    - `learning/goals.md` — aspirational states of being
    - `learning/arcs.md` — developmental lines serving goals
    - `learning/current-state.md` — concept scores, gap types
-   - `learning/daily-notes/` — session logs
+   - `learning/session-logs/` — session review logs
    Updated across: intake, session-review, lesson-scaffold, startwork
    spec, harness-features, .gitignore.
 
@@ -60,18 +60,44 @@ this document captures the build decisions and current state.
      hopper failure degrades gracefully (accelerant, not gate)
    - User communication during wait times
 
-### Remaining today
+9. **Session-review ↔ intake integration**
+   - Shared scoring rubric: `.claude/references/scoring-rubric.md`.
+     Single source of truth for 0-5 scale, gap types, and evidence
+     source tags. Both skills reference it instead of defining inline.
+   - Evidence source tagging: session-review now tags every score
+     update (`session-review:quiz`, `session-review:observed`).
+     Quiz-verified scores supersede intake estimates. Tagging
+     convention defined in scoring rubric.
+   - Goals/arcs lifecycle: session-review Phase 3 now reads
+     `learning/goals.md` and `learning/arcs.md` after updating
+     current-state. Proposes updates when session evidence warrants
+     (goal achieved, arc progressed, new capability cluster emerging).
+     Human-gated — user approves, edits, or skips.
+   - Consumer interface: goals and arcs are now explicitly documented
+     as inputs to the startwork skill.
 
-9. **README + single-action initialization flow** — The onramp that
-   makes `/intake` discoverable. New user clones repo, reads README,
-   runs one command, lands in the interview.
+10. **Install package directory structure** — `package/` now ships with
+    `learning/` and `learning/session-logs/` via `.gitkeep` files. No
+    skill has to create these directories. `.gitignore` uses the same
+    `*` / `!.gitkeep` pattern as `.hopper/`.
 
-### Deferred (decide later today)
+11. **Repo rename: maistro → maestro** — Migration script
+    (`scripts/rename-to-maestro.sh`) renamed directory, updated Claude
+    config paths, verified no stale references.
 
-- Solo `/startwork` — important feature, but README + init flow may
-  be higher priority for installability
+### Remaining (pushed to Wednesday)
+
+- **README + single-action initialization flow** — The onramp that
+  makes `/intake` discoverable. New user clones repo, reads README,
+  runs one command, lands in the interview. Package README exists but
+  the init flow isn't wired.
+- **Solo `/startwork`** — Designed, consumes goals/arcs/current-state.
+  Session-review now feeds it explicitly.
+
+### Deferred
+
 - Coordination layer (team startwork, triage, dependency protocol) —
-  possible afternoon or push to Wednesday
+  pushed to Thursday. Harness depth was higher priority than breadth.
 
 ### Action items surfaced during build
 
@@ -95,6 +121,8 @@ this document captures the build decisions and current state.
 .claude/
   references/
     developmental-model.md    # static, how to analyze learning
+    scoring-rubric.md         # shared scoring scale, gap types, evidence tags
+    context-patterns.md       # context management patterns
   skills/
     intake/SKILL.md           # onboarding entry point
     intake/subagents.md       # sub-agent dispatch specs (on-demand)
@@ -105,7 +133,7 @@ learning/                     # per-user, gitignored
   goals.md                    # states of being
   arcs.md                     # developmental lines
   current-state.md            # concept scores
-  daily-notes/                # session logs
+  session-logs/               # session review logs
 
 projects/                     # per-project context (future)
 
@@ -126,7 +154,7 @@ projects/                     # per-project context (future)
 ## Wednesday–Saturday targets
 
 See `design/schedule.md` for full milestone table. Key:
-- Wed: Coordination layer installable, solo `/startwork`, early tester
-- Thu: Signal return path, README + quickstart for both tools
-- Fri: Demo prep, peer testing
+- Wed: Install package complete (README + init flow), solo `/startwork`
+- Thu: Coordination layer installable, signal return path, docs
+- Fri: Demo prep, peer testing, iterate on feedback
 - Sat: Demo

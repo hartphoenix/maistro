@@ -34,7 +34,7 @@ All local. No network calls. Fast.
 | learning/current-state.md (scores, gaps, staleness) | Where the growth edge is |
 | learning/goals.md (goal states, active projects) | Where the student is headed |
 | learning/arcs.md (developmental lines, capability clusters) | What skill sequences serve the goals |
-| learning/daily-notes/ | What happened last, unfinished threads |
+| learning/session-logs/ | What happened last, unfinished threads |
 | Project schedule (assignments, milestones, due dates) | What has a hard deadline |
 | Design docs / build checklist | What's planned but unbuilt |
 
@@ -101,7 +101,7 @@ waiting-on-external) rank below clean items at the same tier.
    new territory
 
 ### Also on your radar
-- Maistro: solo startwork design (serves a different goal —
+- Maestro: solo startwork design (serves a different goal —
   "build tools that compound learning")
 - Stale todo from Friday: error handling refactor (48h old)
 
@@ -241,7 +241,7 @@ accumulation, or schedule.
 - ~~Do current-state.md and goals.md live in a standard location?~~
   **Resolved:** All learning state lives in `learning/` —
   `learning/goals.md`, `learning/arcs.md`, `learning/current-state.md`,
-  `learning/daily-notes/`. Static analytical framework in
+  `learning/session-logs/`. Static analytical framework in
   `.claude/references/developmental-model.md`.
 - What's the reconciliation mechanism between current-state and goals?
   Arcs bridge the gap: goals decompose into arcs (capability clusters),

@@ -12,10 +12,10 @@ design docs; this file tracks execution status.
 | Day | Target | Status |
 |-----|--------|--------|
 | Mon 2/23 | PRD submitted. Group pitch sent. Both repos scaffolded. Coordination layer extraction started. | Done |
-| Tue 2/24 | Personal harness installable with intake interview + data hopper. Coordination layer extracted and generalized — startwork, triage, dependency protocol all configurable. Team intake flow working. | In progress |
-| Wed 2/25 | Coordination layer installable. At least one team running it if collaborators signed on. Personal /startwork working. Iterate on early tester feedback. | Planned |
-| Thu 2/26 | Signal return path working end-to-end. Both tools documented with README + quickstart. Compound engineer skill (stretch) if coordination stable. | Planned |
-| Fri 2/27 | Compounding indicators (stretch). Demo prep. Everything peer-tested. | Planned |
+| Tue 2/24 | Personal harness depth: intake + session-review end-to-end compatible, shared scoring rubric, evidence tagging, goals/arcs lifecycle. Install package taking shape. | Done |
+| Wed 2/25 | Install package complete (README + init flow). Solo /startwork built. Coordination layer extraction started if time. | In progress |
+| Thu 2/26 | Coordination layer installable. Signal return path end-to-end. Both tools documented. | Planned |
+| Fri 2/27 | Demo prep. Peer testing. Iterate on feedback. | Planned |
 | Sat 2/28 | Demo. | Planned |
 
 ---
@@ -29,6 +29,7 @@ design docs; this file tracks execution status.
 | Data hopper + intake interview | `design/prd.md` §MVP | Done |
 | Parameterized CLAUDE.md generation | `design/prd.md` §MVP | Done |
 | Skills out of the box (debugger, session-review, quick-ref) | `design/build-registry.md` | Done |
+| Intake ↔ session-review integration | Shared scoring rubric, evidence tagging, goals/arcs lifecycle | Done |
 | Solo /startwork | `design/startwork.md` §Solo | Designed |
 | Learning state persistence (current-state.md) | `design/harness-features.md` §P3 | Done |
 | Privacy (.gitignore learner profile) | `design/prd.md` §MVP | Done |
@@ -61,7 +62,7 @@ design docs; this file tracks execution status.
 
 | Task | Spec | Status |
 |------|------|--------|
-| Installation package | `design/prd.md` §Stretch | Not started |
+| Installation package | `design/prd.md` §Stretch | In progress (package/ has README, CLAUDE.md, .gitignore, directory structure) |
 | Solo compound engineer (weekly review) | `design/harness-features.md` §P6 | Not started |
 | Team compound engineering workflow | `coordination/commands/workflows/compound.md` | Extracted |
 | Compounding indicators | `design/harness-features.md` §P6 | Not started |

@@ -27,7 +27,7 @@ Every question gets classified on arrival. The response shape follows.
 - Answer the immediate question directly.
 - Append **one sentence** flagging the larger concept at play.
 
-The test: if giving only the narrow answer would leave Hart solving the same class of problem again next week, it's structural. Flag the pattern; don't teach it.
+The test: if giving only the narrow answer would leave the user solving the same class of problem again next week, it's structural. Flag the pattern; don't teach it.
 
 ## The One-Sentence Flag
 
@@ -36,7 +36,7 @@ This is the key design move and the only place Quick Reference touches teaching 
 When a narrow question reveals a structural gap, after giving the direct answer, add one sentence that:
 - **Names** the bigger concept ("This is closure scope — functions remember the variables from where they were defined.")
 - **Does not explain it.** One sentence. No follow-up. No "would you like to know more?"
-- **Does not ask about it.** The flag is planted. Hart decides whether to pull on the thread.
+- **Does not ask about it.** The flag is planted. The user decides whether to pull on the thread.
 
 Examples:
 - Q: "Why does my `setTimeout` callback have the wrong value of `i`?"

@@ -49,8 +49,8 @@ Skills are procedures any personality can invoke. Each skill gets its own direct
   Generate diagrams via Mermaid using [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid). Includes a script that takes a single argument (a Mermaid diagram string) and saves both an SVG and ASCII text file with the diagram.
 
 - [x] **Session Review** → `.claude/skills/session-review/`
-  End-of-session learning audit. Three-phase workflow: analyze session, quiz on 4-6 concepts (biased toward gaps), log results to daily note frontmatter + current-state.md.
-  - *Companion files:* `daily-notes/current-state.md` (learning state accumulator), daily note YAML frontmatter (session snapshots)
+  End-of-session learning audit. Three-phase workflow: analyze session, quiz on 4-6 concepts (biased toward gaps), log results to session log frontmatter + current-state.md.
+  - *Companion files:* `learning/current-state.md` (learning state accumulator), session log YAML frontmatter (session snapshots)
   - *Future consumers:* weekly-review skill (reads both), spaced-repetition skill (reads current-state.md only)
 
 - [x] **Browser QA** → `.claude/skills/browser-qa/`

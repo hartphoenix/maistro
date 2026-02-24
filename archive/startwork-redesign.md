@@ -229,7 +229,7 @@ All local. No network calls. Fast.
 | Local todo files (agent todos, checklists) | Outstanding items |
 | Current-state (was ARCS) — scores, gaps, staleness | Where the growth edge is |
 | Goals (was SkillTree) — goal states, active projects | Where the student is headed |
-| Session logs / daily notes | What happened last, unfinished threads |
+| Session logs | What happened last, unfinished threads |
 | Project schedule (assignments, milestones, due dates) | What has a hard deadline |
 | Design docs / build checklist | What's planned but unbuilt |
 
@@ -302,7 +302,7 @@ waiting-on-external) rank below clean items at the same tier.
    new territory
 
 ### Also on your radar
-- Maistro: solo startwork design (serves a different goal —
+- Maestro: solo startwork design (serves a different goal —
   "build tools that compound learning")
 - Stale todo from Friday: error handling refactor (48h old)
 
