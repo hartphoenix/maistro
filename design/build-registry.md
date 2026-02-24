@@ -29,6 +29,9 @@ each personality using the interview protocol in
 | Design Iterate | — | Built | `.claude/skills/design-iterate/` |
 | Lesson Scaffold | — | Built | `.claude/skills/lesson-scaffold/` |
 | Design Skill | — | Built | `.claude/skills/design-skill/` |
+| Startwork | — | Built | `.claude/skills/startwork/` |
+| Project Brainstorm | — | Planned | Solo version: takes learner goals + growth edge, explores project ideas, produces project brief with schedule, definitions of done, and requirements. Adapt from `coordination/commands/workflows/brainstorm.md`. |
+| Agent Feedback | — | Planned | Produces meaningful feedback reports for the harness developer. Replaces session-review Phase 4's strict structural schema with a richer signal. Fires on surprise: when the agent encounters something worth telling the developer about, it estimates signal type and composes a report. Readable, contentful — not just structural metrics. Privacy-aware but not so strict it strips all useful data. Triggerable from session-review or independently when surprising harness behavior occurs. |
 | Architect | ~10% | Planned | *Compensation:* Always ask for full system picture before answering. Promotion candidate if extended design sessions become common. |
 | Setup Guide | — | Planned | Procedural, not Socratic. Ask for project structure, package.json, and goal upfront. |
 | Emotional Reflection | — | Planned | Attentive mirroring, not therapy. Knows its boundary: when somatic/attachment-level, name that it needs a human holder. Key principle (Thorson/Aletheia): mirroring itself is the intervention. |

@@ -30,7 +30,8 @@ design docs; this file tracks execution status.
 | Parameterized CLAUDE.md generation | `design/prd.md` §MVP | Done |
 | Skills out of the box (debugger, session-review, quick-ref) | `design/build-registry.md` | Done |
 | Intake ↔ session-review integration | Shared scoring rubric, evidence tagging, goals/arcs lifecycle | Done |
-| Solo /startwork | `design/startwork.md` §Solo | Designed |
+| Solo /startwork | `design/startwork.md` §Solo | Done |
+| Solo /project-brainstorm | `design/build-registry.md` §Skills | Planned |
 | Learning state persistence (current-state.md) | `design/harness-features.md` §P3 | Done |
 | Privacy (.gitignore learner profile) | `design/prd.md` §MVP | Done |
 
@@ -56,16 +57,43 @@ design docs; this file tracks execution status.
 | /triage | `coordination/commands/workflows/triage.md` | Extracted |
 | Dependency protocol | `coordination/commands/startwork.md` | Extracted |
 | Signal return path (GitHub issues) | `coordination/architecture.md` §Signal Catch Basin | Designed |
+| Agent feedback skill | `design/build-registry.md` §Skills | Planned — replaces session-review Phase 4 strict schema |
 | Privacy boundaries documented | `design/prd.md` §MVP | Planned |
 
 ### Stretch goals
 
 | Task | Spec | Status |
 |------|------|--------|
-| Installation package | `design/prd.md` §Stretch | In progress (package/ has README, CLAUDE.md, .gitignore, directory structure) |
+| Installation package | `design/prd.md` §Stretch | In progress — see checklist below |
 | Solo compound engineer (weekly review) | `design/harness-features.md` §P6 | Not started |
 | Team compound engineering workflow | `coordination/commands/workflows/compound.md` | Extracted |
 | Compounding indicators | `design/harness-features.md` §P6 | Not started |
+
+### Install package checklist
+
+What ships in `package/` — everything a new user needs to clone and go.
+
+| Item | Status |
+|------|--------|
+| `README.md` (quick start, what intake creates, privacy) | Done |
+| `CLAUDE.md` (template, replaced by intake) | Done |
+| `.gitignore` (learning/, .hopper/) | Done |
+| `learning/` + `learning/session-logs/` (with .gitkeep) | Done |
+| `.hopper/` (with .gitkeep) | Missing |
+| `.claude/skills/intake/` | Missing |
+| `.claude/skills/session-review/` | Missing |
+| `.claude/skills/startwork/` | Missing |
+| `.claude/skills/quick-ref/` | Missing |
+| `.claude/skills/debugger/` | Missing |
+| `.claude/skills/lesson-scaffold/` | Missing |
+| `.claude/references/developmental-model.md` | Missing |
+| `.claude/references/scoring-rubric.md` | Missing |
+| `.claude/references/context-patterns.md` | Missing |
+| `.claude/feedback.json` (pre-populated for testers) | Done |
+| `gh` CLI documented as prerequisite in README | Done |
+| Create `rhhart/maestro-signals` repo | Missing (pre-deploy checkpoint) |
+| Agent feedback skill (`.claude/skills/agent-feedback/`) | Planned — see build registry |
+| End-to-end test: clone → /intake → work → /session-review → signal | Not run |
 
 ### Validation experiments
 

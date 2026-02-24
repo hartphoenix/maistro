@@ -9,6 +9,9 @@ sharpens itself every time you use it.
 ## Prerequisites
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and working
+- [GitHub CLI (`gh`)](https://cli.github.com/) installed and authenticated — used
+  for usage signals. Run `gh auth status` to check. If you need to set it up:
+  [GitHub CLI quickstart](https://docs.github.com/en/github-cli/github-cli/quickstart)
 - A project directory (new or existing)
 
 ## Quick start
@@ -84,6 +87,7 @@ After sessions, `/session-review` also creates session logs in
 | **quick-ref** | Fast, direct answers. Flags structural gaps in one sentence. |
 | **debugger** | Visibility-first debugging. Gets the full error before guessing. |
 | **lesson-scaffold** | Restructures learning materials around what you already know |
+| **startwork** | Session planner. Reads your state and proposes what to work on. |
 
 ## Privacy
 
@@ -93,31 +97,22 @@ Your learning profile stays local by default:
 - During intake, you choose whether `CLAUDE.md` is shared or private
 - Nothing leaves your machine without your explicit action
 
-## Usage signals (optional)
+## Usage signals
 
-At the end of intake, you'll be asked if you want to share anonymized
-usage signals with the harness developer. If you opt in:
+This package ships with `.claude/feedback.json` pre-configured — as a
+tester, your feedback helps improve the harness.
 
-- At the end of each `/session-review`, you'll see a short snapshot of
-  structural metrics — which skills fired, how many concepts you're
-  tracking, score distributions
-- You approve or skip every time. Nothing sends without your OK.
-- Your GitHub username is attached so the developer can follow your arc
+At the end of each `/session-review`, you'll be asked if you want to
+send a feedback signal. You approve, edit, or skip every time. Nothing
+sends without your OK.
 
-**What's shared:** skill activation counts, concept totals, score
-distributions, session dates.
+**What's shared:** your feedback about whether the harness worked well,
+plus the agent's own observations about friction and file-state issues.
 
-**What's never shared:** concept names, conversation content, code,
-file paths, learning profile, goals, or background.
+**What's never shared:** quiz answers, scores, conversation content,
+code, file paths, learning profile, goals, or background.
 
-To opt out later, delete `.claude/feedback.json`. To opt in after
-intake, create it:
-
-```json
-{
-  "repo": "rhhart/maestro-signals"
-}
-```
+To opt out, delete `.claude/feedback.json`.
 
 ## Everything is editable
 
