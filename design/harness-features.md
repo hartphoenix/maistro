@@ -114,7 +114,7 @@ unit. See `design/design-principles.md` §3.
 - learning/current-state.md (score + gap-type + history per concept)
 - learning/goals.md (goals as states of being → capabilities)
 - learning/arcs.md (developmental lines → capability clusters → skills)
-- learning/daily-notes/ (session logs with YAML frontmatter)
+- learning/session-logs/ (session review logs with YAML frontmatter)
 - Session-review skill (writes to learning/current-state.md)
 - User model in CLAUDE.md (learning style, strengths, watch-fors)
 - .claude/references/developmental-model.md (static analytical framework)
@@ -209,7 +209,7 @@ signal loss at team boundaries becomes the central problem. See
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Learning state accumulation | Built | Current-state updated after each session |
-| Session log capture | Built | JSONL + daily notes |
+| Session log capture | Built | JSONL + session logs |
 | Crystallization prompts | Not started | Replaces quiz as primary session-review instrument. Analyze recent project progress → prompt learner to articulate takeaways → calibrate current-state from fluency. See `design/startwork.md` §Reflective toolkit. |
 | Surprise journal (multi-altitude) | Not started | Technical, conceptual, goal-level surprises. All update current-state; goal-level triggers refinement. See `design/startwork.md` §Reflective toolkit. |
 | Open-ended reflection prompts | Not started | "What felt different today?" "What was fun?" Lower-structure, selects for explore state. |

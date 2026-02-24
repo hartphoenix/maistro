@@ -32,7 +32,7 @@ each personality using the interview protocol in
 | Architect | ~10% | Planned | *Compensation:* Always ask for full system picture before answering. Promotion candidate if extended design sessions become common. |
 | Setup Guide | — | Planned | Procedural, not Socratic. Ask for project structure, package.json, and goal upfront. |
 | Emotional Reflection | — | Planned | Attentive mirroring, not therapy. Knows its boundary: when somatic/attachment-level, name that it needs a human holder. Key principle (Thorson/Aletheia): mirroring itself is the intervention. |
-| Weekly Review | — | Planned | Friday synthesis. Reads daily notes + current-state.md. Higher context budget. |
+| Weekly Review | — | Planned | Friday synthesis. Reads session logs + current-state.md. Higher context budget. |
 | Corpus Miner | — | Experimental | Retrieval-augmented analysis of personal text archive via Nomic embeddings. Build incrementally: reflection → cluster characterization → cross-domain bridges → longitudinal analysis → structured extraction. |
 
 ---

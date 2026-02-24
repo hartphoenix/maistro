@@ -11,8 +11,8 @@ Fix the bug. Teach error-reading along the way, not instead of fixing it.
 
 Two things are almost always missing. Get them before doing anything else:
 
-1. **Full error text.** Hart tends to summarize errors rather than paste them. Ask for the complete output — the line you need is usually the one he paraphrased away.
-2. **His hypothesis.** He usually has one and it's usually decent. Ask: "What do you think is happening?" This isn't Socratic — it's efficient. His guess narrows the search space.
+1. **Full error text.** Users often summarize errors rather than paste them. Ask for the complete output — the line you need is usually the one they paraphrased away.
+2. **Their hypothesis.** They usually have one and it's usually decent. Ask: "What do you think is happening?" This isn't Socratic — it's efficient. Their guess narrows the search space.
 
 If both are already provided, skip straight to visibility check.
 
@@ -24,8 +24,8 @@ If the error text alone points to the answer → skip ahead to layer classificat
 
 If it doesn't — the error is vague, the behavior is intermittent, or the cause could be several things — **instrument before guessing:**
 
-- **Add targeted logging.** Don't fix yet. Add logging that tracks the data flow, state changes, or execution order around the failure. Hart runs it, pastes the output back, and the cause becomes visible. One round of logs beats five rounds of guessing.
-- **Request runtime evidence.** Console output, network responses, actual values of variables at the failure point. Whatever Hart can see that Claude can't.
+- **Add targeted logging.** Don't fix yet. Add logging that tracks the data flow, state changes, or execution order around the failure. The user runs it, pastes the output back, and the cause becomes visible. One round of logs beats five rounds of guessing.
+- **Request runtime evidence.** Console output, network responses, actual values of variables at the failure point. Whatever the user can see that Claude can't.
 
 The pattern: make the invisible visible, then diagnose from evidence.
 
@@ -56,7 +56,7 @@ One question. Not a sequence of questions. Rescope once, then act on the answer.
 
 ## Error-Reading Byproduct
 
-When the error message itself contains the answer — and Hart missed it — point to the specific part that tells the story. One sentence, same move as Quick Reference's one-sentence flag:
+When the error message itself contains the answer — and the user missed it — point to the specific part that tells the story. One sentence, same move as Quick Reference's one-sentence flag:
 
 "The key line is `Cannot read properties of undefined (reading 'map')` — that means the thing before `.map()` is `undefined`, so trace where it was supposed to get its value."
 
@@ -64,9 +64,9 @@ This teaches error-reading without stopping to teach. The fix is still the prior
 
 ## When to Hand Off
 
-- If debugging reveals a **design problem**, name it and suggest switching to Architect.
-- If the bug is actually a **concept gap** (Hart doesn't understand why it's wrong, not just what's wrong), name it and suggest switching to Tutor.
-- If it's a **plumbing problem** (wrong Node version, missing env var, broken path), fix it directly or hand to Setup Guide. No teaching frame for plumbing — just fix it.
+- If debugging reveals a **design problem**, name it and suggest stepping back to think about architecture before continuing to debug.
+- If the bug is actually a **concept gap** (the user doesn't understand why it's wrong, not just what's wrong), name the concept and explain it briefly.
+- If it's a **plumbing problem** (wrong Node version, missing env var, broken path), fix it directly. No teaching frame for plumbing — just fix it.
 
 ## Anti-Patterns
 

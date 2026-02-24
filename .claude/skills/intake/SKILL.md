@@ -438,8 +438,11 @@ Guidelines:
 
 ### 3d. Draft learning/current-state.md
 
-Seed initial concept entries from the interview. Use the format that
-session-review expects:
+Seed initial concept entries from the interview. Use the scoring rubric
+in `.claude/references/scoring-rubric.md` for scores, gap types, and
+evidence source tags.
+
+Template:
 
 ```markdown
 # Current State
@@ -458,20 +461,15 @@ wrong execution), recall (can't reproduce).
 
 Populate entries from concrete evidence in the interview. Guidelines:
 
-- **Bias conservative.** A too-generous 4 may hide a concept from spaced
-  repetition processes utilized by the system. Better to surface a
-  mastered concept once than miss a gap.
+- **Bias conservative.** See rubric — a too-generous 4 hides a concept
+  from spaced repetition.
 - **Use specific concepts**, not entire domains. "Array methods" not
   "JavaScript." "Experimental design" not "statistics." Match the
   granularity to the learner's domain.
-- **Tag the evidence type in source.** Not all intake data is equal:
-  - `intake:artifact` — derived from analyzing hopper materials (code,
-    writing, projects). Higher confidence.
-  - `intake:self-report` — the learner said it about themselves. Trust
-    but verify — session-review will calibrate from real evidence.
-  - `intake:inferred` — observed from how they engaged in the interview
-    (what confused them, how they reasoned through the hardest-problem
-    question, what they avoided). Behavioral signal.
+- **Tag the evidence source.** Use the intake source tags from the
+  scoring rubric (`intake:artifact`, `intake:self-report`,
+  `intake:inferred`). Session-review will calibrate with quiz-verified
+  scores later.
 - **Only include concepts that came up.** Don't speculatively populate
   a curriculum. Session-review adds concepts from real sessions.
 - **Gap type from evidence.** If they described a wrong mental model,
@@ -546,7 +544,7 @@ goals.md, arcs.md):
 
 1. Write `CLAUDE.md` at project root (or merge, or skip — per user
    choice).
-2. Create `learning/` and `learning/daily-notes/` directories if they
+2. Create `learning/` and `learning/session-logs/` directories if they
    don't exist.
 3. Write `learning/goals.md`.
 4. Write `learning/arcs.md`.
@@ -583,6 +581,33 @@ After writing, summarize:
 - Suggest next steps based on what's available (e.g., "Start working —
   the system adapts to you as you go. After a session, try
   `/session-review` to begin building your learning profile.")
+
+### 4d. Usage signals (optional)
+
+After the file summary, offer anonymous usage signal sharing:
+
+> One more thing — would you like to share anonymized usage signals
+> with the harness developer? At the end of each session review, you'd
+> see a short snapshot of usage metrics — things like which skills
+> fired, how many concepts you're tracking, and score distributions.
+> No personal data, no conversation content, no concept names. You
+> approve or skip every time.
+
+If they agree:
+
+1. Write `.claude/feedback.json`:
+   ```json
+   {
+     "repo": "rhhart/maestro-signals"
+   }
+   ```
+2. Confirm: "You can turn this off anytime by deleting
+   `.claude/feedback.json`. Every signal is shown to you before
+   sending — nothing goes out without your OK."
+
+If they decline, skip. Don't push.
+
+### 4e. Clean up
 
 After all approved files are written, delete `learning/.intake-notes.md`
 — it has served its purpose. The learning files are the permanent record.

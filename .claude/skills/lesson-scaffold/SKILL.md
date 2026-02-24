@@ -1,28 +1,28 @@
 ---
 name: lesson-scaffold
-description: Restructures external learning materials into a conceptual scaffold tailored to Hart's current level. Takes source materials (assignment URLs, course chapters, video transcripts, pasted text) and optional context about current state. Use when Hart provides learning materials and wants to understand the "why" before executing.
+description: Restructures external learning materials into a conceptual scaffold tailored to the learner's current level. Takes source materials (assignment URLs, course chapters, video transcripts, pasted text) and optional context about current state. Use when the user provides learning materials and wants to understand the "why" before executing.
 ---
 
 # Lesson Scaffold
 
-Restructure what someone else organized by procedure into what Hart needs organized by understanding.
+Restructure what someone else organized by procedure into what the learner needs organized by understanding.
 
 ## Inputs
 
 1. **Source material** (required). URL, file path, or pasted text — any learning content.
-2. **Current state** (optional). Energy, time, emotional context, what he needs. Shapes scope.
+2. **Current state** (optional). Energy, time, emotional context, what they need. Shapes scope.
 
 ## Workflow
 
 1. Fetch/read the source material.
-2. Read `learning/current-state.md` for current learning state. Optionally read the most recent daily note from `learning/daily-notes/`.
+2. Read `learning/current-state.md` for current learning state. Optionally read the most recent session log from `learning/session-logs/`.
 3. Extract every concept the material teaches or assumes — explicit and implicit. Implicit concepts (things the lesson takes for granted) are often where the real learning edges are.
 4. Cross-reference with learning/current-state.md. What's solid, what's growing, what's new.
 5. Produce a scaffold:
-   - **Concepts to understand** — each with a one-sentence bridge to something Hart already knows. Flag learning/current-state.md gaps by name.
+   - **Concepts to understand** — each with a one-sentence bridge to something the learner already knows. Flag learning/current-state.md gaps by name.
    - **Execution sequence** — the instructor's steps reordered by conceptual dependency. Group steps that share a concept. Mark which concepts each step exercises.
    - **Resurfaced gaps** — low-scoring learning/current-state.md concepts that this material touches. Spaced repetition for free.
-6. Present and ask Hart whether the scope and classification feel right. He drives.
+6. Present and ask the user whether the scope and classification feel right. They drive.
 
 ## Anti-Patterns
 
