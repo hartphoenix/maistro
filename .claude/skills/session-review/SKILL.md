@@ -9,9 +9,9 @@ Three phases, in order. Do not skip or reorder.
 
 ## Phase 1: Analyze
 
-1. Read `daily-notes/current-state.md` to load current learning state.
+1. Read `learning/current-state.md` to load current learning state.
 2. Review the session for: concepts encountered, strengths (with evidence), growth edges (name the gap, not just the topic), procedural observations.
-3. Select 4-6 quiz targets. Bias toward partial/stuck concepts. Include at least one application question. If current-state.md has stale low-score concepts relevant to the session, resurface them.
+3. Select 4-6 quiz targets. Bias toward partial/stuck concepts. Include at least one application question. If learning/current-state.md has stale low-score concepts relevant to the session, resurface them.
 4. Present the analysis before quizzing: strengths, growth edges, quiz targets with rationale.
 
 Hart has explicitly requested honest negative feedback. 100% positive review is a failure of the skill.
@@ -38,7 +38,7 @@ Score each answer 0-5 using the rubric in the current-state.md header. Classify 
 
 ## Phase 3: Log
 
-### Daily note (`daily-notes/YYYY-MM-DD.md`)
+### Daily note (`learning/daily-notes/YYYY-MM-DD.md`)
 
 Prepend YAML frontmatter (or merge if it exists):
 
@@ -57,7 +57,7 @@ arcs:
 
 Body: what happened, quiz results table, learning patterns, key files, remaining work.
 
-### current-state.md (`daily-notes/current-state.md`)
+### current-state.md (`learning/current-state.md`)
 
 Update quizzed concepts: score, gap, last-quizzed, increment times-quizzed, append to history. Create new entries as needed. Check existing names first — don't create near-duplicates.
 

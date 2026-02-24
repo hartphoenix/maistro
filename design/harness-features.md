@@ -111,11 +111,13 @@ want to be (goals). The delta — the gap — is the primary organizational
 unit. See `design/design-principles.md` §3.
 
 **Existing implementations:**
-- current-state.md (score + gap-type + history per concept; was ARCS.md)
-- Session-review skill (writes to current-state)
+- learning/current-state.md (score + gap-type + history per concept)
+- learning/goals.md (goals as states of being → capabilities)
+- learning/arcs.md (developmental lines → capability clusters → skills)
+- learning/daily-notes/ (session logs with YAML frontmatter)
+- Session-review skill (writes to learning/current-state.md)
 - User model in CLAUDE.md (learning style, strengths, watch-fors)
-- goals.md structure (goals as states of being → capabilities → skills;
-  was skill-tree.md)
+- .claude/references/developmental-model.md (static analytical framework)
 
 **Features to catch:**
 

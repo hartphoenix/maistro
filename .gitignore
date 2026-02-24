@@ -5,3 +5,8 @@ bun.lockb
 .DS_Store
 .claude/skills/diagram/output/*
 !.claude/skills/diagram/output/.gitkeep
+
+# Learner profile (personal, not shared)
+learning/
+.hopper/*
+!.hopper/.gitkeep
