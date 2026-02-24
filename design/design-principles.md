@@ -11,7 +11,7 @@ These principles govern the harness — the generalizable infrastructure
 underneath Roger. They organize two catch basins:
 
 - **Harness features** (`design/harness-features.md`) — what to build
-- **Goals** (per-user; Hart's instance: `roger/drafts/goals.md`) — what to learn
+- **Goals** (per-user; e.g. `goals.md`) — what to learn
 
 Both serve the same goals. Features build the system; skills build the
 person using it. The principles ensure both are well-aimed.

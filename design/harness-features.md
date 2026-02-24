@@ -72,7 +72,7 @@ order of attentional cost:
    miner, reference files, tiered memory). Lowest ambient cost.
 
 The gated-propagation principle: capture is low-friction; propagation into
-shared or ambient context is human-gated. See `design/coordination-brainstorm.md` §5.3.
+shared or ambient context is human-gated. See `coordination/architecture.md` §5.3.
 
 **Existing implementations:**
 - Context window as the only lever (compound engineering framework)
@@ -93,7 +93,7 @@ shared or ambient context is human-gated. See `design/coordination-brainstorm.md
 | Compaction protocols | Built | `/clear` + artifact handoff |
 | Selective skill loading | Built | Skills load by description match, not bulk |
 | Session-log preservation across `/clear` | Designed | Captures human observations across context boundaries |
-| Solo startwork (pre-work check) | Designed | Computes the gap, composes a session briefing. Full design: `design/startwork-redesign.md`. |
+| Solo startwork (pre-work check) | Designed | Computes the gap, composes a session briefing. Full design: `design/startwork.md`. |
 | Compounding indicators | Not started | Is this session's attention building on the last, or starting from scratch? |
 | Context budget awareness | Not started | Can the system estimate remaining budget and prioritize? |
 | Attention cost accounting | Not started | What is the attentional cost of a skill invocation, a memory load, a sub-agent spawn? |
@@ -125,7 +125,7 @@ unit. See `design/design-principles.md` §3.
 | Gap classification (conceptual / procedural / recall) | Built | Drives intervention style |
 | Goal discovery interview | Not started | Surfaces vague aspirations, crystallizes into articulated states of being. Runs at intake and periodically. |
 | Goal-refinement check-ins | Not started | Detect goal drift. Triggered by gap closure, goal-altitude surprise accumulation, or schedule. |
-| Gap computation at session start | Not started | Solo startwork reads current-state + goals, computes delta. See `design/startwork-redesign.md`. |
+| Gap computation at session start | Not started | Solo startwork reads current-state + goals, computes delta. See `design/startwork.md`. |
 | Project-goal mapping | Not started | Which active projects serve which goals? Inferred by system, confirmed by human. No tagging — agent does taxonomy from natural writing. |
 | Playful project selection | Not started | "What excites you? What would make this more fun?" Serves P3 (project choice) and P8 (play). |
 | Spaced repetition | Designed | Low score + stale date → resurface past takeaways for re-articulation. |
@@ -155,7 +155,7 @@ Read what kind of help is needed before choosing how to respond. See
 | Altitude check before intervention | Implicit | Operating principle, not enforced mechanically |
 | Behavioral compliance audit | Not started | Retrospective scoring of agent behavior against CLAUDE.md directives. See `design/validation-plan.md` §2 |
 | Intervention type logging | Not started | Which moves worked? Feedback loop for tuning |
-| Prompt compensation patterns | Documented | BUILD_CHECKLIST.md captures these per skill |
+| Prompt compensation patterns | Documented | `design/build-registry.md` captures these per skill |
 | Escalation / de-escalation rules | Not started | When does a quick-ref become a teaching moment? When does debugging become emotional reflection? |
 
 ---
@@ -168,7 +168,7 @@ Modular, swappable skills and personalities with clean interfaces. See
 **Existing implementations:**
 - 8 built skills, each with SKILL.md in `.claude/skills/`
 - 1 built personality (Tutor), 2 planned (Creative Collaborator, Research Partner)
-- BUILD_CHECKLIST.md as skill/personality registry
+- `design/build-registry.md` as skill/personality registry
 - design-skill meta-skill for building new skills
 
 **Features to catch:**
@@ -193,7 +193,7 @@ Knowledge compounds. Friction surfaces. Workflows get refined. See
 
 In single-user, the embedding loop is closed by default. In multi-user,
 signal loss at team boundaries becomes the central problem. See
-`design/coordination-brainstorm.md` §4.
+`coordination/architecture.md` §4.
 
 **Existing implementations:**
 - Knowledge compounding (`docs/solutions/` — first solve = research, second = lookup)
@@ -208,8 +208,8 @@ signal loss at team boundaries becomes the central problem. See
 |---------|--------|-------|
 | Learning state accumulation | Built | Current-state updated after each session |
 | Session log capture | Built | JSONL + daily notes |
-| Crystallization prompts | Not started | Replaces quiz as primary session-review instrument. Analyze recent project progress → prompt learner to articulate takeaways → calibrate current-state from fluency. See `design/startwork-redesign.md` §Reflective toolkit. |
-| Surprise journal (multi-altitude) | Not started | Technical, conceptual, goal-level surprises. All update current-state; goal-level triggers refinement. See `design/startwork-redesign.md` §Reflective toolkit. |
+| Crystallization prompts | Not started | Replaces quiz as primary session-review instrument. Analyze recent project progress → prompt learner to articulate takeaways → calibrate current-state from fluency. See `design/startwork.md` §Reflective toolkit. |
+| Surprise journal (multi-altitude) | Not started | Technical, conceptual, goal-level surprises. All update current-state; goal-level triggers refinement. See `design/startwork.md` §Reflective toolkit. |
 | Open-ended reflection prompts | Not started | "What felt different today?" "What was fun?" Lower-structure, selects for explore state. |
 | Workflow self-modification | Demonstrated | Happened organically in session 6; not formalized |
 | Intervention effectiveness tracking | Not started | Did the move work? Did the gap close? Catch basin pattern. |
@@ -299,13 +299,13 @@ Features that don't yet have a clear home or that span multiple principles.
 
 | Feature | Possible principle(s) | Notes |
 |---------|----------------------|-------|
-| Multi-Claude orchestration (game-Claude + Roger) | Attention, Composability | Two instances with different attentional roles and shared filesystem. See `design/coordination-brainstorm.md` §5 |
+| Multi-Claude orchestration (game-Claude + Roger) | Attention, Composability | Two instances with different attentional roles and shared filesystem. See `coordination/architecture.md` §5 |
 | Corpus miner | Self-improvement, Attention | Personal archive as searchable knowledge base. Built. Useful for retrospective capture. |
 | Handoff test skill | Attention, Human authority | Audit artifacts for self-containedness before context loss. |
 | Cross-domain bridge detection | Developmental model, Self-improvement | Exaptation mining from corpus |
 | Awareness practice catalog | Awareness, Play | Which practices restore coherence and cultivate the explore state? |
-| Multi-user learning layer | Self-improvement, Composability | Distributed P6: keeping the embedding loop closed across team boundaries. See `design/coordination-brainstorm.md` §4. Depends on solo P6 features as prototypes. |
-| Human connection facilitation | Boundary condition | Can the system encourage human learning bonds? Surface shared growth edges, match learners, prepare users for peer sessions. See `design/startwork-redesign.md` §Open questions. |
+| Multi-user learning layer | Self-improvement, Composability | Distributed P6: keeping the embedding loop closed across team boundaries. See `coordination/architecture.md` §4. Depends on solo P6 features as prototypes. |
+| Human connection facilitation | Boundary condition | Can the system encourage human learning bonds? Surface shared growth edges, match learners, prepare users for peer sessions. See `design/startwork.md` §Open questions. |
 
 ---
 

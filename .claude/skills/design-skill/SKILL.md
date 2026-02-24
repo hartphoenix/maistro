@@ -21,7 +21,7 @@ Before writing anything, answer:
   - **Low** (exact scripts): fragile operations, specific sequence required.
 - **What is it NOT?** Name the adjacent skill or mode it could drift into. This is how you prevent attractor bleed between skills.
 
-If the skill is already spec'd in `BUILD_CHECKLIST.md` (project root), read that entry — it contains scoping decisions already made.
+If the skill is already spec'd in ``design/build-registry.md`` (project root), read that entry — it contains scoping decisions already made.
 
 ### 2. Write the frontmatter
 
@@ -117,7 +117,7 @@ by voice. Edit `~/Documents/superwhisper/settings/settings.json`:
 ### 6. Update project checklists
 
 If the skill appears in the build checklist, check it off:
-- `BUILD_CHECKLIST.md` (project root)
+- ``design/build-registry.md`` (project root)
 
 ## Skill vs. Personality
 

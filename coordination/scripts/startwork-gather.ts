@@ -11,6 +11,10 @@
 
 import { $ } from "bun";
 
+// ── Config (replace with your org/project) ────────────────────────
+const ORG_OWNER = "YOUR_ORG";        // GitHub org or user that owns the project
+const PROJECT_NUMBER = 1;             // GitHub Projects (v2) project number
+
 // ── Types ──────────────────────────────────────────────────────────
 
 interface BoardItem {
@@ -102,7 +106,8 @@ async function main() {
   let boardItems: BoardItem[] = [];
   try {
     const boardRaw =
-      await $`gh project item-list 1 --owner thrialectics --format json --limit 200`.text();
+      // TODO: parameterize org and project number via config
+      await $`gh project item-list ${PROJECT_NUMBER} --owner ${ORG_OWNER} --format json --limit 200`.text();
     const board = JSON.parse(boardRaw);
     boardItems = board.items.map((i: any) => ({
       number: i.content?.number ?? null,

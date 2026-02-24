@@ -179,14 +179,7 @@ architecture fails at scale.
 
 ## Milestones
 
-| Day | Goal |
-|-----|------|
-| Monday | PRD submitted. Group pitch sent. Hot mic (voice-to-text) set up — speeds everything downstream. Both repos scaffolded. Personal harness installable with intake interview + data hopper working. Coordination layer extraction started. |
-| Tuesday | Personal harness ready for first external tester (family member). Coordination layer extracted and generalized — startwork, triage, dependency protocol all configurable. Team intake flow working. |
-| Wednesday | Coordination layer installable. If collaborators have signed on, at least one team running it. Personal /startwork working. Iterate on both tools based on early tester feedback. |
-| Thursday | Signal return path working end-to-end. Both tools documented with README + quickstart. Compound engineer skill (stretch) if coordination is stable. |
-| Friday | Compounding indicators (stretch). Demo prep. Everything peer-tested. |
-| Saturday | Demo. |
+See `design/schedule.md` for the living task tracker with current status.
 
 ---
 
@@ -208,12 +201,8 @@ architecture fails at scale.
   with coordination-as-add-on?
 - How tightly does the coordination layer depend on GitHub? Could it work
   with other project management surfaces?
-- ~~ClaudeConnect~~ — Investigated 2026-02-23. Back-burnered. It's
-  encrypted file sync between Claude instances (ambient sharing), which
-  bypasses the human triage gate our coordination layer is built around.
-  Also creates gitignored shadow state and has prompt injection
-  propagation risk. Full assessment in
-  `design/coordination-brainstorm.md` §5.3.
+- ~~ClaudeConnect~~ — Investigated 2026-02-23. Back-burnered. Full
+  assessment in `coordination/architecture.md` §ClaudeConnect.
 - Roger was built by a learner with a teaching background and strong
   pedagogical intuitions. How well does the tutor adapt to someone who
   doesn't share that? Can it hold the expert-teacher role on its own, or

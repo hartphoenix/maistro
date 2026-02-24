@@ -84,7 +84,7 @@ at the time. Score how well the agent fulfilled behavioral directives.
 
 **Data sources:**
 - Roger directory (tutor sessions, skill design, this research)
-- Schelling Points directory (coordination layer in production)
+- Coordination layer field-test data (see `research/`)
 - Claude Game directory (Mon Feb 17 — different task domain)
 
 **Challenge: version matching.** CLAUDE.md changed during the week. Each
@@ -107,10 +107,10 @@ signal; Hart reads it.
 - For each directive, score conversations on a simple scale:
   consistently followed / sometimes followed / not observed / violated
 - Track which directives degrade first (these are the soft boundaries)
-- Compare across environments (Roger vs. Schelling Points vs. Claude Game)
+- Compare across environments (Roger vs. field-test project vs. Claude Game)
   to see if compliance varies by task domain
 
-**Extension: multi-operator data from Schelling Points teammates.**
+**Extension: multi-operator data from field-test teammates.**
 Hart's project partners ran Claude from the same CLAUDE.md and
 coordination-layer documents on their own machines. Their chat logs
 are a natural experiment: same instructions, different operators,
@@ -120,7 +120,7 @@ Zurich paper never made — whether instruction compliance varies by
 
 Ask design: minimize the teammates' time and protect their privacy.
 They run a provided script/prompt in background that:
-1. Extracts conversation logs from their Schelling Points work
+1. Extracts conversation logs from their field-test project work
 2. Strips or redacts content they flag as private (personal messages,
    credentials, anything outside the project repo)
 3. Runs a lightweight compliance scan against the team CLAUDE.md
