@@ -49,9 +49,9 @@ Skills are procedures any personality can invoke. Each skill gets its own direct
   Generate diagrams via Mermaid using [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid). Includes a script that takes a single argument (a Mermaid diagram string) and saves both an SVG and ASCII text file with the diagram.
 
 - [x] **Session Review** → `.claude/skills/session-review/`
-  End-of-session learning audit. Three-phase workflow: analyze session, quiz on 4-6 concepts (biased toward gaps), log results to daily note frontmatter + ARCS.md.
-  - *Companion files:* `daily-notes/ARCS.md` (learning state accumulator), daily note YAML frontmatter (session snapshots)
-  - *Future consumers:* weekly-review skill (reads both), spaced-repetition skill (reads ARCS.md only)
+  End-of-session learning audit. Three-phase workflow: analyze session, quiz on 4-6 concepts (biased toward gaps), log results to daily note frontmatter + current-state.md.
+  - *Companion files:* `daily-notes/current-state.md` (learning state accumulator), daily note YAML frontmatter (session snapshots)
+  - *Future consumers:* weekly-review skill (reads both), spaced-repetition skill (reads current-state.md only)
 
 - [x] **Browser QA** → `.claude/skills/browser-qa/`
   Tests a webapp in-browser via Chrome automation. Reads test priorities from and writes outcome logs to `.claude/browser-testing/` in the target project. Covers visual, functional, console, network, and responsive checks. Observe and report — never fix.
@@ -63,7 +63,7 @@ Skills are procedures any personality can invoke. Each skill gets its own direct
   Restructures external learning materials into a conceptual scaffold tailored to Hart's current level. Takes source materials and optional context about current state.
 
 - [ ] **Weekly Review** → `.claude/skills/weekly-review/`
-  Friday synthesis skill. Reads all week's daily note frontmatter + ARCS.md. Produces weekly summary for Saturday demo retrospectives. Higher context budget, justified by higher return value.
+  Friday synthesis skill. Reads all week's daily note frontmatter + current-state.md. Produces weekly summary for Saturday demo retrospectives. Higher context budget, justified by higher return value.
 
 ## Experimental / Future
 

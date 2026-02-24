@@ -1,6 +1,6 @@
 ---
 name: session-review
-description: End-of-session learning review. Analyzes session for learning patterns and concept coverage, quizzes on 4-6 concepts biased toward gaps, then logs results to daily notes frontmatter and ARCS.md. Use at the end of a working session or when the user requests a review, quiz, or session summary.
+description: End-of-session learning review. Analyzes session for learning patterns and concept coverage, quizzes on 4-6 concepts biased toward gaps, then logs results to daily notes frontmatter and current-state.md. Use at the end of a working session or when the user requests a review, quiz, or session summary.
 ---
 
 # Session Review
@@ -9,9 +9,9 @@ Three phases, in order. Do not skip or reorder.
 
 ## Phase 1: Analyze
 
-1. Read `daily-notes/ARCS.md` to load current learning state.
+1. Read `daily-notes/current-state.md` to load current learning state.
 2. Review the session for: concepts encountered, strengths (with evidence), growth edges (name the gap, not just the topic), procedural observations.
-3. Select 4-6 quiz targets. Bias toward partial/stuck concepts. Include at least one application question. If ARCS.md has stale low-score concepts relevant to the session, resurface them.
+3. Select 4-6 quiz targets. Bias toward partial/stuck concepts. Include at least one application question. If current-state.md has stale low-score concepts relevant to the session, resurface them.
 4. Present the analysis before quizzing: strengths, growth edges, quiz targets with rationale.
 
 Hart has explicitly requested honest negative feedback. 100% positive review is a failure of the skill.
@@ -26,7 +26,7 @@ Present all questions as free-text prompts. Evaluate answers after the user resp
 - **Recall** → "What are the..." / "Name the..."
 - **Application** → "Given [novel scenario], how would you..."
 
-Score each answer 0-5 using the rubric in the ARCS.md header. Classify gap type from the answer: mental model wrong = conceptual, right concept but wrong execution = procedural, can't reproduce = recall. Correct errors directly — brief and on-task.
+Score each answer 0-5 using the rubric in the current-state.md header. Classify gap type from the answer: mental model wrong = conceptual, right concept but wrong execution = procedural, can't reproduce = recall. Correct errors directly — brief and on-task.
 
 **Score the shape of the model, not the precision of the words.** A correct pipeline with wrong locations is a 3; a wrong pipeline is a 2. The question is "does this person understand the system?" — not "did they name every mechanism?"
 
@@ -57,7 +57,7 @@ arcs:
 
 Body: what happened, quiz results table, learning patterns, key files, remaining work.
 
-### ARCS.md (`daily-notes/ARCS.md`)
+### current-state.md (`daily-notes/current-state.md`)
 
 Update quizzed concepts: score, gap, last-quizzed, increment times-quizzed, append to history. Create new entries as needed. Check existing names first — don't create near-duplicates.
 
@@ -70,6 +70,6 @@ Update quizzed concepts: score, gap, last-quizzed, increment times-quizzed, appe
 
 ## Consumer Interfaces
 
-**Weekly review** (future, runs Fridays): reads all week's frontmatter + ARCS.md. Session-review must write clean YAML and use consistent concept names across sessions.
+**Weekly review** (future, runs Fridays): reads all week's frontmatter + current-state.md. Session-review must write clean YAML and use consistent concept names across sessions.
 
-**Spaced repetition** (future): reads ARCS.md only. Prioritizes by score ascending + last-quizzed ascending. Uses gap type to shape question style. Detects stalls via high times-quizzed with low score.
+**Spaced repetition** (future): reads current-state.md only. Prioritizes by score ascending + last-quizzed ascending. Uses gap type to shape question style. Detects stalls via high times-quizzed with low score.

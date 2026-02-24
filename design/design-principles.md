@@ -11,10 +11,37 @@ These principles govern the harness — the generalizable infrastructure
 underneath Roger. They organize two catch basins:
 
 - **Harness features** (`design/harness-features.md`) — what to build
-- **Skill tree** (see `roger/drafts/skill-tree.md`) — what to learn
+- **Goals** (per-user; Hart's instance: `roger/drafts/goals.md`) — what to learn
 
 Both serve the same goals. Features build the system; skills build the
 person using it. The principles ensure both are well-aimed.
+
+---
+
+## Boundary conditions
+
+These scope the entire system. They are not principles to optimize for
+but limits to design within.
+
+### The system supplements human learning in relationship — it does not replace it
+
+The agent can compound competence and to some degree bolster confidence, but cannot supply belonging. The felt
+sense of being witnessed in one's growth — the nervous system
+regulation, the mirror neurons, the implicit social signals that say
+"you're changing and we can see it" — requires a human.
+
+This means the harness has a relational ceiling when operating solo. A
+student using it alone will develop competence faster, but they'll be
+missing the nutrient that makes competence feel emotionally real. A
+system that doesn't acknowledge this ceiling risks producing competent
+people who don't feel competent.
+
+The harness is therefore a supplement: it makes human learning
+relationships more fruitful. It handles what benefits from infinite
+patience, instant availability, and detailed state tracking — practice,
+calibration, crystallization, project scaffolding — freeing human
+relationships for what requires actual human presence: belonging,
+reflection, emotional regulation, the experience of being seen.
 
 ---
 
@@ -73,17 +100,42 @@ perfectly and it won't land if awareness is fragmented.
 
 ## Serving layer
 
-Principles 3–7 serve the primary layer. Each advances awareness and
+Principles 3–9 serve the primary layer. Each advances awareness and
 attention through a specific mechanism.
 
 ### 3. Developmental model as first-class state
 
 The system maintains a structured, evolving model of where the learner
-is — not as metadata, but as the primary object that drives all other
-behavior. The model tells the system where to direct attention (growth
-edge) and what the learner's awareness can hold (complexity, load,
-fragmentation patterns). Without it, attention is aimed blindly and
-awareness is not accounted for.
+is and where they want to be. The delta between these — the gap — is
+the primary organizational unit of the harness. Everything else
+(projects, assessments, session plans) serves to close, measure, or
+recalibrate the gap.
+
+**Current state** tracks where the learner is: scores, gap types,
+demonstrated capabilities, session history. Updated by the system's
+instruments (crystallization prompts, observation, surprise capture),
+not by the learner maintaining a spreadsheet.
+
+**Goals are states of being.** "I want to be adept at system design."
+"I want to build tools that compound my own learning." They are
+aspirational identities, discovered and refined through interview —
+not declared up front and left static. Goal drift is expected: as the
+learner develops, their perspective shifts, mastery feels different
+than anticipated, and new territory opens that wasn't visible before.
+The system supports ongoing goal refinement as a first-class process.
+
+**Projects are instruments for closing the gap.** A well-chosen project
+puts the learner at an edge where the work of doing the project IS the
+work of moving toward the goal. Projects are selected because they
+exercise the right edges, serve the right goals, and engage the
+learner's genuine interest. Assessments are instruments for measuring
+the gap — low-friction, background, in service of model accuracy.
+
+The model tells the system where to direct attention (the growth edge
+is where the gap is thinnest and most ready to close) and what the
+learner's awareness can hold (complexity, load, fragmentation patterns).
+Without it, attention is aimed blindly and awareness is not accounted
+for.
 
 ### 4. Intervention matches the gap
 
@@ -117,3 +169,50 @@ learner's attentional choices erodes the faculty it exists to develop.
 Authority over attention remains with the human — the system composes the
 agent's attention and proposes compositions for the human's, but never
 imposes.
+
+### 8. Play is the explore state
+
+Play is wide, iterative attention with low cost of failure. In play,
+hypotheses turn over fastest, discovery reaches outside ordinary
+domains, and feedback is experienced without distortion — the game
+container makes failure safe and success genuine. Intrinsic motivation
+is highest in play; the learner doesn't need to be pushed.
+
+Every one of these properties directly multiplies learning. A student in
+play-state learns faster, explores more broadly, handles failure better,
+and sustains engagement without external pressure.
+
+Play requires coherent awareness (P1) — you can't play when fragmented.
+Play is a mode of attention (P2) — exploratory rather than convergent.
+Play can't be compelled (P7) — the moment it's mandatory, it stops
+being play. The system cannot force playfulness. It can create
+conditions where play is available and attractive: selecting projects
+partly for what excites the learner, offering playful variants of
+growth-edge tasks, making the reflective toolkit itself exploratory
+rather than evaluative.
+
+### 9. Challenge calibrated to the edge
+
+For every learner there is a zone where the ratio of novelty to
+familiarity keeps them in an open, uncertain, learning-is-happening
+state — enough challenge to bring genuine uncertainty, not so much
+that failure feels certain, not so little that success feels
+predetermined. This is the zone of proximal development: eustress,
+not distress.
+
+When the learner is in this zone, they can feel the novelty of the
+scenario. Attention stays exploratory. New learning integrates with
+existing structure at the rate the structure can absorb it. When they
+slip past it — into overwhelm or boredom — a kind of cognitive closure
+sets in. The territory feels determined rather than open: either "I
+can't do this" or "I already know this." Learning mode gives way to
+survival mode or distraction mode.
+
+The learner is often not aware of where they are relative to their
+edge while engaged. It is the system's role to track this — using the
+developmental model (P3), observation of session patterns, and the
+learner's own reflections — and to calibrate the challenge accordingly.
+This means selecting the right project, the right scope within that
+project, and the right pacing of novelty introduction. It also means
+recognizing when the learner has slipped out of the zone and adjusting
+before the closure compounds.

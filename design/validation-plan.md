@@ -34,7 +34,7 @@ links to the design principle it validates and the risk it addresses.
 3. **Instructions persist.** Directives remain effective across a full
    session, not just the first few exchanges.
 
-4. **The embedding loop compounds.** Updates to CLAUDE.md, ARCS.md, and
+4. **The embedding loop compounds.** Updates to CLAUDE.md, current-state.md, and
    skills produce better outcomes in subsequent sessions — the system
    actually learns, not just documents.
 

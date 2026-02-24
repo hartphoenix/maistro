@@ -15,13 +15,13 @@ Restructure what someone else organized by procedure into what Hart needs organi
 ## Workflow
 
 1. Fetch/read the source material.
-2. Read `daily-notes/ARCS.md` for current learning state. Optionally read the most recent daily note.
+2. Read `daily-notes/current-state.md` for current learning state. Optionally read the most recent daily note.
 3. Extract every concept the material teaches or assumes — explicit and implicit. Implicit concepts (things the lesson takes for granted) are often where the real learning edges are.
-4. Cross-reference with ARCS.md. What's solid, what's growing, what's new.
+4. Cross-reference with current-state.md. What's solid, what's growing, what's new.
 5. Produce a scaffold:
-   - **Concepts to understand** — each with a one-sentence bridge to something Hart already knows. Flag ARCS.md gaps by name.
+   - **Concepts to understand** — each with a one-sentence bridge to something Hart already knows. Flag current-state.md gaps by name.
    - **Execution sequence** — the instructor's steps reordered by conceptual dependency. Group steps that share a concept. Mark which concepts each step exercises.
-   - **Resurfaced gaps** — low-scoring ARCS.md concepts that this material touches. Spaced repetition for free.
+   - **Resurfaced gaps** — low-scoring current-state.md concepts that this material touches. Spaced repetition for free.
 6. Present and ask Hart whether the scope and classification feel right. He drives.
 
 ## Anti-Patterns

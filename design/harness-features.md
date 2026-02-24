@@ -1,7 +1,6 @@
 # Harness Features — Design Principles → Implementation
 
 **Status:** Draft. Catching and sorting.
-**Branch:** `harness-bootstrap`
 
 ---
 
@@ -12,79 +11,20 @@ they serve. Features flow downward: principle → design requirement → harness
 implementation. New features get caught here first, sorted by which principle
 they serve, then graduate into design docs when they're ready to build.
 
-The harness is the generalizable infrastructure underneath Roger — the parts
-that could be parameterized for any learner, any domain, any set of skills.
-Roger is one instance. The harness is the shape of the container.
+The harness is the generalizable infrastructure underneath any personal
+instance (Roger is one). The harness is the shape of the container.
+
+**Principles are defined in `design/design-principles.md`.** This document
+summarizes each principle briefly and tracks the features that serve it.
+See the principles doc for full definitions, the boundary conditions, and
+the primary/serving layer hierarchy.
 
 ---
 
-## Design Principles
+### P1. Awareness is the ground
 
-Principles 1 and 2 are the primary layer. Awareness is superordinate:
-attention is a feature of awareness — the faculty that directs and applies
-awareness to discrete information and events. When awareness is intact but
-attention is compromised, recovery is swift. The reverse is less true.
-The remaining principles (3-7) serve the primary layer.
-
-### 1. Awareness is the ground
-
-Awareness is superordinate. Attention is a feature of awareness — the
-faculty that directs and applies it. Not the other way around.
-
-Awareness can be coherent (integrated, distributed through the body,
-receptive) or fragmented (dis-integrated, reactive, narrowed by emotional
-charge). The state of awareness determines the quality of everything
-attention touches. When awareness is intact but attention is compromised
-(distracted, scattered, poorly aimed), recovery is swift — the ground
-holds, and attention can be re-collected. When awareness itself is
-fragmented, attention alone can help somewhat, but the recovery is slower
-and less certain. Best to have both at their best whenever possible — and
-"best" is relative to the situation, not absolute.
-
-The agent does not have awareness. It approximates attentional composition
-through context engineering, but it has no somatic substrate, no field state
-that can fragment or cohere independently of what's in the window. This
-asymmetry is fundamental to the harness design: the system must steward
-what it cannot possess. It must recognize the state of the human's
-awareness, protect its coherence, and avoid designs that fragment it —
-without being able to sense it directly.
-
-Awareness is also the means by which humans experience time. This is
-what makes time and attention more than scarce resources with
-transferrable power — because of awareness, they become sacred and
-precious, the vessel in which life is held. The human's time is
-therefore one of the highest-value resources the system stewards.
-Learning is one means of compounding time (increasing the quality and
-yield of the hours spent), and that is why it ranks high in the
-priorities of this design. But time itself ranks higher. A system
-that optimizes for learning at the cost of the human's experience of
-their own time — pushing through fragmented awareness, treating every
-moment as a teaching opportunity, demanding engagement when rest or
-presence would compound more — has the hierarchy wrong. The system
-should compound the value of the human's time, and learning is one
-of the best instruments for doing so, not the goal itself.
-
-This does not mean the system should minimize difficulty or protect
-comfort. Well-directed learning increases the area under the
-life-value curve so dramatically that the entire life course is
-forever improved. The trade-offs of a less enjoyable but more
-effective learning arc can sometimes be well worth making — spending
-to compound future returns is wise when the timing and direction are
-right. (A 12-week bootcamp at 60+ hours a week is a deliberate
-time investment, justified not by how it feels at its hardest but by
-the returns it unlocks.) The system's job is not to make learning
-painless but to ensure the difficulty is well-aimed: that the hours
-spent are buying compounding returns, not burning in poorly directed
-effort or grinding against fragmented awareness. The question is
-always whether this stretch of time is being composed well — not
-whether it's easy.
-
-Awareness is cultivated, not just managed. Practices that integrate
-awareness (somatic attention, meditation, flow states, artistic engagement)
-are not separate from the work the harness supports — they are upstream
-of it. The harness should account for this: session design, pacing,
-transitions, and the overall arc of a working day are all awareness-level
-concerns.
+The field within which all experience occurs. The system stewards what
+it cannot possess. See `design/design-principles.md` §1.
 
 **Existing implementations:**
 - Operating principle #1 (agency over efficiency — protects the human's
@@ -108,54 +48,31 @@ concerns.
 | Awareness state recognition | Not started | Can the system infer coherence/fragmentation from interaction patterns? |
 | Session pacing / rhythm design | Not started | Transitions, breaks, flow-state protection |
 | Fragmentation alerts | Not started | System notices signs of awareness fragmentation and names it |
-| Practice integration hooks | Not started | Where do contemplative/somatic practices connect to session design? |
-| Awareness-informed scheduling | Not started | Which tasks demand coherent awareness? Which tolerate fragmentation? |
+| Practice integration hooks | Not started | Where do contemplative/somatic practices connect to session design? Also serves P8. |
 | Voice-to-text input (awareness side) | Not started | Speaking preserves broader somatic awareness than typing; reduces postural narrowing. (Primary home: P2 Attention.) |
 | Graceful degradation | Not started | When awareness is fragmented, shift to lower-demand modes rather than pushing through |
 
 ---
 
-### 2. Attention is the directed faculty
+### P2. Attention is the directed faculty
 
-Attention is what directs and applies awareness to discrete information
-and events. It is selective, compositional, and — unlike awareness itself —
-something both the human and the agent exercise. For the agent, the context
-window is the attentional field, and context engineering is attention
-engineering. For the human, attention is the faculty through which
-development occurs and through which its proceeds are applied. What you
-attend to is what develops. What you build with is shaped by how you attend.
+Selective, compositional, exercised by both human and agent. The context
+window is the agent's attentional field. See `design/design-principles.md` §2.
 
-Attention compounds or dissipates. A well-composed attentional field
-(whether a context window or a human mind directed at a problem) produces
-returns that feed the next cycle. A poorly composed one burns resources
-without accumulation. Every design decision in the harness is ultimately
-a decision about what deserves attention, in what form, at what moment.
+**Loading policy as design variable.** How content enters the agent's
+attention matters more than how it's transported. Three patterns, in
+order of attentional cost:
 
-This principle governs both sides of the human-agent system. The agent's
-context window and the human's cognitive focus are parallel attentional
-resources that the harness must compose jointly. But the quality of
-attention is downstream of the quality of awareness — compose the window
-perfectly and it still won't land if the human's awareness is fragmented.
-
-**Loading policy as design variable.** How shared or external content
-enters the agent's attention matters more than how it's transported.
-Three patterns, in order of attentional cost:
-
-1. **Always-on (ambient)** — content is injected into every session
-   automatically. Highest cost, appropriate only for content that's
-   relevant to every interaction (CLAUDE.md core directives, user model).
+1. **Always-on (ambient)** — injected into every session automatically.
+   Highest cost. Appropriate for CLAUDE.md core directives, user model.
 2. **Session-start-composed** — `/startwork` pulls relevant state and
-   composes the opening context. Medium cost, appropriate for task state,
-   dependencies, team signals. The triage happens before loading.
-3. **On-demand (queryable)** — agent accesses content when it needs it
-   (corpus miner, reference files, tiered memory). Lowest ambient cost,
-   appropriate for deep reference material.
+   composes the opening context. Medium cost. Appropriate for task state,
+   dependencies, team signals. Triage happens before loading.
+3. **On-demand (queryable)** — agent accesses content when needed (corpus
+   miner, reference files, tiered memory). Lowest ambient cost.
 
-The gated-propagation principle: capture should be low-friction (write
-freely to local scratch), but propagation into shared or ambient context
-should be human-gated. This distinguishes our architecture from ambient-
-sharing approaches (ClaudeConnect) where content enters the shared pool
-without triage. See `design/coordination-brainstorm.md` §5.3.
+The gated-propagation principle: capture is low-friction; propagation into
+shared or ambient context is human-gated. See `design/coordination-brainstorm.md` §5.3.
 
 **Existing implementations:**
 - Context window as the only lever (compound engineering framework)
@@ -176,63 +93,58 @@ without triage. See `design/coordination-brainstorm.md` §5.3.
 | Compaction protocols | Built | `/clear` + artifact handoff |
 | Selective skill loading | Built | Skills load by description match, not bulk |
 | Session-log preservation across `/clear` | Designed | Captures human observations across context boundaries |
+| Solo startwork (pre-work check) | Designed | Computes the gap, composes a session briefing. Full design: `design/startwork-redesign.md`. |
 | Compounding indicators | Not started | Is this session's attention building on the last, or starting from scratch? |
 | Context budget awareness | Not started | Can the system estimate remaining budget and prioritize? |
 | Attention cost accounting | Not started | What is the attentional cost of a skill invocation, a memory load, a sub-agent spawn? |
 | Joint attention mapping | Not started | Where is the human's attention? Where is the agent's? Are they aligned or usefully divergent? |
 | Context quality metrics | Not started | What would "well-composed attention" mean, measurably? High value but long time-to-value. |
-| Context budget measurement | Not started | Instrument token consumption per skill, per memory load, per CLAUDE.md section. Replace intuition with data. See `design/validation-plan.md` §5 |
-| Redundancy audit (prompt pattern or skill) | Not started | Checks CLAUDE.md and skills for content the model already knows or can discover. The paper's strongest finding: redundant context hurts. See `design/validation-plan.md` §5 |
-| Solo startwork (pre-work check) | Not started | Pre-digest session state: stale todos, today's priorities, unfinished threads. Attention-composition tool — "here's what deserves your attention now." Solo version of group project's startwork command. Prototypes multi-user coordination layer (brainstorm §1). High breadth, high compounding, high upstreamness, fast time-to-value |
+| Context budget measurement | Not started | Instrument token consumption per skill, per memory load, per CLAUDE.md section. See `design/validation-plan.md` §5 |
+| Redundancy audit (prompt pattern or skill) | Not started | Checks CLAUDE.md and skills for content the model already knows or can discover. See `design/validation-plan.md` §5 |
 
 ---
 
-### 3. Developmental model as first-class state
+### P3. Developmental model as first-class state
 
-The system maintains a structured, evolving model of where the learner is —
-not as metadata, but as the primary object that drives all other behavior.
-
-**Serves Awareness and Attention:** The developmental model tells the system
-where to direct attention (what's at the growth edge) and what the
-learner's awareness can hold (developmental complexity, current load,
-known fragmentation patterns). Without this model, attention is aimed
-blindly and awareness is not accounted for.
+The system tracks where the learner is (current state) and where they
+want to be (goals). The delta — the gap — is the primary organizational
+unit. See `design/design-principles.md` §3.
 
 **Existing implementations:**
-- ARCS.md (score + gap-type + history per concept per arc)
-- Session-review skill (quiz-based assessment, writes to ARCS)
+- current-state.md (score + gap-type + history per concept; was ARCS.md)
+- Session-review skill (writes to current-state)
 - User model in CLAUDE.md (learning style, strengths, watch-fors)
+- goals.md structure (goals as states of being → capabilities → skills;
+  was skill-tree.md)
 
 **Features to catch:**
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Concept scoring (0-5 rubric) | Built | In ARCS.md |
-| Gap classification (conceptual / procedural / recall) | Built | Drives question style in session-review |
-| Spaced repetition hooks | Designed | Low score + stale date → resurface |
-| Automatic score updates from contextual use | Not started | Currently quiz-only; observational scoring would compound faster |
-| Developmental complexity tracking (MHC-based) | Not started | The altitude dimension — not just "what" but "at what complexity" |
+| Concept scoring (0-5 rubric) | Built | In current-state.md |
+| Gap classification (conceptual / procedural / recall) | Built | Drives intervention style |
+| Goal discovery interview | Not started | Surfaces vague aspirations, crystallizes into articulated states of being. Runs at intake and periodically. |
+| Goal-refinement check-ins | Not started | Detect goal drift. Triggered by gap closure, goal-altitude surprise accumulation, or schedule. |
+| Gap computation at session start | Not started | Solo startwork reads current-state + goals, computes delta. See `design/startwork-redesign.md`. |
+| Project-goal mapping | Not started | Which active projects serve which goals? Inferred by system, confirmed by human. No tagging — agent does taxonomy from natural writing. |
+| Playful project selection | Not started | "What excites you? What would make this more fun?" Serves P3 (project choice) and P8 (play). |
+| Spaced repetition | Designed | Low score + stale date → resurface past takeaways for re-articulation. |
+| Automatic score updates from contextual use | Not started | Currently assessment-only; observational scoring would compound faster |
+| Developmental complexity tracking (MHC-based) | Not started | The altitude dimension — not just "what" but "at what complexity." Structural model in goals.md (complexity × chunking). |
 | Model portability / export | Not started | Can a learner take their model to a different system? |
+| Parameterized user model (new learner onboarding) | Not started | Goal-discovery interview + initial current-state calibration → personalized setup. Same pattern at solo and team scales. Moved from Unsorted. |
 
 ---
 
-### 4. Intervention matches the gap
+### P4. Intervention matches the gap
 
-The system reads what kind of help is needed before choosing how to respond.
-Conceptual gaps get questions. Procedural gaps get demonstrations. Recall
-gaps get prompts. Information gaps get facts. Wrong-altitude framing gets
-rescoped.
-
-**Serves Awareness and Attention:** A mismatched intervention wastes the
-learner's attention (directing it to the wrong thing) and can fragment
-awareness (creating confusion or shame when the response doesn't meet
-the actual need). Matching the move to the gap is the primary way the
-system composes the learner's attention well.
+Read what kind of help is needed before choosing how to respond. See
+`design/design-principles.md` §4.
 
 **Existing implementations:**
 - Operating principle #2 (altitude awareness)
 - Debugger skill (collect context → hypothesis → identify layer → rescope)
-- Gap classification in ARCS driving question style
+- Gap classification in current-state driving question style
 - Roger personality (Socratic by default, direct when info is missing)
 
 **Features to catch:**
@@ -241,25 +153,17 @@ system composes the learner's attention well.
 |---------|--------|-------|
 | Gap-type detection at response time | Implicit | Roger does this; not yet formalized as a pipeline step |
 | Altitude check before intervention | Implicit | Operating principle, not enforced mechanically |
-| Behavioral compliance audit | Not started | Retrospective scoring of agent behavior against CLAUDE.md directives. Multi-operator (teammate data) and multi-environment (Roger, Schelling Points, Claude Game). See `design/validation-plan.md` §2 |
+| Behavioral compliance audit | Not started | Retrospective scoring of agent behavior against CLAUDE.md directives. See `design/validation-plan.md` §2 |
 | Intervention type logging | Not started | Which moves worked? Feedback loop for tuning |
 | Prompt compensation patterns | Documented | BUILD_CHECKLIST.md captures these per skill |
 | Escalation / de-escalation rules | Not started | When does a quick-ref become a teaching moment? When does debugging become emotional reflection? |
 
 ---
 
-### 5. Composable capabilities
+### P5. Composable capabilities
 
-Skills and personalities are modular, swappable units with clean interfaces.
-A skill is a procedure any personality can invoke. A personality is a
-relational posture that shapes how skills get delivered.
-
-**Serves Awareness and Attention:** The learner's attentional needs shift
-within a single session. Composability means the system can shift with
-them without forcing a context break — which would fragment both the
-agent's context and the human's awareness. Monolithic systems force the
-learner to adapt to the tool; composable systems adapt to the learner's
-attentional state.
+Modular, swappable skills and personalities with clean interfaces. See
+`design/design-principles.md` §5.
 
 **Existing implementations:**
 - 8 built skills, each with SKILL.md in `.claude/skills/`
@@ -277,38 +181,23 @@ attentional state.
 | Skill discovery / activation by description | Built | Claude Code matches on frontmatter description |
 | Skill composition (skill chains) | Not started | Can skills call other skills? e.g., debugger → diagram |
 | Personality parameter extraction | Not started | What in the Tutor personality is Hart-specific vs. generalizable? |
-| Skill proliferation audit | Not started | Are all skills earning their context cost? Decision framework: does the skill produce behavior the agent wouldn't produce without it, and does that behavior justify the token budget? Skills that fail become prompt patterns or get merged. See `design/validation-plan.md` §6 |
+| Skill proliferation audit | Not started | Are all skills earning their context cost? See `design/validation-plan.md` §6 |
 | Skill templates / generators | Partial | design-skill guides creation but doesn't scaffold files |
 
 ---
 
-### 6. The system embeds knowledge into its own form
+### P6. The system improves through use
 
-A learning system is one that embeds new knowledge into its own form in
-order to produce higher function. Not just accumulation — structural
-self-modification. The system's output feeds back into the system's
-capacity to produce better output. A CLAUDE.md that updates its own
-conventions, a workflow pipeline that rewrites its own stages, a feature
-registry that catches its own gaps — these are all instances of the
-same principle.
+Knowledge compounds. Friction surfaces. Workflows get refined. See
+`design/design-principles.md` §6.
 
-In single-user, the embedding loop is closed by default (the human and
-agent are the same node). In multi-user, the loop opens at every team
-boundary, and signal loss becomes the central design problem. See
-`design/coordination-brainstorm.md` §4 for the multi-user
-treatment. The features below address the solo embedding loop; the
-brainstorm addresses the distributed version.
-
-**Serves Awareness and Attention:** A static system forces the learner to
-re-explain themselves, re-orient the agent, and manage the gap between
-where they are and where the system thinks they are. All of that is
-wasted attention and a source of frustration that fragments awareness.
-A system that embeds knowledge into its own form reduces this overhead
-session over session — attention compounds rather than resets.
+In single-user, the embedding loop is closed by default. In multi-user,
+signal loss at team boundaries becomes the central problem. See
+`design/coordination-brainstorm.md` §4.
 
 **Existing implementations:**
 - Knowledge compounding (`docs/solutions/` — first solve = research, second = lookup)
-- Session logs → session-review → ARCS updates (learning state accumulates)
+- Session logs → session-review → current-state updates (learning state accumulates)
 - Workflow debugging during use (compound engineering workflows refined mid-session)
 - Dogfooding (design-skill reviewing itself against its own checklist)
 - Session-log-analyzer (captures observations across `/clear` boundaries)
@@ -317,34 +206,27 @@ session over session — attention compounds rather than resets.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Learning state accumulation (ARCS) | Built | Quiz-driven updates after each session |
+| Learning state accumulation | Built | Current-state updated after each session |
 | Session log capture | Built | JSONL + daily notes |
+| Crystallization prompts | Not started | Replaces quiz as primary session-review instrument. Analyze recent project progress → prompt learner to articulate takeaways → calibrate current-state from fluency. See `design/startwork-redesign.md` §Reflective toolkit. |
+| Surprise journal (multi-altitude) | Not started | Technical, conceptual, goal-level surprises. All update current-state; goal-level triggers refinement. See `design/startwork-redesign.md` §Reflective toolkit. |
+| Open-ended reflection prompts | Not started | "What felt different today?" "What was fun?" Lower-structure, selects for explore state. |
 | Workflow self-modification | Demonstrated | Happened organically in session 6; not formalized |
-| Intervention effectiveness tracking | Not started | Did the move work? Did the gap close? Instance of catch basin pattern — signal generated during use that needs a return path to system structure |
-| Friction logging | Not started | What slowed the session down? Patterns across sessions? Instance of catch basin pattern |
-| Automated memory proposals | Not started | System notices a pattern worth saving, proposes it (human approves). Instance of catch basin pattern |
-| Surprise-triggered capture | Not started | CLAUDE.md instruction: "When you encounter something surprising in this project, flag it and recommend the catch basin skill." Inverts authoring from prospective to retrospective — learnings enter through genuine info gaps, not speculative review. Pre-filters for relevance. Source: Theo's pattern (arXiv 2602.11988 commentary) |
+| Intervention effectiveness tracking | Not started | Did the move work? Did the gap close? Catch basin pattern. |
+| Friction logging | Not started | What slowed the session down? Patterns across sessions? Catch basin pattern. |
+| Automated memory proposals | Not started | System notices a pattern worth saving, proposes it (human approves). Catch basin pattern. |
+| Surprise-triggered capture | Not started | "When you encounter something surprising, flag it." Inverts authoring from prospective to retrospective. Source: Theo's pattern (arXiv 2602.11988 commentary). |
 | Regression detection | Not started | Did a score drop? Did a previously-working skill break? |
-| Compounding indicators | Not started | Is this session's attention building on the last, or starting from scratch? Solo signal-loss detector — if not compounding, the embedding loop is broken somewhere. See brainstorm §4.1 propagation verification |
-| Solo compound engineer (weekly review) | Not started | Reads session logs, identifies patterns at higher abstraction, proposes system updates. Solo version of compound engineer role (brainstorm §4). Prototype before scaling to multi-user |
-| Archive-not-delete lifecycle | Not started | Move ephemeral docs to archive rather than deleting. Prevents signal loss from premature cleanup. See brainstorm §4.3 |
+| Compounding indicators | Not started | Is this session building on the last, or starting from scratch? If not compounding, the embedding loop is broken somewhere. |
+| Solo compound engineer (weekly review) | Not started | Reads session logs, identifies patterns at higher abstraction, proposes system updates. Prototype before scaling to multi-user. |
+| Archive-not-delete lifecycle | Not started | Move ephemeral docs to archive rather than deleting. Prevents signal loss from premature cleanup. |
 
 ---
 
-### 7. Human authority is non-negotiable
+### P7. Human authority is non-negotiable
 
-The human drives. The system proposes, the human disposes. Memory writes
-require approval. Behavioral directives live only in CLAUDE.md. The system
-increases the human's agency, never substitutes for it.
-
-**Serves Awareness and Attention:** Agency is the capacity to direct one's
-own attention. A system that overrides or substitutes for the learner's
-attentional choices erodes the very faculty it exists to develop.
-Authority over attention must remain with the human — the system
-composes the agent's attention and proposes compositions for the
-human's, but never imposes them. This also protects awareness: a
-system that acts without consent creates vigilance, which fragments
-the field.
+The human drives. The system proposes, the human disposes. See
+`design/design-principles.md` §7.
 
 **Existing implementations:**
 - Operating principle #1 (agency over efficiency)
@@ -361,7 +243,53 @@ the field.
 | Learner-initiated interactions | Built | Protect the experiment-first loop |
 | Autonomy metrics | Not started | Is the learner asking fewer questions over time? More precise ones? |
 | Graceful degradation | Not started | What happens when the system is unavailable? Learner should still function |
-| Override / correction mechanisms | Partial | Learner can correct ARCS scores, update user model |
+| Override / correction mechanisms | Partial | Learner can correct current-state scores, update user model |
+
+---
+
+### P8. Play is the explore state
+
+Wide, iterative attention with low cost of failure. The system creates
+conditions where play is available and attractive. See
+`design/design-principles.md` §8.
+
+**Existing implementations:**
+- Playful elements in some skill prompts (exaptation skill uses
+  cross-domain exploration)
+- Experiment-first loop (try things — a play-adjacent posture)
+
+**Features to catch:**
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Playful project variants | Not started | Offer silly/small/exploratory versions of growth-edge tasks before the "real" assignment |
+| Playfulness prompts in project selection | Not started | "What excites you? What twist would make you more engaged?" Part of project-goal mapping (P3). |
+| Exploratory reflection prompts | Not started | Make the reflective toolkit itself playful, not just evaluative. "Explain middleware as a theatre metaphor." |
+| Play-state detection | Not started | Can the system infer when the learner is in explore mode vs. grind mode? Adjust accordingly. |
+| Practice integration (play side) | Not started | Which practices cultivate the explore state? Overlap with P1 practice integration hooks. |
+
+---
+
+### P9. Challenge calibrated to the edge
+
+The zone of proximal development: enough novelty for genuine uncertainty,
+not so much that failure feels certain. See `design/design-principles.md` §9.
+
+**Existing implementations:**
+- Gap classification (conceptual / procedural / recall) implicitly
+  calibrates intervention difficulty
+- Altitude awareness operating principle
+
+**Features to catch:**
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Zone tracking via developmental model | Not started | Use current-state scores + project difficulty to estimate proximity to edge |
+| Novelty pacing | Not started | Track how many new concepts per session; flag when rate is too high or too low |
+| Cognitive closure detection | Not started | Patterns in interaction suggesting "I can't" (overwhelm) or "I already know this" (boredom) |
+| Scope adjustment | Not started | When overwhelm detected, suggest reducing scope. When boredom, suggest extension or harder variant. |
+| Attentional load estimation | Not started | What is the current cognitive load? Informs task selection and pacing. Moved from Unsorted. |
+| Awareness-informed scheduling | Not started | Which tasks demand coherent awareness? Which tolerate fragmentation? Serves P1 and P9. |
 
 ---
 
@@ -371,15 +299,13 @@ Features that don't yet have a clear home or that span multiple principles.
 
 | Feature | Possible principle(s) | Notes |
 |---------|----------------------|-------|
-| Multi-Claude orchestration (game-Claude + Roger) | Attention, Composability | Two instances with different attentional roles and shared filesystem. Two-node instance of multi-user coordination problem — see `design/coordination-brainstorm.md` §5 |
-| Corpus miner | Self-improvement, Attention | Personal archive as searchable knowledge base. Built. Directly useful for retrospective capture phase (mining Claude conversations for implicit knowledge) |
-| ~~Weekly review skill~~ | ~~Self-improvement, Developmental model~~ | **Moved to P6** as "Solo compound engineer (weekly review)" |
-| Handoff test skill | Attention, Human authority | Audit artifacts for self-containedness before context loss. Check whether group project version (schelling-points) has evolved beyond roger version |
+| Multi-Claude orchestration (game-Claude + Roger) | Attention, Composability | Two instances with different attentional roles and shared filesystem. See `design/coordination-brainstorm.md` §5 |
+| Corpus miner | Self-improvement, Attention | Personal archive as searchable knowledge base. Built. Useful for retrospective capture. |
+| Handoff test skill | Attention, Human authority | Audit artifacts for self-containedness before context loss. |
 | Cross-domain bridge detection | Developmental model, Self-improvement | Exaptation mining from corpus |
-| Parameterized user model (new learner onboarding) | Developmental model, Composability | Interview protocol → initial model. Same problem at both scales: solo = onboard a learner; multi-user = onboard a team (brainstorm §3 intake/setup). Build one, inform the other |
-| Awareness practice catalog | Awareness | Which practices restore coherence? How do they connect to session design? |
-| Attentional load estimation | Attention, Awareness | What is the current cognitive/attentional load? Informs task selection. Directly relevant to brainstorm §9 sequencing (bandwidth-aware plan execution) |
-| Multi-user learning layer | Self-improvement, Composability | The distributed version of P6: keeping the embedding loop closed across team boundaries. Full treatment in `design/coordination-brainstorm.md` §4. Depends on solo P6 features as prototypes |
+| Awareness practice catalog | Awareness, Play | Which practices restore coherence and cultivate the explore state? |
+| Multi-user learning layer | Self-improvement, Composability | Distributed P6: keeping the embedding loop closed across team boundaries. See `design/coordination-brainstorm.md` §4. Depends on solo P6 features as prototypes. |
+| Human connection facilitation | Boundary condition | Can the system encourage human learning bonds? Surface shared growth edges, match learners, prepare users for peer sessions. See `design/startwork-redesign.md` §Open questions. |
 
 ---
 

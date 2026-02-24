@@ -22,7 +22,6 @@ Design docs: `design/`. Research: `research/`. Skills: `.claude/skills/`.
 - Git: meaningful commit messages, commit working states frequently,
   always commit to a feature branch (not main)
 - File structure: flat until complexity demands nesting
-- Testing: add tests when behavior matters, not for ceremony
 - CLAUDE.md edits: keep minimal — only what the agent can't discover
   by exploring the repo. The reasoning token tax is real.
 
