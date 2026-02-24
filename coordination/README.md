@@ -4,10 +4,10 @@ Team coordination module for Claude Code. Connects individual
 developer harnesses into a shared workflow: task ranking, conflict
 detection, triage routing, dependency tracking, and signal return path.
 
-**Source:** Extracted from the Schelling Points group project
-(4-person team, 1-week build cycle, Feb 2026). Field-tested through
-a full development lifecycle with PRs, code review, and task
-coordination all running through the system.
+**Source:** Extracted from a group project field test (4-person team,
+1-week build cycle, Feb 2026). Field-tested through a full development
+lifecycle with PRs, code review, and task coordination all running
+through the system. See `research/` for field-test reference material.
 
 ## Components
 
@@ -22,32 +22,23 @@ coordination all running through the system.
 
 ## Generalization status
 
-These files were copied directly from the Schelling Points project.
-Items below need generalization before the coordination layer is
-project-agnostic.
+These files were extracted from a field-test project and generalized.
 
-### Hardcoded project references (must fix)
+### Configuration points
 
-- `compound-engineering.md` — Contains Schelling Points project
-  description and review concerns. Replace with configurable project
-  context (populated during team intake).
-- `scripts/startwork-gather.ts` line 105 — Hardcoded `thrialectics`
-  org and project number. Parameterize with config variables.
+- `compound-engineering.md` — Project description and review concerns.
+  Replace placeholder content during team intake.
+- `scripts/startwork-gather.ts` — `ORG_OWNER` and `PROJECT_NUMBER`
+  constants at top of file. Set to your GitHub org/project.
 
-### Game-specific subagents (generalize or make optional)
+### Subagents
 
-- `subagents/decision-balance-audit.md` — Written for game balance
-  auditing (dominant strategies, resource pressure, escalation curves).
-  Not applicable to non-game projects. Either generalize to "decision
-  analysis" or make it an optional/swappable subagent.
-- `subagents/feature-ui-completeness.md` — Mostly generic (UI feedback
-  loops, invisible state, dead-end UX) but uses game terminology.
-  Light rewrite to remove game-specific language.
-
-### Generic subagents (ready to use)
+All subagents are project-agnostic:
 
 - `subagents/best-practices-researcher.md`
 - `subagents/code-simplicity-reviewer.md`
+- `subagents/decision-balance-audit.md` — Decision & trade-off analysis
+- `subagents/feature-ui-completeness.md` — UI completeness audit
 - `subagents/framework-docs-researcher.md`
 - `subagents/learnings-researcher.md`
 - `subagents/repo-research-analyst.md`

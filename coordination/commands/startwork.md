@@ -3,6 +3,8 @@
 Pre-work checks before beginning any task. Surfaces conflicts with
 active work so the human can make an informed choice.
 
+**Full specification:** `design/startwork.md` (solo + team + interplay).
+
 ## Usage
 
 `/startwork` — pick the highest-priority available task from the board
