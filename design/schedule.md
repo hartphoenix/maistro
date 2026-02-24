@@ -26,12 +26,12 @@ design docs; this file tracks execution status.
 
 | Task | Spec | Status |
 |------|------|--------|
-| Data hopper + intake interview | `design/prd.md` §MVP | Planned |
-| Parameterized CLAUDE.md generation | `design/prd.md` §MVP | Planned |
+| Data hopper + intake interview | `design/prd.md` §MVP | Done |
+| Parameterized CLAUDE.md generation | `design/prd.md` §MVP | Done |
 | Skills out of the box (debugger, session-review, quick-ref) | `design/build-registry.md` | Done |
 | Solo /startwork | `design/startwork.md` §Solo | Designed |
 | Learning state persistence (current-state.md) | `design/harness-features.md` §P3 | Done |
-| Privacy (.gitignore learner profile) | `design/prd.md` §MVP | Planned |
+| Privacy (.gitignore learner profile) | `design/prd.md` §MVP | Done |
 
 ### Personal harness — additional built skills
 

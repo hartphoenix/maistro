@@ -31,9 +31,10 @@ All local. No network calls. Fast.
 |--------|------------------|
 | Git state (branch, uncommitted work, recent commits) | What was in-progress |
 | Local todo files (agent todos, checklists) | Outstanding items |
-| current-state.md (scores, gaps, staleness) | Where the growth edge is |
-| goals.md (goal states, active projects) | Where the student is headed |
-| Session logs / daily notes | What happened last, unfinished threads |
+| learning/current-state.md (scores, gaps, staleness) | Where the growth edge is |
+| learning/goals.md (goal states, active projects) | Where the student is headed |
+| learning/arcs.md (developmental lines, capability clusters) | What skill sequences serve the goals |
+| learning/daily-notes/ | What happened last, unfinished threads |
 | Project schedule (assignments, milestones, due dates) | What has a hard deadline |
 | Design docs / build checklist | What's planned but unbuilt |
 
@@ -53,8 +54,8 @@ is due in 2 days, estimated at 4-6 hours of work."
 Three detection approaches (not mutually exclusive):
 - **Manual annotation** — lightweight dependency syntax in local files
 - **Design doc analysis** — heuristic scan for dependency language
-- **Current-state-informed prerequisites** — goals.md says you need
-  concept X; current-state.md says you're at level 1; flag it
+- **Current-state-informed prerequisites** — learning/goals.md says you
+  need concept X; learning/current-state.md says you're at level 1; flag it
 
 **Tier 4: Growth-edge.** What's at the developmental frontier. Surfaced
 through the lens of active projects: "This project needs useReducer,
@@ -237,6 +238,15 @@ accumulation, or schedule.
 - How does the system detect play-state vs. grind-state?
 
 ### Document architecture
-- Do current-state.md and goals.md live in a standard location?
+- ~~Do current-state.md and goals.md live in a standard location?~~
+  **Resolved:** All learning state lives in `learning/` —
+  `learning/goals.md`, `learning/arcs.md`, `learning/current-state.md`,
+  `learning/daily-notes/`. Static analytical framework in
+  `.claude/references/developmental-model.md`.
 - What's the reconciliation mechanism between current-state and goals?
-- How does the system handle a new user with no current-state data?
+  Arcs bridge the gap: goals decompose into arcs (capability clusters),
+  arcs track complexity/chunking state, current-state tracks individual
+  concept scores. Startwork reads all three layers.
+- ~~How does the system handle a new user with no current-state data?~~
+  **Resolved:** `/intake` skill generates initial learning/goals.md,
+  learning/arcs.md, and learning/current-state.md from hopper + interview.
