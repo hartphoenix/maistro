@@ -5,7 +5,32 @@ description: Onboarding interview for the personal development harness. Scans .h
 
 # Intake
 
-Onboard a new learner. Four phases, in order. Do not skip or reorder.
+Onboard a new learner. Five phases, in order. Do not skip or reorder.
+
+---
+
+## Phase 0: Resume Check
+
+Before starting intake, check if `learning/.intake-notes.md` exists.
+
+**If found:** Read the file. The YAML frontmatter fields `phase` and
+`last_completed` tell you where intake was interrupted. Present a
+summary of what's already captured and offer:
+1. Resume from the interruption point
+2. Start fresh (delete the notes file and any partial drafts first)
+
+If resuming into Phase 2, re-read the notes to restore context. If
+the notes contain a `## Hopper Analysis` section, use its signal-strength
+ratings to calibrate remaining interview domains the same way a fresh
+run would (strong = confirmation only, thin = full question set). Also
+read `.claude/references/developmental-model.md` if you haven't yet.
+Pick up at the next step not listed in `domains_completed` — this
+includes the five interview domains plus `reflection` and `projects`.
+
+If resuming into Phase 3, proceed directly to synthesis sub-agent
+dispatch.
+
+**If not found:** Proceed to Phase 1.
 
 ---
 
@@ -17,48 +42,67 @@ sharper starting model.
 Before starting, read `.claude/references/developmental-model.md`. This
 reference tells you how to analyze a learner's development — the
 complexity/chunking dimensions, dependency types, ordering heuristic,
-and compounding engine. Use it to interpret hopper materials and
-calibrate interview questions.
+and compounding engine. Use it to calibrate interview questions and
+identify bridge opportunities from the learner's background.
 
-### 1a. Check the hopper
+### 1a. Scan the hopper
 
-Look for a `.hopper/` directory in the project root. These are the
-material types the hopper may contain and what to extract from each:
+Look for a `.hopper/` directory in the project root. List its contents
+(file names, sizes, types) but **do not read file contents yourself**.
+Produce a file manifest — this is what you'll pass to the analysis
+sub-agent.
 
-| Material type | What to extract |
-|---------------|-----------------|
-| Code files / repos | Languages, frameworks, file structure patterns, naming conventions, code style, README content, commit messages if `.git/` present, test patterns |
-| Resumes / CVs | Background domains, career trajectory, skills claimed, projects highlighted, education |
-| Writing samples | Reasoning patterns, tone, vocabulary, domain interests, self-awareness cues |
-| Conversation exports | Question patterns, help-seeking style, what confuses vs. what flows, reflection depth |
-| Course materials / transcripts | Subject areas, performance indicators, completion status |
-| Other files | Describe what you found; ask the user what it is |
+### 1b. Dispatch hopper analysis
 
-### 1b. Analyze and surface gaps
+**If the hopper has files**, tell the user you're analyzing their
+materials and it will take a moment. Then dispatch a hopper analysis
+sub-agent using the Task tool. Read
+`.claude/skills/intake/subagents.md § Hopper Analyzer` for the full
+dispatch prompt, extraction table, and output schema. Pass the sub-agent
+the hopper path and your file manifest. It reads the files, reads the
+developmental model independently, and returns a structured Hopper
+Analysis Report with signal-strength ratings per interview domain.
 
-**If the hopper has files**, present what you found — be specific about
-signals extracted, not just file names. Then assess which interview
-domains (background, goals, current state, learning style,
-preferences) the materials gave good signal on vs. left thin.
+If the sub-agent fails or returns unusable output, retry once. If it
+fails again, tell the user the automated analysis didn't work and
+proceed to the interview without hopper findings — the hopper is an
+accelerant, not a gate.
 
-Tell the user what's covered, what's thin, and what specific materials
-could fill the gaps. Reference the material types above — suggest the
-ones the hopper is *missing* that are likely easy for the user to find
-(a resume for background, project work for current level,
-conversation exports for learning patterns, etc.). Frame it as
-opportunity, not requirement.
+**If the hopper is empty or absent**, skip the sub-agent. Explain the
+convention: `.hopper/` is where they can drop materials (code, resumes,
+writing, conversation logs, course materials) for a sharper starting
+profile. None of it is required — the interview can build the profile
+from scratch.
 
-**If the hopper is empty or absent**, explain the convention: `.hopper/`
-is where they can drop materials (code, resumes, writing, conversation
-logs, course materials) for a sharper starting profile. None of it is
-required — the interview can build the profile from scratch.
+### 1c. Present findings and offer paths
+
+**If a hopper report was returned**, present what it found — be specific
+about signals, not just file names. Use the signal-strength ratings to
+tell the user what's well-covered vs. thin, and suggest materials that
+could fill gaps. Frame it as opportunity, not requirement.
 
 **Either way**, offer three paths:
-1. Add materials to the hopper (wait for them)
+1. Add materials to the hopper (wait for them, then re-dispatch)
 2. Point to another directory to read from
 3. Skip straight to the interview
 
-### 1c. Proceed
+### 1d. Initialize intake notes
+
+Create `learning/.intake-notes.md` with YAML frontmatter:
+
+```yaml
+---
+phase: discover
+last_completed: discover
+domains_completed: []
+started: YYYY-MM-DD
+---
+```
+
+If a hopper report was generated, append it as the `## Hopper Analysis`
+section. This file is your running record for the rest of intake.
+
+### 1e. Proceed
 
 Whatever the user chose, move to Phase 2. The hopper is an accelerant,
 not a gate.
@@ -71,12 +115,27 @@ Adaptive conversational interview. The hopper findings (if any) inform
 which questions to ask and which to skip. Target: 10-15 minutes. If the
 hopper was rich, this may be shorter.
 
+### Interview protocol
+
+- Conversational, not interrogative. One domain at a time.
+- Acknowledge what you learned from the hopper before asking related
+  questions. ("Your writing shows clear structural thinking — tell me
+  more about how you approach organizing ideas.")
+- When the user gives a short answer, one follow-up is okay. Two
+  follow-ups on the same topic is too many — move on.
+- If the interview is running long (more than 15 minutes), offer to
+  wrap up: "I have enough to build a solid starting profile. We can
+  always refine it later. Want to continue or should I synthesize
+  what I have?"
+
 ### Question domains
 
-Work through these domains in order. **Skip any domain the hopper
-already answered well.** Within each domain, ask 1-3 questions depending
-on what you need to learn. Follow interesting threads briefly, but don't
-interrogate — one follow-up per short answer, max.
+Work through these domains in order. The hopper report's signal-strength
+ratings guide your depth: **strong** domains need only a confirmation
+question or two, **moderate** domains get targeted follow-ups, **thin**
+or missing domains get the full question set. Within each domain, follow
+interesting threads briefly but don't interrogate — one follow-up per
+short answer, max.
 
 **1. Background and context**
 
@@ -125,33 +184,126 @@ helps vs. what annoys.
 
 **5. Work and communication preferences**
 
-What to discover: how they want the harness to interact with them.
+What to discover: how they want the system to interact with them.
 
 - What does good work look like to you? (quality standards, style)
 - Do you prefer structure or flexibility in your workflow?
 - How direct do you want feedback? Gentle nudges or straight talk?
 - When someone is helping you, what's most useful? What's annoying?
 
-### Interview protocol
+### Record domain notes
 
-- Conversational, not interrogative. One domain at a time.
-- Acknowledge what you learned from the hopper before asking related
-  questions. ("Your writing shows clear structural thinking — tell me
-  more about how you approach organizing ideas.")
-- When the user gives a short answer, one follow-up is okay. Two
-  follow-ups on the same topic is too many — move on.
-- If the interview is running long (more than 15 minutes), offer to
-  wrap up: "I have enough to build a solid starting profile. We can
-  always refine it later. Want to continue or should I synthesize
-  what I have?"
+After completing each interview domain, append structured notes to
+`learning/.intake-notes.md`. Format:
+
+```markdown
+## [Domain Name]
+
+[Key findings — specific quotes, concrete details, not summaries]
+**Signal strength:** strong | moderate | thin
+**Key signals:**
+- [most important things learned, bulleted]
+```
+
+Then update the YAML frontmatter: add the domain name to
+`domains_completed`, set `phase: interview`, set `last_completed` to
+the domain name.
+
+Write as if you will not remember anything that isn't in this file.
+This is your compression-resistant record — if context is lost, these
+notes are what survives.
+
+### Reflect and check
+
+After the five interview domains, pause and reflect back what you've
+heard. Present a brief portrait: here's where I think you are in your
+learning. Include:
+
+- What they seem confident about and where they light up
+- Where they feel stuck or uncertain
+- Predictions about their workflow — how you'd expect them to approach
+  a new problem, what patterns might show up
+- Bridge material from prior domains that could accelerate learning
+
+This is a mirror, not a grade. The learner should recognize themselves
+or correct the picture. Ask: "Does this sound right? Anything I'm
+missing or getting wrong?"
+
+After the user confirms or corrects, append a `## Reflection` section
+to the intake notes with your summary and any corrections they offered.
+Update the frontmatter: add `reflection` to `domains_completed`, set
+`last_completed: reflection`.
+
+### Projects
+
+Projects are how skills develop — the instrument for closing the gap
+between current state and goals. After the reflection, explore what
+the learner is currently working on.
+
+If projects came up in the hopper or earlier in the interview, build
+on what you know. Otherwise ask directly.
+
+- What are you working on right now? (current projects, assignments,
+  personal builds, work deliverables)
+- For each project: where are you in it? What's going well? What's
+  blocked or unclear?
+- What do you not yet know how to do to finish this?
+- What do you want out of this project as a learner? (what skills or
+  understanding should it build?)
+- What do you want it to do in the world? (functional purpose, who
+  it's for, why it matters)
+
+The *why* is as important as the *what*. A project that serves a goal
+the learner cares about generates intrinsic motivation; one that
+doesn't becomes a chore.
+
+**If the learner has no current projects**, note this as something to
+address after intake. Don't dive into project brainstorming during
+the interview — but mention that the system can help with that as a
+next step and ask if they'd like to schedule it.
+
+After the projects discussion, append a `## Projects` section to the
+intake notes following the same format (findings, signal strength, key
+signals). Update the YAML frontmatter: add `projects` to
+`domains_completed`, set `last_completed: projects`.
 
 ---
 
 ## Phase 3: Synthesize
 
-Compile everything (hopper findings + interview answers) into drafts
-for the `learning/` directory and CLAUDE.md. Present all drafts to the
-user for review before writing anything.
+Read `learning/.intake-notes.md` and verify completeness — all interview
+domains, reflection, and projects should be present. If any are missing,
+ask the user for that information directly before proceeding to
+synthesis. A missing reflection is especially important — the learner
+needs to have validated the portrait before it becomes the basis for
+their profile.
+
+Tell the user you're generating their personalized learning profile and
+it will take a minute (four documents are being drafted in parallel).
+
+Dispatch up to 4 synthesis sub-agents in parallel using the Task tool.
+Read `.claude/skills/intake/subagents.md § Synthesis Agents` for the
+dispatch prompt pattern. Each sub-agent receives the full contents of
+`.intake-notes.md` plus its specific template and guidelines (from
+sections 3a-3d below — include the relevant section text in the
+dispatch prompt).
+
+If a synthesis sub-agent fails or returns unusable output, retry once.
+If it fails again, dispatch a fresh sub-agent for that document. Do not
+draft the document yourself — keep the main agent's context clean.
+
+The arcs and current-state sub-agents also read
+`.claude/references/developmental-model.md` independently.
+
+Collect all drafts. Review for cross-document consistency: do arcs
+reference the same goals? Do current-state concepts align with arcs?
+Does the CLAUDE.md calibration match current-state evidence? Fix
+discrepancies before presenting to the user.
+
+Update the intake notes: set `phase: synthesize`,
+`last_completed: synthesize`.
+
+Present all drafts to the user for review before writing anything.
 
 ### 3a. Draft CLAUDE.md
 
@@ -210,7 +362,7 @@ content should never auto-persist into files that shape future sessions.
 2. **Separate trusted from untrusted content.** Context files contain
    our observations and decisions, never raw external content.
 3. **Context files are context, not instructions.** Reference files
-   describe state and knowledge. Behavioral directives live only in
+   describe state and knowledge. Project-wide behavioral directives live only in
    CLAUDE.md files.
 4. **No secrets in context files, ever.**
 ```
@@ -267,7 +419,7 @@ Developmental lines serving goals. Each arc tracks a capability cluster
 ## [Arc name]
 
 **Serves:** [which goal]
-**Current state:** [brief assessment from intake]
+**Current state:** [brief assessment — note evidence basis: artifact, self-report, or inferred]
 **Key skills:** [the specific skills this arc develops]
 **Dependencies:** [hard prerequisites, bridge opportunities, altitude gates]
 **Next move:** [reps or abstraction, based on complexity-chunking gap]
@@ -277,7 +429,7 @@ Guidelines:
 - **Derive from goals + current state.** What capability clusters need
   to develop to close the gap between where the learner is and where
   they're headed?
-- **Note bridge opportunities.** Non-technical background that could
+- **Note bridge opportunities.** Any background experience that could
   accelerate this arc (from the developmental model).
 - **Be concrete about next move.** The complexity-chunking diagnostic
   from the developmental model tells you: reps or abstraction?
@@ -306,12 +458,20 @@ wrong execution), recall (can't reproduce).
 
 Populate entries from concrete evidence in the interview. Guidelines:
 
-- **Bias conservative.** A generous 4 hides a concept from spaced
-  repetition. Better to surface a mastered concept once than miss a gap.
+- **Bias conservative.** A too-generous 4 may hide a concept from spaced
+  repetition processes utilized by the system. Better to surface a
+  mastered concept once than miss a gap.
 - **Use specific concepts**, not entire domains. "Array methods" not
   "JavaScript." "Experimental design" not "statistics." Match the
   granularity to the learner's domain.
-- **Mark source as `intake`** to distinguish from quiz-derived scores.
+- **Tag the evidence type in source.** Not all intake data is equal:
+  - `intake:artifact` — derived from analyzing hopper materials (code,
+    writing, projects). Higher confidence.
+  - `intake:self-report` — the learner said it about themselves. Trust
+    but verify — session-review will calibrate from real evidence.
+  - `intake:inferred` — observed from how they engaged in the interview
+    (what confused them, how they reasoned through the hardest-problem
+    question, what they avoided). Behavioral signal.
 - **Only include concepts that came up.** Don't speculatively populate
   a curriculum. Session-review adds concepts from real sessions.
 - **Gap type from evidence.** If they described a wrong mental model,
@@ -321,22 +481,39 @@ Populate entries from concrete evidence in the interview. Guidelines:
 
 ### 3e. Present and confirm
 
-Show all drafts to the user, clearly labeled:
-
-> **Here's the CLAUDE.md I'd generate.** Read through it — does this
-> sound like you? Anything to change?
+Present the learner-facing drafts for review. The CLAUDE.md is a
+behind-the-scenes configuration file — don't lead with it.
 
 > **Here are your goals.** These are the aspirational states I heard
 > from our conversation. Anything to add or rephrase?
 
-> **Here are your initial arcs** — the developmental lines I see
-> between where you are and where you're headed.
+> **Here's how I see your growth path** — the groups of related skills
+> I'd focus on to get you from where you are to where you're headed.
+
+For each arc, present it in plain language: what the skill group is,
+where they seem to be with it, what they'd need before going further,
+and what the natural next step looks like. Don't use terms like
+"capability cluster," "altitude gate," "complexity-chunking gap," or
+other developmental model jargon. The stored arcs.md file keeps the
+structured format (other skills read it), but what you show the learner
+should read like a conversation, not a technical spec.
 
 > **And here's your initial learning state.** These scores are estimates
 > from our conversation. Adjust anything that feels off.
 
-Wait for explicit approval before proceeding to Phase 4. Accept edits —
-incorporate them into the drafts and re-present if needed.
+After the learner reviews goals, arcs, and current state:
+
+> I also generated a configuration file called CLAUDE.md — it tells the
+> system how to work with you (communication style, calibration level,
+> preferences). You can view and edit it anytime. Want to see it now, or
+> should we move on?
+
+If they want to see it, show the draft. If not, proceed. Either way,
+the CLAUDE.md is written in Phase 4 with the same human-gated approval
+as every other file.
+
+Wait for explicit approval of all drafts before proceeding to Phase 4.
+Accept edits — incorporate them into the drafts and re-present if needed.
 
 ---
 
@@ -363,7 +540,7 @@ goals.md, arcs.md):
 - Warn the user. For each file, offer to merge or skip.
 
 **If `.gitignore` exists:**
-- Show the proposed additions. Ask to append.
+- Don't show the file or name it. Just confirm intent (see 4b.6).
 
 ### 4b. Write approved files
 
@@ -374,16 +551,27 @@ goals.md, arcs.md):
 3. Write `learning/goals.md`.
 4. Write `learning/arcs.md`.
 5. Write `learning/current-state.md`.
-6. Append privacy patterns to `.gitignore`:
+6. Append privacy patterns to `.gitignore`. Frame it for the user in
+   plain language — don't name the file or assume they know what it does:
 
-```gitignore
-# Learner profile (personal, not shared)
-learning/
-.hopper/
-```
+   > I'm going to make sure your personal learning data stays private
+   > and doesn't get shared if you push this project to GitHub. Okay
+   > to proceed?
 
-7. Ask the user: "Do you want your CLAUDE.md tracked in git, or kept
-   local?" If local, add `CLAUDE.md` to `.gitignore` as well.
+   If they approve, append:
+
+   ```gitignore
+   # Learner profile (personal, not shared)
+   learning/
+   .hopper/
+   ```
+
+7. Ask about CLAUDE.md privacy the same way:
+
+   > Do you want your personal configuration file shared if you push
+   > this project, or kept just for you?
+
+   If local, add `CLAUDE.md` to `.gitignore` as well.
 
 ### 4c. Wrap up
 
@@ -393,8 +581,11 @@ After writing, summarize:
 - Remind the user: "All generated files are editable. The intake gives
   you a starting point — refine anything that doesn't fit as you work."
 - Suggest next steps based on what's available (e.g., "Start working —
-  the harness adapts to you as you go. After a session, try
+  the system adapts to you as you go. After a session, try
   `/session-review` to begin building your learning profile.")
+
+After all approved files are written, delete `learning/.intake-notes.md`
+— it has served its purpose. The learning files are the permanent record.
 
 ---
 
@@ -402,7 +593,7 @@ After writing, summarize:
 
 - **Don't teach during intake.** Discover who the learner is. Teaching
   happens in sessions, not onboarding.
-- **Don't over-interview.** If the hopper answered a question, skip it.
+- **Don't over-interview.** If the hopper answered a question completely, skip it.
   If the user gives short answers, respect the signal — they may not
   know yet, or may not care to articulate right now.
 - **Don't write files without approval.** Every generated file gets
@@ -416,3 +607,6 @@ After writing, summarize:
 - **Don't bloat the CLAUDE.md.** Only include what the agent needs to
   behave appropriately. The reasoning token tax is real — a 200-line
   CLAUDE.md competes with every conversation turn.
+- **Don't read hopper files in the main agent.** The sub-agent handles
+  file analysis. The main agent works from the structured report. This
+  is how context stays clean for the interview and synthesis phases.

@@ -43,11 +43,22 @@ this document captures the build decisions and current state.
 
 7. **SuperWhisper** — "slash intake" → `/intake` registered.
 
-### In progress
-
-8. **Intake skill refinement** — Improving hopper analysis flow: after
-   analyzing materials, surface gaps in the model and suggest what data
-   could fill them before proceeding to interview.
+8. **Intake context management** — Sub-agent delegation, progressive
+   note-taking, and resume protocol to keep the skill within context
+   budget for non-technical users:
+   - Sub-agent for hopper analysis (raw materials never enter main
+     agent context; conditional sub-sub-agent spawning for large
+     hoppers)
+   - Progressive note-taking to `learning/.intake-notes.md` after each
+     interview domain (compression-resistant record)
+   - Parallel sub-agent dispatch for synthesis (4 document drafts
+     generated in isolated contexts)
+   - Resume protocol (Phase 0) — detects interrupted intake via notes
+     file, offers to resume or start fresh
+   - Sub-agent dispatch reference: `.claude/skills/intake/subagents.md`
+   - Failure handling: retry once, re-dispatch on second failure;
+     hopper failure degrades gracefully (accelerant, not gate)
+   - User communication during wait times
 
 ### Remaining today
 
@@ -62,6 +73,19 @@ this document captures the build decisions and current state.
 - Coordination layer (team startwork, triage, dependency protocol) —
   possible afternoon or push to Wednesday
 
+### Action items surfaced during build
+
+- **Solo project brainstorm skill** — Intake may surface that a learner
+  has no current projects. The coordination layer has a brainstorm
+  workflow (`coordination/commands/workflows/brainstorm.md`) and skill
+  (`coordination/skills/brainstorming/SKILL.md`) designed for team
+  feature brainstorming. Adapt to a solo version scoped to project
+  brainstorming: takes the learner's goals and growth edge as input,
+  explores project ideas that would serve those goals, produces a
+  project brief. Could reuse the coordination brainstorm's phased
+  structure (understand → explore approaches → capture → handoff) with
+  the learner model as context instead of a team codebase.
+
 ---
 
 ## Architecture decisions made today
@@ -73,6 +97,7 @@ this document captures the build decisions and current state.
     developmental-model.md    # static, how to analyze learning
   skills/
     intake/SKILL.md           # onboarding entry point
+    intake/subagents.md       # sub-agent dispatch specs (on-demand)
     session-review/SKILL.md   # end-of-session learning loop
     ...
 
