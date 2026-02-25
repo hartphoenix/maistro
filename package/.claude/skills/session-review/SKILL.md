@@ -18,8 +18,8 @@ Four phases, in order. Do not skip or reorder. Phase 4 is optional.
 
 2. **Determine the review window.**
    Find the last session-review date: check the most recent file in
-   `learning/session-logs/` for its `date:` frontmatter. If no session
-   logs exist, this is the first review — the window starts at intake
+   `learning/session-logs/` for its `date:` frontmatter. If no daily
+   notes exist, this is the first review — the window starts at intake
    (or repo init).
 
 3. **Gather evidence since last review.** Three evidence sources,
@@ -48,6 +48,17 @@ Four phases, in order. Do not skip or reorder. Phase 4 is optional.
       same day or in a short window, read their frontmatter for
       already-logged concepts and scores. Don't re-quiz concepts
       already reviewed in the window.
+
+   e. **Lesson scaffolds in the window** — check `learning/scaffolds/`
+      for scaffold files dated within the review window. If found,
+      read concept classifications (solid / growing / new /
+      prerequisite gap) and the execution sequence. These are
+      predictions made before the session — use them as a baseline
+      to validate against session evidence. Note where the scaffold's
+      classification was accurate and where it was wrong (e.g.,
+      scaffold predicted "solid" but the learner struggled, or
+      predicted "prerequisite gap" but the learner handled it fine).
+      These discrepancies are high-value calibration data.
 
 4. **Context management gate.**
 
@@ -116,7 +127,15 @@ directly — brief and on-task.
 
 ### Session log (`learning/session-logs/YYYY-MM-DD.md`)
 
-Prepend YAML frontmatter (or merge if it exists):
+Check whether a session log already exists for today's date. Other
+skills (lesson-scaffold) may have created one earlier in the session.
+
+**If it exists:** merge into it. Read existing YAML frontmatter and
+preserve any fields already present (e.g., `scaffold:`). Add or update
+`project:`, `concepts:`, and `arcs:` fields. Append to the body —
+don't overwrite existing content.
+
+**If it doesn't exist:** create it with full frontmatter:
 
 ```yaml
 ---
@@ -274,6 +293,20 @@ concept names, code, file paths, goals, or background.
 
 ## Consumer Interfaces
 
-**Weekly review** (future, runs Fridays): reads all week's session log frontmatter + current-state.md. Session-review must write clean YAML and use consistent concept names across sessions.
+**Progress-review** (built, `.claude/skills/progress-review/`): reads
+session log frontmatter + bodies + current-state.md + goals.md +
+arcs.md + scaffolds. Detects cross-session patterns (stalls,
+regressions, goal drift, arc readiness). Dispatched by startwork when
+unreviewed sessions > 2, or invoked standalone. Session-review must
+write clean YAML and use consistent concept names across sessions.
+
+**Lesson-scaffold** (built, `.claude/skills/lesson-scaffold/`): reads
+recent session log frontmatter to classify concepts relative to the
+learner's current state. Uses scores and gap types from session-review
+output.
+
+**Startwork** (built, `.claude/skills/startwork/`): reads session log
+frontmatter for continuation signals, recent concepts/scores, arc
+activity, and unfinished threads.
 
 **Spaced repetition** (future): reads current-state.md only. Prioritizes by score ascending + last-quizzed ascending. Uses gap type to shape question style. Detects stalls via high times-quizzed with low score.

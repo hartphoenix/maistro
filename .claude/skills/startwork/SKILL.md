@@ -5,8 +5,11 @@ description: Composes a session plan from local state. Reads git status, learnin
 
 # Startwork
 
-Four phases, in order. Startwork is read-only — it never writes to
-learning state files. It reads the landscape and composes a briefing.
+Four core phases plus one conditional. Phases 1-4 are read-only —
+startwork never writes to learning state files. It reads the landscape
+and composes a briefing. Phase 5 (Progress Review) fires only when
+enough sessions have accumulated, running in the background during
+Phases 2-4 and presenting findings after the session plan is confirmed.
 
 ## Phase 1: Gather
 
@@ -67,6 +70,28 @@ From the collected frontmatter, build a picture of:
 - **Unfinished threads** — remaining work noted in recent logs
 
 If no session logs exist, this is the first session. Skip silently.
+
+### Step 3b: Progress-review check
+
+After reading session logs, check whether a progress review is due:
+
+1. Check for `learning/.progress-review-log.md`. Read the most recent
+   entry's `date` field. If the file doesn't exist, no prior review.
+2. Count session logs since that date (or all logs if no prior review).
+3. If count > 2: dispatch the progress-review skill as a background
+   sub-agent (`subagent_type: "general-purpose"`,
+   `run_in_background: true`). Pass it:
+   - All session log frontmatter for the review period
+   - Full contents of `learning/current-state.md`, `learning/goals.md`,
+     `learning/arcs.md`
+   - List of scaffold files in `learning/scaffolds/` (with dates)
+   - `git log --oneline -20`
+   - Data source inventory (what exists, what's missing)
+   - The full contents of `.claude/skills/progress-review/SKILL.md`
+   - Contents of `learning/.progress-review-log.md` (for deferred
+     findings)
+   Continue to Step 4 without waiting.
+4. If count ≤ 2: skip silently. No mention to user.
 
 ### Step 4: Learning state
 
@@ -292,7 +317,42 @@ Present the session briefing. Three possible responses:
   mention it briefly. The system proposes; the human decides.
 
 Startwork is done. The session begins. No files written, no state
-persisted.
+persisted — unless Phase 5 fires.
+
+---
+
+## Phase 5: Progress Review (conditional)
+
+Only runs if a progress-review sub-agent was dispatched in Step 3b.
+
+1. After the user confirms the session plan (Phase 4), check if the
+   progress-review sub-agent has returned.
+2. **If returned:** Present findings. "I also looked across your recent
+   sessions and noticed some patterns." Show the review summary and
+   proposed changes. User approves all / selects specific changes /
+   adjusts / defers / rejects.
+   - **Approve (all or selective):** Write approved changes to learning
+     state files. Tag updates as `progress-review:pattern`. Log the
+     review to `learning/.progress-review-log.md` per the progress-review
+     skill's Phase 4 log format (date, sessions reviewed, themes with
+     applied/deferred status, changes applied, deferred items).
+   - **Defer:** Write the review log with deferred findings recorded.
+     No learning state changes. Deferred findings escalate next review.
+   - **Reject:** Write the review log with empty changes and empty
+     deferrals. This advances the review window so the same sessions
+     aren't re-analyzed.
+
+   In all three cases, startwork writes the log entry directly — the
+   sub-agent has already returned and its work is done.
+3. **If not yet returned:** "I'm also running a learning review across
+   your recent sessions — I'll share when it's ready." Check again
+   after a brief pause. Present when available.
+4. **If failed:** Skip silently. Don't mention it. The session
+   proceeds.
+
+Startwork's read-only contract is preserved for Phases 1-4. Phase 5
+writes happen only with explicit user approval, following the
+progress-review skill's log format and evidence tagging conventions.
 
 ---
 
@@ -317,8 +377,9 @@ the skill can offer.
 
 - **Don't teach during startwork.** Name the growth edge; the session
   teaches. Startwork composes attention, not content.
-- **Don't write to learning state.** Startwork is read-only.
-  Session-review handles state updates.
+- **Don't write to learning state in Phases 1-4.** Startwork's core is
+  read-only. Phase 5 (progress-review) may write with user approval,
+  but that runs through the progress-review skill's own protocol.
 - **Don't rank personal vs. team work.** If both contexts exist, present
   both domains clearly labeled. The human decides which gets their time.
 - **Don't ignore the override.** If the user says "I want to work on X,"

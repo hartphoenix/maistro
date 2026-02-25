@@ -88,6 +88,7 @@ After sessions, `/session-review` also creates session logs in
 | **debugger** | Visibility-first debugging. Gets the full error before guessing. |
 | **lesson-scaffold** | Restructures learning materials around what you already know |
 | **startwork** | Session planner. Reads your state and proposes what to work on. |
+| **progress-review** | Cross-session pattern analysis. Detects stalls, regressions, and goal drift that single sessions miss. Runs automatically via startwork when enough sessions accumulate, or invoke directly. |
 
 ## Privacy
 

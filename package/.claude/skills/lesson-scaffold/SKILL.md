@@ -1,6 +1,6 @@
 ---
 name: lesson-scaffold
-description: Restructures external learning materials into a conceptual scaffold tailored to the learner's current level. Reads learning state (current-state, goals, daily notes) to classify concepts and shape the scaffold. Writes a persistent scaffold file to learning/scaffolds/. Use when the user provides learning materials and wants to understand the "why" before executing.
+description: Restructures external learning materials into a conceptual scaffold tailored to the learner's current level. Reads learning state (current-state, goals, session logs) to classify concepts and shape the scaffold. Writes a persistent scaffold file to learning/scaffolds/. Use when the user provides learning materials and wants to understand the "why" before executing.
 ---
 
 # Lesson Scaffold
@@ -34,7 +34,7 @@ Check whether `learning/current-state.md` and `learning/goals.md` exist.
 
 ### Step 2: Recent session context
 
-List files in `learning/daily-notes/`. For the most recent 1-2 log
+List files in `learning/session-logs/`. For the most recent 1-2 log
 files, read the YAML frontmatter. Extract:
 
 ```yaml
@@ -59,7 +59,7 @@ From the collected frontmatter, build a picture of:
 - **Unfinished threads** — remaining work that the material might
   connect to
 
-If no daily notes exist, skip silently.
+If no session logs exist, skip silently.
 
 ### Step 3: Learning state files
 
@@ -185,7 +185,28 @@ concepts: [list of concepts extracted]
 <only if prerequisite gaps found>
 ```
 
-### Step 7: Present and confirm
+### Step 7: Link to session log
+
+Check whether `learning/session-logs/YYYY-MM-DD.md` exists for today.
+
+**If it exists:** add a `scaffold:` field to its YAML frontmatter
+pointing to the scaffold file.
+
+**If it doesn't exist:** create it with minimal frontmatter:
+
+```yaml
+---
+date: YYYY-MM-DD
+scaffold: scaffolds/YYYY-MM-DD-<topic-slug>.md
+---
+```
+
+This creates a breadcrumb so session-review can connect the scaffold's
+predictions to session evidence. Session-review will merge its own
+frontmatter (project, concepts, arcs) into this file later — don't
+duplicate those fields here.
+
+### Step 8: Present and confirm
 
 Present the scaffold to the user. Ask whether the scope and
 classification feel right. If they adjust, update the file.
@@ -201,7 +222,7 @@ They drive.
 | All learning state | Scaffold from material alone. All concepts classified as new. Suggest `/intake`. |
 | `current-state.md` only | No concept scoring. Goals still provide trajectory connection. |
 | `goals.md` only | No trajectory connection. Concepts still scored from current-state. |
-| Daily notes empty | No recent session context. Scaffold still works. |
+| Session logs empty | No recent session context. Scaffold still works. |
 
 Never error on missing data. Shape the scaffold to available data.
 Only surface a message when the degradation meaningfully changes what
