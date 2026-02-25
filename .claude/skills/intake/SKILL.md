@@ -370,10 +370,35 @@ content should never auto-persist into files that shape future sessions.
    describe state and knowledge. Project-wide behavioral directives live only in
    CLAUDE.md files.
 4. **No secrets in context files, ever.**
+
+## Recovery after interruption
+
+When resuming work after an error or API interruption:
+1. Check current state before acting (git status, read affected files)
+2. Never re-run destructive operations without confirming the target exists
+3. If a file was edited and you are unsure whether the edit applied, re-read it — skip if the file is already in context and unambiguously current
+4. Use the todo list as a checkpoint — check what's already marked complete
+5. If the user interrupted and gave a new instruction, treat that as the complete scope. Do not resume the prior plan unless explicitly told to continue
+6. When in doubt about scope or next step after an interruption, ask
+
+## Complex operations are decision points
+
+Multi-step operations — multi-branch git workflows, schema changes, bulk
+file operations, anything spanning more than one distinct system —
+require a plan before execution. Enter plan mode and develop a stepwise
+approach with the user before proceeding. Do not execute on assumptions.
+
+## Unexpected behavior — pause and report
+
+If a tool call fails, a hook blocks a command, a git operation produces
+unexpected output, or a file is missing or has unexpected content: pause
+before attempting any workaround and tell the user what you expected vs.
+what you found. Do not silently work around surprises.
 ```
 
-The Security section is a system invariant. Emit it verbatim for every
-user — do not personalize or abbreviate.
+The Security, Recovery, Complex operations, and Unexpected behavior
+sections are system invariants. Emit all four verbatim for every user —
+do not personalize or abbreviate.
 
 ### 3b. Draft learning/goals.md
 
@@ -587,30 +612,77 @@ After writing, summarize:
   the system adapts to you as you go. After a session, try
   `/session-review` to begin building your learning profile.")
 
-### 4d. Usage signals (optional)
+### 4d. Data sharing (optional)
 
-After the file summary, offer anonymous usage signal sharing:
+> One more thing — this harness can share your learning data to
+> GitHub. Two things happen if you opt in:
+>
+> 1. At the end of each session review, a short signal gets posted to
+>    the developer's repo — your feedback on how the tool worked, plus
+>    the agent's own observations. You see every signal before it
+>    sends, and you approve or skip each one.
+>
+> 2. A public repo is created on your GitHub account where progress
+>    summaries get posted when you run `/progress-review`. Teachers,
+>    mentors, or peers can watch that repo and comment with guidance.
+>
+> **What's shared:** concept scores, gap types, progress patterns,
+> goals, and growth edges — the learning data the harness tracks.
+> **What's never shared:** conversation content, code, file paths,
+> background materials, or raw quiz answers.
+>
+> You can turn this off anytime by deleting `.claude/feedback.json`.
+> Want to opt in?
 
-> One more thing — would you like to share anonymized usage signals
-> with the harness developer? At the end of each session review, you'd
-> see a short snapshot of usage metrics — things like which skills
-> fired, how many concepts you're tracking, and score distributions.
-> No personal data, no conversation content, no concept names. You
-> approve or skip every time.
+If they decline, skip. Don't push. Delete `.claude/feedback.json` if
+it was pre-populated in the package.
 
 If they agree:
 
-1. Write `.claude/feedback.json`:
+1. **Write `.claude/feedback.json`** (if not already present):
    ```json
    {
      "repo": "rhhart/maestro-signals"
    }
    ```
-2. Confirm: "You can turn this off anytime by deleting
-   `.claude/feedback.json`. Every signal is shown to you before
-   sending — nothing goes out without your OK."
 
-If they decline, skip. Don't push.
+2. **Create the learner's signal repo.** Run:
+   ```
+   gh repo create learning-signals --public --description "My learning progress — shared with teachers and mentors"
+   ```
+   If it already exists, skip creation.
+
+3. **Set up labels.** Run:
+   ```
+   gh label create progress-review --repo USERNAME/learning-signals --description "Cross-session progress summary" --color 0E8A16
+   gh label create goal-update --repo USERNAME/learning-signals --description "Goal or arc change" --color 1D76DB
+   gh label create needs-teacher --repo USERNAME/learning-signals --description "Student requesting teacher input" --color D93F0B
+   gh label create responded --repo USERNAME/learning-signals --description "Teacher has responded" --color BFD4F2
+   gh label create acknowledged --repo USERNAME/learning-signals --description "Student has seen teacher response" --color C2E0C6
+   ```
+
+4. **Write `learning/relationships.md`:**
+   ```yaml
+   # Where I publish (my own repo)
+   signal_repo: USERNAME/learning-signals
+
+   # Who I learn from (they watch my repo)
+   teachers: []
+
+   # Who I teach (I watch their repos)
+   students: []
+   ```
+
+5. **Confirm and explain the share link:**
+   > You're set up. Your progress repo is at:
+   >
+   > **https://github.com/USERNAME/learning-signals**
+   >
+   > If you have a teacher or mentor who'd like to follow your
+   > progress, send them that link — they just Watch the repo on
+   > GitHub. You can add their GitHub handle to
+   > `learning/relationships.md` anytime, and `/progress-review`
+   > will assign issues to them automatically.
 
 ### 4e. Clean up
 
