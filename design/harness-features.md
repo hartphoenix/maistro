@@ -42,7 +42,7 @@ it cannot possess. See `design/design-principles.md` §1.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Emotional reflection skill | Built | Mirrors awareness state; knows its boundary with somatic/attachment work |
+| Emotional reflection skill | Deferred | Behavior embedded in Tutor personality; standalone skill not built. Mirrors awareness state; knows its boundary with somatic/attachment work |
 | Watch-for pattern recognition | Built | CLAUDE.md flags patterns that fragment awareness |
 | Experiment-first loop protection | Built | Preserves natural rhythm of awareness and attention |
 | Awareness state recognition | Not started | Can the system infer coherence/fragmentation from interaction patterns? |
@@ -168,7 +168,7 @@ Modular, swappable skills and personalities with clean interfaces. See
 `design/design-principles.md` §5.
 
 **Existing implementations:**
-- 8 built skills, each with SKILL.md in `.claude/skills/`
+- 10 built skills, each with SKILL.md in `.claude/skills/` (7 ship in package, 4 dev-only)
 - 1 built personality (Tutor), 2 planned (Creative Collaborator, Research Partner)
 - `design/build-registry.md` as skill/personality registry
 - design-skill meta-skill for building new skills
@@ -202,7 +202,7 @@ signal loss at team boundaries becomes the central problem. See
 - Session logs → session-review → current-state updates (learning state accumulates)
 - Workflow debugging during use (compound engineering workflows refined mid-session)
 - Dogfooding (design-skill reviewing itself against its own checklist)
-- Session-log-analyzer (captures observations across `/clear` boundaries)
+- Session-log analysis (behavior embedded in session-review, not a standalone skill)
 
 **Features to catch:**
 
@@ -295,6 +295,43 @@ not so much that failure feels certain. See `design/design-principles.md` §9.
 
 ---
 
+### P10. The system facilitates human teaching relationships
+
+Every teacher is an obligate student. The system actively facilitates
+the human relationships that supply what the harness cannot: belonging,
+witnessing, true expertise, valid teacherly authority, and wisdom.
+See `design/design-principles.md` §10.
+
+Full design: `design/teacher-relationship.md`.
+
+**Existing implementations:**
+- Structured learner state (current-state.md, goals.md, arcs.md) — the
+  regularized signal a teacher would consume
+- Progress-review skill — cross-session analysis a teacher can read
+- Scoring rubric — shared language between student, agent, and teacher
+- Signal return path (GitHub Issues) — same infrastructure serves
+  teacher-student exchange
+
+**Features to catch:**
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Teacher-student exchange protocol (GitHub Issues) | Designed | Student shares progress reviews; teacher responds with guidance; harness surfaces responses at session start. See `design/teacher-relationship.md` §Protocol. |
+| Teacher opt-in configuration | Designed | Teacher's GitHub handle + per-user signal repo stored in `learning/relationships.md`. Enables publish/read-back cycle. |
+| Startwork teacher-response check | Designed | Startwork reads teacher comments from GitHub Issues and surfaces guidance in session plan. |
+| Progress-review publish step | Designed | Optional Phase 5: posts progress summary as GitHub Issue with labels and teacher assignment. |
+| Learner profile card (shareable summary) | Not started | Opt-in exportable summary of goals, growth edges, and what kind of help the student seeks. Discovery signal for teachers. |
+| Teacher profile / expertise declaration | Not started | Teacher publishes what they offer: domains, capacity, teaching style. Discovery signal for students. |
+| Discovery board (skillshare/timeshare) | Not started | Forum or registry where learner profiles and teacher profiles are browsable. Students and teachers find latent potential in their network. |
+| Teacher-assisted intake | Not started | Teacher participates in or completes the intake interview. Could conduct an initialization lesson that seeds the learner profile with higher-fidelity observations. |
+| Teacher-assisted goal refinement | Not started | Teacher reviews goals.md and proposes refinements based on their expertise and knowledge of the student. |
+| Teacher-published materials → lesson-scaffold | Not started | Teacher disseminates lesson plans and learning materials through the subscription channel. Each student's harness runs them through lesson-scaffold, producing a personalized scaffold based on the student's current-state. Same lesson, different scaffold per student. Connects teacher's intentional curriculum with per-student differentiation. |
+| Role fluidity support | Not started | Same user occupies student and teacher roles in different relationships without separate config. The harness identity is the person, not the role. |
+| Notification layer (Discord webhook) | Not started | Optional ping to Discord when a progress review is posted. Links to the GitHub Issue. Complement, not replacement. |
+| Teacher view of progress-review history | Not started | Curated view of a student's review history for a teacher. Could be a GitHub Issue label filter or a generated summary. |
+
+---
+
 ## Unsorted / Incoming
 
 Features that don't yet have a clear home or that span multiple principles.
@@ -306,8 +343,7 @@ Features that don't yet have a clear home or that span multiple principles.
 | Handoff test skill | Attention, Human authority | Audit artifacts for self-containedness before context loss. |
 | Cross-domain bridge detection | Developmental model, Self-improvement | Exaptation mining from corpus |
 | Awareness practice catalog | Awareness, Play | Which practices restore coherence and cultivate the explore state? |
-| Multi-user learning layer | Self-improvement, Composability | Distributed P6: keeping the embedding loop closed across team boundaries. See `coordination/architecture.md` §4. Depends on solo P6 features as prototypes. |
-| Human connection facilitation | Boundary condition | Can the system encourage human learning bonds? Surface shared growth edges, match learners, prepare users for peer sessions. See `design/startwork.md` §Open questions. |
+| Multi-user learning layer | Self-improvement, Composability, P10 | Distributed P6: keeping the embedding loop closed across team boundaries. See `coordination/architecture.md` §4. Depends on solo P6 features as prototypes. Teacher-student exchange (P10) is a specialization of this. |
 
 ---
 

@@ -309,4 +309,13 @@ output.
 frontmatter for continuation signals, recent concepts/scores, arc
 activity, and unfinished threads.
 
+**Coordination file: `learning/.progress-review-log.md`** — not written
+by session-review, but dependent on session-review's output. Progress-review
+and startwork both read this file to determine the last review date (for
+session-log windowing) and to retrieve deferred findings. They both
+append entries after reviews. The review window starts from the date in
+this log, covering all session logs since. Session-review's consistent
+YAML frontmatter and concept naming across sessions is what makes the
+windowing useful.
+
 **Spaced repetition** (future): reads current-state.md only. Prioritizes by score ascending + last-quizzed ascending. Uses gap type to shape question style. Detects stalls via high times-quizzed with low score.

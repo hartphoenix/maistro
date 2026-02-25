@@ -240,5 +240,7 @@ the skill can offer.
   assumptions.
 - **Don't ignore emotional context.** "I'm tired" is load-bearing
   information about session scope.
-- **Don't write to learning state files.** Lesson-scaffold writes only
-  to `learning/scaffolds/`. Session-review handles state updates.
+- **Don't update learning state.** Lesson-scaffold does not modify
+  concept scores, gaps, or arc state. It writes to
+  `learning/scaffolds/` and may add a `scaffold:` field to session log
+  frontmatter (Step 7), but session-review owns all state updates.
