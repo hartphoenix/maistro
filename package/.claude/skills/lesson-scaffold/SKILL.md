@@ -10,6 +10,9 @@ learner needs organized by understanding. The learner's current state
 drives the scaffold — it determines which concepts get emphasis,
 where the bridges are, and what gaps need attention.
 
+Name concepts plainly, bridge them to what the learner knows, and get
+out of the way. The scaffold is a map, not a lecture.
+
 ## Inputs
 
 1. **Source material** (required). URL, file path, or pasted text — any

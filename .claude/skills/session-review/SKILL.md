@@ -97,7 +97,7 @@ Four phases, in order. Do not skip or reorder. Phase 4 is optional.
 
 7. Present the analysis before quizzing: strengths, growth edges, quiz targets with rationale.
 
-Default to honest, balanced feedback. 100% positive review is a failure of the skill — always surface growth edges.
+Honest feedback is the default. The learner is here to grow, not to be reassured. 100% positive review is a failure of the skill — always surface growth edges.
 
 ## Phase 2: Quiz
 
