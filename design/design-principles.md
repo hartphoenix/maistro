@@ -28,20 +28,28 @@ but limits to design within.
 The agent can compound competence and to some degree bolster confidence, but cannot supply belonging. The felt
 sense of being witnessed in one's growth — the nervous system
 regulation, the mirror neurons, the implicit social signals that say
-"you're changing and we can see it" — requires a human.
+"you're changing and we can see it" — requires a human. What's more,
+the wisdom to guide development through a landscape of uncomputable
+problems is an indispensable human trait, and a rare one at that.
 
 This means the harness has a relational ceiling when operating solo. A
 student using it alone will develop competence faster, but they'll be
-missing the nutrient that makes competence feel emotionally real. A
+missing the nutrient that makes competence feel emotionally real – and
+the leadership that ensures they're moving in a sound direction. A
 system that doesn't acknowledge this ceiling risks producing competent
-people who don't feel competent.
+people who don't feel competent, or confident people who go nowhere.
 
 The harness is therefore a supplement: it makes human learning
 relationships more fruitful. It handles what benefits from infinite
 patience, instant availability, and detailed state tracking — practice,
 calibration, crystallization, project scaffolding — freeing human
 relationships for what requires actual human presence: belonging,
-reflection, emotional regulation, the experience of being seen.
+reflection, true expertise, valid teacherly authority, and wisdom.
+
+The system's response to this ceiling is not passive acknowledgment
+but active facilitation. See P10: the system helps students and
+teachers find each other, share structured state, and deepen
+relationships that the harness alone cannot provide.
 
 ---
 
@@ -100,7 +108,7 @@ perfectly and it won't land if awareness is fragmented.
 
 ## Serving layer
 
-Principles 3–9 serve the primary layer. Each advances awareness and
+Principles 3–10 serve the primary layer. Each advances awareness and
 attention through a specific mechanism.
 
 ### 3. Developmental model as first-class state
@@ -216,3 +224,50 @@ This means selecting the right project, the right scope within that
 project, and the right pacing of novelty introduction. It also means
 recognizing when the learner has slipped out of the zone and adjusting
 before the closure compounds.
+
+### 10. The system facilitates human teaching relationships
+
+Every teacher is an obligate student. Every student has something to
+teach. The system does not replace these relationships — it makes them
+more discoverable, more legible, and more fruitful.
+
+The harness already produces structured state about where the learner
+is: goals, gaps, trajectory, session history. This state is the
+learner's signal — a regularized description of what they need and
+where they're growing. When shared with consent, it becomes the basis
+for a teacher to see the student clearly without requiring hours of
+diagnostic conversation. It answers "where are you?" so the human
+relationship can start at "what should we do about it?"
+
+Teachers benefit from the same harness. A teacher at their own growth
+edge — learning what they don't yet know how to teach, or deepening
+expertise in their own domain — is a better teacher. The harness
+serves the teacher's learning exactly as it serves the student's. The
+role distinction is not in the tool but in the relationship between
+two users: User A learns React from User B, who learns system design
+from User C.
+
+This principle generates features at three scales:
+
+1. **Exchange** — A protocol for sharing developmental state between
+   student and teacher, with consent. The teacher sees the student's
+   progress reviews, goals, and gaps. The teacher responds with
+   guidance that the student's harness surfaces at session start.
+
+2. **Discovery** — A means for students and teachers to find each
+   other. Students publish what they need; teachers publish what they
+   offer. The structured data the harness already produces is the
+   matching signal.
+
+3. **Role fluidity** — The same person occupies different roles in
+   different relationships. The system supports this without requiring
+   separate accounts, modes, or configurations. You are always both
+   learning and potentially teaching.
+
+This principle serves the primary layer by ensuring that the human
+relationships which supply belonging, witnessing, true expertise,
+valid teacherly authority, and wisdom (see Boundary Condition) are
+not left to chance. It also serves P9 (challenge calibration)
+because a human teacher can read the student's edge in ways the
+system cannot — through empathy, intuition, and the hard-won
+judgment to guide development through uncomputable problems.

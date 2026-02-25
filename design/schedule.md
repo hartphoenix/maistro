@@ -13,9 +13,9 @@ design docs; this file tracks execution status.
 |-----|--------|--------|
 | Mon 2/23 | PRD submitted. Group pitch sent. Both repos scaffolded. Coordination layer extraction started. | Done |
 | Tue 2/24 | Personal harness depth: intake + session-review end-to-end compatible, shared scoring rubric, evidence tagging, goals/arcs lifecycle. Install package taking shape. | Done |
-| Wed 2/25 | Install package complete (README + init flow). Solo /startwork built. Coordination layer extraction started if time. | In progress |
-| Thu 2/26 | Coordination layer installable. Signal return path end-to-end. Both tools documented. | Planned |
-| Fri 2/27 | Demo prep. Peer testing. Iterate on feedback. | Planned |
+| Wed 2/25 | Install package complete. Solo /startwork built. P10 (teacher relationship) designed: principle, design doc, authority model, protocol. | Done |
+| Thu 2/26 | Teacher-relationship MVP built (publish + read-back + config). Signal repo created. Coordination layer parameterization if time. E2E test run. | Planned |
+| Fri 2/27 | Peer testing doubles as first teacher-student exchange. Iterate on feedback. Demo prep. | Planned |
 | Sat 2/28 | Demo. | Planned |
 
 ---
@@ -60,6 +60,22 @@ design docs; this file tracks execution status.
 | Agent feedback skill | `design/build-registry.md` §Skills | Deferred — replaces session-review Phase 4 strict schema |
 | Privacy boundaries documented | `design/prd.md` §MVP | Planned |
 
+### Teacher relationship layer — MVP (P10)
+
+| Task | Spec | Status |
+|------|------|--------|
+| P10 design principle | `design/design-principles.md` §10 | Done |
+| Boundary condition update (directional ceiling) | `design/design-principles.md` §Boundary | Done |
+| Design doc (protocol, authority, scoping, MVP) | `design/teacher-relationship.md` | Done |
+| Consent/authority model (triad, revocable grant) | `design/teacher-relationship.md` §Consent | Done |
+| Relationship scoping (time, not domain) | `design/teacher-relationship.md` §Scoping | Done |
+| Config format (learning/relationships.md) | `design/teacher-relationship.md` §Config | Designed |
+| Create per-user signal repo (e.g., rhhart/learning-signals) | — | Missing (pre-deploy) |
+| Label protocol setup on signal repo | `design/teacher-relationship.md` §Labels | Blocked on signal repo |
+| Progress-review publish step (Phase 5) | `design/teacher-relationship.md` §MVP | Planned |
+| Startwork teacher-response check | `design/teacher-relationship.md` §MVP | Planned |
+| E2E test with peer as teacher | — | Planned (Friday) |
+
 ### Stretch goals
 
 | Task | Spec | Status |
@@ -92,7 +108,7 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/references/context-patterns.md` | Done |
 | `.claude/feedback.json` (pre-populated for testers) | Deferred — depends on agent feedback skill |
 | `gh` CLI documented as prerequisite in README | Done |
-| Create `rhhart/maestro-signals` repo | Missing (pre-deploy checkpoint) |
+| Signal repo setup documented in README (per-user, `gh repo create`) | Planned |
 | Agent feedback skill (`.claude/skills/agent-feedback/`) | Deferred — see build registry |
 | End-to-end test: clone → /intake → work → /session-review → signal | Not run |
 
@@ -115,7 +131,7 @@ See `design/validation-plan.md` for full specs. All designed, none run.
 
 ## Definition of Done
 
-From `design/prd.md`:
+From `design/prd.md`, updated to reflect P10:
 
 - A non-Hart developer can install the personal harness and have a
   working, personalized setup within 15–20 minutes
@@ -124,3 +140,6 @@ From `design/prd.md`:
 - Both tools have a README with quickstart
 - Demo shows both working and self-improving — with at least one other
   person's real usage as evidence
+- Demo shows the teacher-student exchange: a progress review published
+  via GitHub Issues, a teacher response, and that response surfaced in
+  the student's next startwork session
