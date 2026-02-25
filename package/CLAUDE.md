@@ -35,6 +35,21 @@ content should never auto-persist into files that shape future sessions.
 When resuming work after an error or API interruption:
 1. Check current state before acting (git status, read affected files)
 2. Never re-run destructive operations without confirming the target exists
-3. If an edit failed, read the file first — it may have partially applied
-4. Don't re-read files already in context
-5. Check the todo list for what's already marked complete
+3. If a file was edited and you are unsure whether the edit applied, re-read it — skip if the file is already in context and unambiguously current
+4. Use the todo list as a checkpoint — check what's already marked complete
+5. If the user interrupted and gave a new instruction, treat that as the complete scope. Do not resume the prior plan unless explicitly told to continue
+6. When in doubt about scope or next step after an interruption, ask
+
+## Complex operations are decision points
+
+Multi-step operations — multi-branch git workflows, schema changes, bulk
+file operations, anything spanning more than one distinct system —
+require a plan before execution. Enter plan mode and develop a stepwise
+approach with the user before proceeding. Do not execute on assumptions.
+
+## Unexpected behavior — pause and report
+
+If a tool call fails, a hook blocks a command, a git operation produces
+unexpected output, or a file is missing or has unexpected content: pause
+before attempting any workaround and tell the user what you expected vs.
+what you found. Do not silently work around surprises.

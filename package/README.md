@@ -98,22 +98,54 @@ Your learning profile stays local by default:
 - During intake, you choose whether `CLAUDE.md` is shared or private
 - Nothing leaves your machine without your explicit action
 
-## Usage signals
+## Recommended: Install a command guard
 
-This package ships with `.claude/feedback.json` pre-configured — as a
-tester, your feedback helps improve the harness.
+AI coding agents occasionally attempt destructive commands — `git reset
+--hard`, `rm -rf`, force pushes — that can destroy uncommitted work in
+seconds. This is a [known class of issue](https://github.com/anthropics/claude-code/issues/7232)
+across all AI coding tools.
 
-At the end of each `/session-review`, you'll be asked if you want to
-send a feedback signal. You approve, edit, or skip every time. Nothing
-sends without your OK.
+[DCG (Destructive Command Guard)](https://github.com/Dicklesworthstone/destructive_command_guard?tab=readme-ov-file#dcg-destructive-command-guard)
+intercepts these before execution and explains what the agent was trying
+to do. Install it once and it protects all your projects:
 
-**What's shared:** your feedback about whether the harness worked well,
-plus the agent's own observations about friction and file-state issues.
+```bash
+curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/destructive_command_guard/main/install.sh?$(date +%s)" | bash -s -- --easy-mode
+```
 
-**What's never shared:** quiz answers, scores, conversation content,
-code, file paths, learning profile, goals, or background.
+**When DCG blocks an agent command:** read DCG's explanation of what it
+intercepted. If the command is legitimately needed — for example,
+reverting a mistake the agent just made — run it yourself in the
+terminal. Otherwise, let the block stand and tell the agent to find an
+alternative approach.
 
-To opt out, delete `.claude/feedback.json`.
+## Data sharing (optional)
+
+During `/intake`, you'll be asked if you want to share learning data
+to GitHub. One question, one consent. If you opt in, two things happen:
+
+1. **Developer signals** — at the end of each `/session-review`, a
+   short signal is posted to the developer's repo with your feedback on
+   how the tool worked, plus learning metrics (concept scores, gap
+   types, progress patterns). You see every signal before it sends and
+   approve or skip each one.
+
+2. **Progress repo** — a public GitHub repo is created on your account
+   (`your-username/learning-signals`). When you run `/progress-review`,
+   a summary posts there. Teachers, mentors, or peers can watch the
+   repo and comment with guidance — `/startwork` surfaces their
+   responses in your next session.
+
+**What's shared:** concept scores, gap types, progress patterns, goals,
+and growth edges.
+**What's never shared:** conversation content, code, file paths,
+background materials, or raw quiz answers.
+
+**To invite a teacher:** send them your progress repo link. They Watch
+it on GitHub. Add their GitHub handle to `learning/relationships.md`
+and `/progress-review` will assign issues to them automatically.
+
+To opt out of all data sharing, delete `.claude/feedback.json`.
 
 ## Everything is editable
 

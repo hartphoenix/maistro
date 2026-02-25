@@ -45,15 +45,23 @@ Feature registry organized by principle: `design/harness-features.md`.
   shared or ambient context is human-gated.
 - **Signal return path via GitHub issues.** Findings route through
   human triage, not ambient file sync.
-- **Surprise-triggered capture.** When you encounter something in this
-  project that surprises you, alert the developer and describe what you
-  expected vs. what you found. This is how the system learns.
+- **Surprise-triggered capture.** Pause and alert the developer —
+  before attempting any workaround — when you encounter: a tool call
+  failure, a hook blocking a command, a git operation producing
+  unexpected output, or a file missing or having unexpected content.
+  Describe what you expected vs. what you found. This is how the system
+  learns.
+- **Complex operations are decision points.** Multi-branch git
+  workflows, schema changes, bulk file operations, and anything spanning
+  more than one distinct system: enter plan mode and develop a stepwise
+  plan with the user before executing. Do not proceed on assumptions.
 
 ### Recovery after interruption
 
 When resuming after an error or API interruption:
 1. Check current state before acting (git status, read affected files)
 2. Never re-run destructive operations without confirming the target exists
-3. If an edit failed, read the file first — it may have partially applied
-4. Don't re-read files already in context
-5. Check the todo list for what's already marked complete
+3. If a file was edited and you are unsure whether the edit applied, re-read it — skip if the file is already in context and unambiguously current
+4. Use the todo list as a checkpoint — check what's already marked complete
+5. If the user interrupted and gave a new instruction, treat that as the complete scope. Do not resume the prior plan unless explicitly told to continue
+6. When in doubt about scope or next step after an interruption, ask
