@@ -11,8 +11,8 @@
 > as you use them. I'm looking for field testers for both tools:
 >
 > The first is a personal development harness — drop your materials in a
-> background folder, run an intake interview, and get a CLAUDE.md, skill set,
-> and learning tracker calibrated to you. It models your learning
+> background folder, run an intake interview, and get a CLAUDE.md, skill
+> set, and learning tracker calibrated to you. It models your learning
 > trajectory and self-calibrates over time. The second is a team
 > coordination layer that connects individual harnesses into a shared
 > workflow: task ranking, conflict detection, triage routing, dependency
@@ -55,8 +55,8 @@ It ships two interoperable Claude Code tools:
 
 1. **Personal development harness** — A Claude Code configuration that
    adapts to its user and maximizes their learning. Drop your materials
-   in a background folder, run an intake interview, and get a CLAUDE.md, skill
-   set, and learning tracker calibrated to you. The harness updates its
+   in the background folder, run an intake interview, and get a CLAUDE.md,
+   skill set, and learning tracker calibrated to you. The harness updates its
    model of the developer as they work and self-calibrates over time. My
    instance ("Roger") has been running this loop for three weeks. This week,
    I'll extract the reusable infrastructure so anyone can set theirs up in
@@ -113,12 +113,12 @@ architecture fails at scale.
   personalized CLAUDE.md, skills, and learning tracker generated. Claude
   models your developmental trajectory and helps you achieve your goals
   through structured daily practice
-- Background folder: a designated intake directory where the learner drops
-  whatever they have — resumes, project repos, writing samples, course
-  transcripts, old code, conversation exports. The intake interview reads
-  this material and synthesizes it into the learner profile. Richer input
-  produces a sharper starting model, but an empty folder still works (the
-  interview asks questions to fill in gaps)
+- Background folder: a designated intake directory where the learner
+  drops whatever they have — resumes, project repos, writing samples,
+  course transcripts, old code, conversation exports. The intake interview
+  reads this material and synthesizes it into the learner profile. Richer
+  input produces a sharper starting model, but an empty folder still works
+  (the interview asks questions to fill in gaps)
 - Working skills out of the box: debugger (guides problem decomposition),
   session-review (end-of-session quiz that updates the learning model),
   quick-ref (direct answers that skip socratic reflection when teaching

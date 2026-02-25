@@ -53,7 +53,7 @@ design docs; this file tracks execution status.
 | Generalize hardcoded references | `coordination/README.md` §Config | Done |
 | Team intake flow | `design/prd.md` §MVP | Planned |
 | /startwork (team) | `design/startwork.md` §Team | Extracted (needs parameterization) |
-| /handoff-test | `.claude/skills/handoff-test/` | Done |
+| /handoff-test | `coordination/skills/handoff-test/` | Done |
 | /triage | `coordination/commands/workflows/triage.md` | Extracted |
 | Dependency protocol | `coordination/commands/startwork.md` | Extracted |
 | Signal return path (GitHub issues) | `coordination/architecture.md` §Signal Catch Basin | Designed |
@@ -106,10 +106,16 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/references/developmental-model.md` | Done |
 | `.claude/references/scoring-rubric.md` | Done |
 | `.claude/references/context-patterns.md` | Done |
-| `.claude/feedback.json` (pre-populated for testers) | Deferred — depends on agent feedback skill |
+| `.claude/references/tutor-posture.md` | Done |
+| `.claude/feedback.json` (pre-populated for testers) | Done |
+| `.claude/hooks/session-start.sh` (conditional onboarding hook) | Done |
+| `.claude/skills/handoff-test/` | Done |
 | `gh` CLI documented as prerequisite in README | Done |
 | Signal repo setup documented in README (per-user, `gh repo create`) | Planned |
 | Agent feedback skill (`.claude/skills/agent-feedback/`) | Deferred — see build registry |
+| `scripts/bootstrap.ts` (install pipeline) | Planned |
+| `scripts/test-install.ts` (install verification) | Planned |
+| `package/.claude/references/data-contracts.md` | Planned |
 | End-to-end test: clone → /intake → work → /session-review → signal | Not run |
 
 ### Validation experiments
@@ -125,7 +131,9 @@ See `design/validation-plan.md` for full specs. All designed, none run.
 | Context budget measurement + skill audit | 5 |
 | Embedding loop validation | 6 |
 | Onboarding design | 7 (deployment-blocking) |
+| Continuous system observability (7b) | 0 (prerequisite — makes 5, 6, 7 cheaper) |
 | Context budget discipline | 8 (deployment-blocking) |
+| SessionStart hook validation | 9 (run with peer testing) |
 
 ---
 

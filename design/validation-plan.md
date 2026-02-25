@@ -213,6 +213,10 @@ standard tool descriptions. The user model, developmental profile,
 and psychological watch-items are non-redundant by definition — the
 model doesn't know these from training.
 
+**Prerequisite:** Experiment 7b (continuous system observability) makes
+this cheaper — skill usage frequency from session log frontmatter is a
+proxy for context cost without dedicated instrumentation sessions.
+
 **Validates:** Assumption 5
 **Serves:** P2 Attention (context budget awareness, attention cost
 accounting)
@@ -236,6 +240,11 @@ new skill creation justified?
   behavior the agent wouldn't produce without it AND that behavior
   matters enough to justify the token budget. Skills that fail this
   test become documented prompt patterns (cheaper) or get merged
+
+**Prerequisite:** Experiment 7b (continuous system observability)
+directly feeds this audit — skill usage data from session log
+frontmatter answers "are all skills earning their cost?" without a
+separate measurement pass.
 
 **Validates:** Assumptions 5, 6
 **Serves:** P5 Composable capabilities
@@ -274,6 +283,39 @@ embedding loop validation.
 **Validates:** Assumption 4
 **Serves:** P6 Self-improvement (regression detection, compounding
 indicators)
+
+---
+
+### 7b. Continuous System Observability
+
+**What:** Instrument session-review to continuously collect the data
+that Experiments 5, 6, and 7 need. Instead of dedicated measurement
+sessions, observability hooks in session log frontmatter generate a
+stream that accumulates automatically.
+
+**Design:**
+- Session-review logs in session log frontmatter:
+  - `skills-invoked: [list]` — which skills were used this session
+  - `gap-types-addressed: { conceptual: N, procedural: N, recall: N }`
+  - `interventions: [{ skill, gap-type, concept, effective: bool }]`
+    (optional, when effectiveness is inferable)
+- Progress-review reads this data across sessions (already reads
+  session logs) and surfaces aggregate patterns
+- Analysis queries: "Which skills are used most?", "Which gap types
+  get addressed?", "Do interventions on concept X correlate with score
+  increases?"
+
+**Relationship to existing experiments:**
+- Experiment 5 (Context Budget): usage frequency is a proxy for context
+  cost — frequently-invoked skills earn their budget; never-invoked
+  ones don't
+- Experiment 6 (Skill Audit): usage data directly answers "are all
+  skills earning their cost?"
+- Experiment 7 (Embedding Loop): intervention effectiveness data
+  directly measures "did the system's action produce learning?"
+
+**Validates:** Assumptions 4, 5
+**Serves:** P6 Self-improvement, P2 Attention
 
 ---
 
@@ -363,6 +405,46 @@ Roughly by dependency and information value:
 
 7. **Onboarding design** (8) + **Context discipline** (9) — deployment
    work. Informed by everything above.
+
+8. **SessionStart hook validation** (10) — run after the hook ships.
+   Quick to execute (5 test scenarios, each a fresh session). Can run
+   concurrently with peer testing (Friday). Validates that hooks are a
+   viable delivery mechanism for state-aware behavior.
+
+---
+
+### 10. SessionStart Hook Validation
+
+**What:** The `SessionStart` command hook
+(`package/.claude/hooks/session-start.sh`) checks learning state and
+injects context to guide the agent's opening move. Validate that it
+fires reliably, produces correct condition detection, and that the
+agent acts on the injected context appropriately.
+
+**Design:**
+- **Condition coverage:** Create test scenarios for each branch:
+  1. No `learning/` directory → should suggest `/intake`
+  2. `.intake-notes.md` with incomplete phase → should offer resume
+  3. `learning/` exists, no `current-state.md` → should suggest `/intake`
+  4. Full state, no recent session logs → should suggest `/startwork` or
+     `/lesson-scaffold`
+  5. Full state, recent activity → should inject nothing
+- **Agent compliance:** For each injection, verify the agent surfaces
+  the suggestion naturally (not robotic parroting of the hook text).
+  The hook provides context; the agent should incorporate it into a
+  conversational opening.
+- **Edge cases:**
+  - Hook script errors (malformed JSON, missing `jq`) — verify graceful
+    degradation (session starts normally, no crash)
+  - Empty `learning/` directory (exists but no files)
+  - Very old session logs (edge of the 7-day window)
+- **Cross-platform:** Test on macOS. Note any portability issues for
+  Linux/Windows (bash availability, `find` flags, `jq` dependency).
+
+**Validates:** Assumption 1 (behavioral shaping — does injected context
+reliably shape the agent's opening behavior?)
+**Serves:** P3 Developmental model (state-aware session start), P7
+Human authority (suggestions, not directives)
 
 ---
 

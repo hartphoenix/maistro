@@ -29,8 +29,8 @@ provide, the sharper your starting profile:
 - **Course materials** — syllabi, assignments, lecture notes for what
   you're currently learning
 
-The background folder is optional. If you skip it, the interview covers everything —
-it just takes a few more questions.
+The background folder is optional. If you skip it, the interview covers
+everything — it just takes a few more questions.
 
 ### 2. Run intake
 

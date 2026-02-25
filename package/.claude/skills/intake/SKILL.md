@@ -68,11 +68,11 @@ fails again, tell the user the automated analysis didn't work and
 proceed to the interview without background findings — background is an
 accelerant, not a gate.
 
-**If the background folder is empty or absent**, skip the sub-agent. Explain the
-convention: `background/` is where they can drop materials (code, resumes,
-writing, conversation logs, course materials) for a sharper starting
-profile. None of it is required — the interview can build the profile
-from scratch.
+**If the background folder is empty or absent**, skip the sub-agent.
+Explain the convention: `background/` is where they can drop materials
+(code, resumes, writing, conversation logs, course materials) for a
+sharper starting profile. None of it is required — the interview can
+build the profile from scratch.
 
 ### 1c. Present findings and offer paths
 
@@ -111,9 +111,9 @@ not a gate.
 
 ## Phase 2: Interview
 
-Adaptive conversational interview. The background findings (if any) inform
-which questions to ask and which to skip. Target: 10-15 minutes. If the
-background was rich, this may be shorter.
+Adaptive conversational interview. The background findings (if any)
+inform which questions to ask and which to skip. Target: 10-15 minutes.
+If the background was rich, this may be shorter.
 
 ### Interview protocol
 
@@ -623,7 +623,7 @@ After all approved files are written, delete `learning/.intake-notes.md`
 
 - **Don't teach during intake.** Discover who the learner is. Teaching
   happens in sessions, not onboarding.
-- **Don't over-interview.** If the background answered a question completely, skip it.
+- **Don't over-interview.** If background answered a question completely, skip it.
   If the user gives short answers, respect the signal — they may not
   know yet, or may not care to articulate right now.
 - **Don't write files without approval.** Every generated file gets
