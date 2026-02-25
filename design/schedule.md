@@ -70,8 +70,8 @@ design docs; this file tracks execution status.
 | Consent/authority model (triad, revocable grant) | `design/teacher-relationship.md` §Consent | Done |
 | Relationship scoping (time, not domain) | `design/teacher-relationship.md` §Scoping | Done |
 | Config format (learning/relationships.md) | `design/teacher-relationship.md` §Config | Designed |
-| Create per-user signal repo (e.g., rhhart/learning-signals) | — | Missing (pre-deploy) |
-| Label protocol setup on signal repo | `design/teacher-relationship.md` §Labels | Blocked on signal repo |
+| Create per-user signal repo (e.g., rhhart/learning-signals) | — | Done (public) |
+| Label protocol setup on signal repo | `design/teacher-relationship.md` §Labels | Done |
 | Progress-review publish step (Phase 5) | `design/teacher-relationship.md` §MVP | Planned |
 | Startwork teacher-response check | `design/teacher-relationship.md` §MVP | Planned |
 | E2E test with peer as teacher | — | Planned (Friday) |
@@ -107,11 +107,11 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/references/scoring-rubric.md` | Done |
 | `.claude/references/context-patterns.md` | Done |
 | `.claude/references/tutor-posture.md` | Done |
-| `.claude/feedback.json` (pre-populated for testers) | Done |
+| `.claude/feedback.json` (no default — created by intake on consent) | Done |
 | `.claude/hooks/session-start.sh` (conditional onboarding hook) | Done |
 | `.claude/skills/handoff-test/` | Done |
 | `gh` CLI documented as prerequisite in README | Done |
-| Signal repo setup documented in README (per-user, `gh repo create`) | Planned |
+| Signal repo setup documented in README (per-user, `gh repo create`) | Done |
 | Agent feedback skill (`.claude/skills/agent-feedback/`) | Deferred — see build registry |
 | `scripts/bootstrap.ts` (install pipeline) | Planned |
 | `scripts/test-install.ts` (install verification) | Planned |

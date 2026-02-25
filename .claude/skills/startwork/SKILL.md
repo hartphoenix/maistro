@@ -390,3 +390,16 @@ the skill can offer.
   it has failed. This is an attention composition, not a report.
 - **Don't hardcode paths.** Use convention-based discovery for schedule
   and project context files.
+
+## Consent Gate — External Signal Paths
+
+Startwork may check for teacher responses on the learner's signal repo
+(teacher-response check, when built). All external signal paths obey
+one consent gate:
+
+- **Check `.claude/feedback.json`.** If absent, the user has not
+  consented to data sharing — skip all external queries silently.
+- **Check `learning/relationships.md`.** If absent or has no
+  `signal_repo`, skip the teacher-response check silently.
+- Both checks run before any network call. No prompt, no mention —
+  just skip.

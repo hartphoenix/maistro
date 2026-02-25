@@ -634,12 +634,11 @@ After writing, summarize:
 > You can turn this off anytime by deleting `.claude/feedback.json`.
 > Want to opt in?
 
-If they decline, skip. Don't push. Delete `.claude/feedback.json` if
-it was pre-populated in the package.
+If they decline, skip. Don't push.
 
 If they agree:
 
-1. **Write `.claude/feedback.json`** (if not already present):
+1. **Write `.claude/feedback.json`** (creates the consent gate):
    ```json
    {
      "repo": "rhhart/maestro-signals"
