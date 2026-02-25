@@ -125,6 +125,13 @@ this document captures the build decisions and current state.
     Phase 4 schema. The agent writes a narrative report that's useful
     without leaking sensitive learning data. The exact boundary gets
     refined during skill design.
+  - **Calibration loop:** Check for discrepancies between
+    lesson-scaffold predictions and session-review outcomes. Scaffold
+    files in `learning/scaffolds/` contain concept classifications
+    (solid/growing/new/prerequisite gap); session-review produces
+    actual scores and observed behavior. Mismatches between predicted
+    and actual difficulty are a first-class signal type — they reveal
+    where the learner model is miscalibrated.
   - **Replaces session-review Phase 4:** Once built, session-review's
     Phase 4 delegates to this skill rather than composing the signal
     inline.

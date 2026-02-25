@@ -65,9 +65,9 @@ design docs; this file tracks execution status.
 | Task | Spec | Status |
 |------|------|--------|
 | Installation package | `design/prd.md` §Stretch | In progress — see checklist below |
-| Solo compound engineer (weekly review) | `design/harness-features.md` §P6 | Not started |
+| Solo compound engineer (weekly review) | `design/harness-features.md` §P6 | Done — built as progress-review, integrated into startwork Phase 5 |
 | Team compound engineering workflow | `coordination/commands/workflows/compound.md` | Extracted |
-| Compounding indicators | `design/harness-features.md` §P6 | Not started |
+| Compounding indicators | `design/harness-features.md` §P6 | Partial — progress-review detects compounding breakdown |
 
 ### Install package checklist
 
@@ -86,6 +86,7 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/skills/quick-ref/` | Done |
 | `.claude/skills/debugger/` | Done |
 | `.claude/skills/lesson-scaffold/` | Done |
+| `.claude/skills/progress-review/` | Done |
 | `.claude/references/developmental-model.md` | Done |
 | `.claude/references/scoring-rubric.md` | Done |
 | `.claude/references/context-patterns.md` | Done |
