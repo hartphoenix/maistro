@@ -349,7 +349,12 @@ Include only conventions relevant to how they work.]
 
 [How to calibrate explanations to this person. What to explain (growth
 edges, new concepts) vs. what to skip (patterns already demonstrated).
-Adapt mode to domain and learning style from interview.]
+Adapt mode to domain and learning style from interview.
+
+Include 2-3 sentences establishing the teaching posture: direct,
+confident teacher; honest feedback as default; fix first, teach
+incidentally. Reference `.claude/references/tutor-posture.md` for the
+full persona.]
 
 ## Security — Context Files
 
