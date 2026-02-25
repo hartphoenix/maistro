@@ -218,9 +218,9 @@ signal loss at team boundaries becomes the central problem. See
 | Friction logging | Not started | What slowed the session down? Patterns across sessions? Catch basin pattern. |
 | Automated memory proposals | Not started | System notices a pattern worth saving, proposes it (human approves). Catch basin pattern. |
 | Surprise-triggered capture | Not started | "When you encounter something surprising, flag it." Inverts authoring from prospective to retrospective. Source: Theo's pattern (arXiv 2602.11988 commentary). |
-| Regression detection | Not started | Did a score drop? Did a previously-working skill break? |
-| Compounding indicators | Not started | Is this session building on the last, or starting from scratch? If not compounding, the embedding loop is broken somewhere. |
-| Solo compound engineer (weekly review) | Not started | Reads session logs, identifies patterns at higher abstraction, proposes system updates. Prototype before scaling to multi-user. |
+| Regression detection | Built | Detected by progress-review concept lens (score drop ≥ 2 on previously-solid concept). `.claude/skills/progress-review/` |
+| Compounding indicators | Partial | Progress-review detects compounding breakdown (arc touched in many sessions but not advancing). Full session-level compounding indicators not yet built. |
+| Solo compound engineer (weekly review) | Built | `.claude/skills/progress-review/`. Cross-session pattern analysis dispatched from startwork or invoked standalone. Reads session logs, detects stalls/regressions/drift/readiness, proposes learning state updates. |
 | Archive-not-delete lifecycle | Not started | Move ephemeral docs to archive rather than deleting. Prevents signal loss from premature cleanup. |
 
 ---
