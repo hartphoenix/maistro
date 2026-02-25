@@ -5,7 +5,7 @@ coordination layer for Claude Code.
 
 Two interoperable tools that learn as they are used:
 
-1. **Personal development harness** — Drop materials in a data hopper,
+1. **Personal development harness** — Drop materials in a background folder,
    run an intake interview, get a CLAUDE.md, skills, and learning
    tracker calibrated to you. The harness updates its model as you work
    and self-calibrates over time.

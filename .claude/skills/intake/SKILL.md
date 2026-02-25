@@ -1,6 +1,6 @@
 ---
 name: intake
-description: Onboarding interview for the personal development harness. Scans .hopper/ for pre-loaded materials (code, resumes, writing, transcripts), runs a conversational interview to discover background, goals, current skills, and learning preferences, then generates a personalized CLAUDE.md and initial current-state.md. Use when setting up a new learner, onboarding, or bootstrapping the harness.
+description: Onboarding interview for the personal development harness. Scans background/ for pre-loaded materials (code, resumes, writing, transcripts), runs a conversational interview to discover background, goals, current skills, and learning preferences, then generates a personalized CLAUDE.md and initial current-state.md. Use when setting up a new learner, onboarding, or bootstrapping the harness.
 ---
 
 # Intake
@@ -20,7 +20,7 @@ summary of what's already captured and offer:
 2. Start fresh (delete the notes file and any partial drafts first)
 
 If resuming into Phase 2, re-read the notes to restore context. If
-the notes contain a `## Hopper Analysis` section, use its signal-strength
+the notes contain a `## Background Analysis` section, use its signal-strength
 ratings to calibrate remaining interview domains the same way a fresh
 run would (strong = confirmation only, thin = full question set). Also
 read `.claude/references/developmental-model.md` if you haven't yet.
@@ -45,44 +45,44 @@ complexity/chunking dimensions, dependency types, ordering heuristic,
 and compounding engine. Use it to calibrate interview questions and
 identify bridge opportunities from the learner's background.
 
-### 1a. Scan the hopper
+### 1a. Scan background materials
 
-Look for a `.hopper/` directory in the project root. List its contents
+Look for a `background/` directory in the project root. List its contents
 (file names, sizes, types) but **do not read file contents yourself**.
 Produce a file manifest — this is what you'll pass to the analysis
 sub-agent.
 
-### 1b. Dispatch hopper analysis
+### 1b. Dispatch background analysis
 
-**If the hopper has files**, tell the user you're analyzing their
-materials and it will take a moment. Then dispatch a hopper analysis
+**If background has files**, tell the user you're analyzing their
+materials and it will take a moment. Then dispatch a background analysis
 sub-agent using the Task tool. Read
-`.claude/skills/intake/subagents.md § Hopper Analyzer` for the full
+`.claude/skills/intake/subagents.md § Background Analyzer` for the full
 dispatch prompt, extraction table, and output schema. Pass the sub-agent
-the hopper path and your file manifest. It reads the files, reads the
-developmental model independently, and returns a structured Hopper
+the background path and your file manifest. It reads the files, reads the
+developmental model independently, and returns a structured Background
 Analysis Report with signal-strength ratings per interview domain.
 
 If the sub-agent fails or returns unusable output, retry once. If it
 fails again, tell the user the automated analysis didn't work and
-proceed to the interview without hopper findings — the hopper is an
+proceed to the interview without background findings — background is an
 accelerant, not a gate.
 
-**If the hopper is empty or absent**, skip the sub-agent. Explain the
-convention: `.hopper/` is where they can drop materials (code, resumes,
+**If the background folder is empty or absent**, skip the sub-agent. Explain the
+convention: `background/` is where they can drop materials (code, resumes,
 writing, conversation logs, course materials) for a sharper starting
 profile. None of it is required — the interview can build the profile
 from scratch.
 
 ### 1c. Present findings and offer paths
 
-**If a hopper report was returned**, present what it found — be specific
+**If a background report was returned**, present what it found — be specific
 about signals, not just file names. Use the signal-strength ratings to
 tell the user what's well-covered vs. thin, and suggest materials that
 could fill gaps. Frame it as opportunity, not requirement.
 
 **Either way**, offer three paths:
-1. Add materials to the hopper (wait for them, then re-dispatch)
+1. Add materials to background (wait for them, then re-dispatch)
 2. Point to another directory to read from
 3. Skip straight to the interview
 
@@ -99,26 +99,26 @@ started: YYYY-MM-DD
 ---
 ```
 
-If a hopper report was generated, append it as the `## Hopper Analysis`
+If a background report was generated, append it as the `## Background Analysis`
 section. This file is your running record for the rest of intake.
 
 ### 1e. Proceed
 
-Whatever the user chose, move to Phase 2. The hopper is an accelerant,
+Whatever the user chose, move to Phase 2. Background is an accelerant,
 not a gate.
 
 ---
 
 ## Phase 2: Interview
 
-Adaptive conversational interview. The hopper findings (if any) inform
+Adaptive conversational interview. The background findings (if any) inform
 which questions to ask and which to skip. Target: 10-15 minutes. If the
-hopper was rich, this may be shorter.
+background was rich, this may be shorter.
 
 ### Interview protocol
 
 - Conversational, not interrogative. One domain at a time.
-- Acknowledge what you learned from the hopper before asking related
+- Acknowledge what you learned from background before asking related
   questions. ("Your writing shows clear structural thinking — tell me
   more about how you approach organizing ideas.")
 - When the user gives a short answer, one follow-up is okay. Two
@@ -130,7 +130,7 @@ hopper was rich, this may be shorter.
 
 ### Question domains
 
-Work through these domains in order. The hopper report's signal-strength
+Work through these domains in order. The background report's signal-strength
 ratings guide your depth: **strong** domains need only a confirmation
 question or two, **moderate** domains get targeted follow-ups, **thin**
 or missing domains get the full question set. Within each domain, follow
@@ -240,7 +240,7 @@ Projects are how skills develop — the instrument for closing the gap
 between current state and goals. After the reflection, explore what
 the learner is currently working on.
 
-If projects came up in the hopper or earlier in the interview, build
+If projects came up in background or earlier in the interview, build
 on what you know. Otherwise ask directly.
 
 - What are you working on right now? (current projects, assignments,
@@ -561,7 +561,7 @@ goals.md, arcs.md):
    ```gitignore
    # Learner profile (personal, not shared)
    learning/
-   .hopper/
+   background/
    ```
 
 7. Ask about CLAUDE.md privacy the same way:
@@ -618,7 +618,7 @@ After all approved files are written, delete `learning/.intake-notes.md`
 
 - **Don't teach during intake.** Discover who the learner is. Teaching
   happens in sessions, not onboarding.
-- **Don't over-interview.** If the hopper answered a question completely, skip it.
+- **Don't over-interview.** If the background answered a question completely, skip it.
   If the user gives short answers, respect the signal — they may not
   know yet, or may not care to articulate right now.
 - **Don't write files without approval.** Every generated file gets
@@ -632,6 +632,6 @@ After all approved files are written, delete `learning/.intake-notes.md`
 - **Don't bloat the CLAUDE.md.** Only include what the agent needs to
   behave appropriately. The reasoning token tax is real — a 200-line
   CLAUDE.md competes with every conversation turn.
-- **Don't read hopper files in the main agent.** The sub-agent handles
+- **Don't read background files in the main agent.** The sub-agent handles
   file analysis. The main agent works from the structured report. This
   is how context stays clean for the interview and synthesis phases.

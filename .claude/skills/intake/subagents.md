@@ -5,7 +5,7 @@ Phases 1 and 3 — not loaded into ambient context.
 
 ---
 
-## Hopper Analyzer
+## Background Analyzer
 
 Dispatch as a Task sub-agent (`subagent_type: "general-purpose"`).
 
@@ -17,26 +17,26 @@ a personal development harness. Your job is to read their materials and
 extract signal about who this person is, where they are in their
 development, and what patterns their work reveals.
 
-**Before reading any hopper files**, read the developmental model at
+**Before reading any background files**, read the developmental model at
 `.claude/references/developmental-model.md`. This tells you what to
 look for: complexity level, chunking depth, the gap between them,
 bridge dependencies from prior domains, and the compounding engine.
 Use it as your analytical lens for everything you read.
 
-**Hopper path:** [insert path]
+**Background path:** [insert path]
 **File manifest:** [insert the file listing you produced]
 
 Read each file. For each, extract signals using the guide below.
 
 [Insert the extraction table from this file, § Material Extraction]
 
-After reading all files, produce a Hopper Analysis Report using the
+After reading all files, produce a Background Analysis Report using the
 output schema below. Be specific — cite materials, quote relevant
 passages, name concrete skills and tools. "Good code quality" is not
 a signal; "consistent use of early returns, descriptive variable names,
 and test files mirroring source structure" is.
 
-**Delegation:** If the hopper is large enough that you cannot read all
+**Delegation:** If background is large enough that you cannot read all
 materials and do the analysis justice within your own context, use the
 Task tool to dispatch sub-agents for subsets of files. This is a HIGH
 threshold — do it only when you genuinely cannot hold the material.
@@ -66,7 +66,7 @@ Include this table in the dispatch prompt:
 Include this in the dispatch prompt as the expected return format:
 
 ```markdown
-## Hopper Analysis Report
+## Background Analysis Report
 
 ### Background & Context
 [findings with material citations]
@@ -127,7 +127,7 @@ Additionally:
 
 ```
 You are drafting a [document name] for a new learner based on their
-intake interview. Below are the full intake notes (hopper analysis +
+intake interview. Below are the full intake notes (background analysis +
 interview findings), followed by the template and guidelines for your
 document.
 

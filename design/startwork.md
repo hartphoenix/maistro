@@ -249,4 +249,4 @@ accumulation, or schedule.
   concept scores. Startwork reads all three layers.
 - ~~How does the system handle a new user with no current-state data?~~
   **Resolved:** `/intake` skill generates initial learning/goals.md,
-  learning/arcs.md, and learning/current-state.md from hopper + interview.
+  learning/arcs.md, and learning/current-state.md from background + interview.

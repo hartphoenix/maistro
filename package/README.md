@@ -16,9 +16,9 @@ sharpens itself every time you use it.
 
 ## Quick start
 
-### 1. (Optional) Load the hopper
+### 1. (Optional) Load your background
 
-Drop files into `.hopper/` before running intake. The more signal you
+Drop files into `background/` before running intake. The more signal you
 provide, the sharper your starting profile:
 
 - **Code you've written** — shows what you can build and how you think
@@ -29,7 +29,7 @@ provide, the sharper your starting profile:
 - **Course materials** — syllabi, assignments, lecture notes for what
   you're currently learning
 
-The hopper is optional. If you skip it, the interview covers everything —
+The background folder is optional. If you skip it, the interview covers everything —
 it just takes a few more questions.
 
 ### 2. Run intake
@@ -40,7 +40,7 @@ it just takes a few more questions.
 
 The intake interview has four phases:
 
-1. **Discover** — scans your hopper materials (if any) to build a
+1. **Discover** — scans your background materials (if any) to build a
    starting picture
 2. **Interview** — conversational, ~10-15 minutes. Covers your
    background, goals, current skills, how you learn, and how you like
@@ -94,7 +94,7 @@ After sessions, `/session-review` also creates session logs in
 
 Your learning profile stays local by default:
 
-- `.hopper/` and `learning/` are gitignored out of the box
+- `background/` and `learning/` are gitignored out of the box
 - During intake, you choose whether `CLAUDE.md` is shared or private
 - Nothing leaves your machine without your explicit action
 

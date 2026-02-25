@@ -1,7 +1,7 @@
 # Developmental Model
 
 Reference for analyzing a learner's development. Consulted during
-intake (hopper analysis, interview calibration), session review
+intake (background analysis, interview calibration), session review
 (scoring context), and startwork (priority computation).
 
 This is system knowledge — it does not change per user.
@@ -89,7 +89,7 @@ impact:
    are needed.
 
 Use this heuristic when:
-- Analyzing hopper materials to identify high-value prior experience
+- Analyzing background materials to identify high-value prior experience
 - Calibrating interview questions toward high-leverage gaps
 - Seeding initial current-state.md concept priorities
 - Computing growth edges in startwork
@@ -115,9 +115,9 @@ diagnostic state — what the next move is.
 
 ## Applying this model
 
-### During intake (hopper analysis)
+### During intake (background analysis)
 
-When analyzing hopper materials, use this model to extract:
+When analyzing background materials, use this model to extract:
 - What domains has the learner built chunks in? (code, writing, other)
 - What complexity level do their artifacts suggest?
 - Where are the complexity-chunking gaps? (bridge built but chunks

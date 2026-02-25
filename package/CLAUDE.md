@@ -6,7 +6,7 @@ A personal development harness for Claude Code. Run `/intake` to begin.
 
 - `.claude/skills/` — modular capabilities that activate contextually
 - `.claude/references/` — system knowledge (developmental model)
-- `.hopper/` — drop materials here before intake for a sharper starting profile
+- `background/` — drop materials here before intake for a sharper starting profile
 - `learning/` — created by intake, tracks your development over time
 
 ## After intake

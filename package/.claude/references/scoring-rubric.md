@@ -45,7 +45,7 @@ weight evidence appropriately.
 
 | Tag | Meaning | Confidence |
 |-----|---------|------------|
-| `intake:artifact` | Derived from analyzing hopper materials (code, writing, projects) | Higher — behavioral evidence |
+| `intake:artifact` | Derived from analyzing background materials (code, writing, projects) | Higher — behavioral evidence |
 | `intake:self-report` | The learner said it about themselves | Trust but verify |
 | `intake:inferred` | Observed from how they engaged in the interview | Behavioral signal |
 

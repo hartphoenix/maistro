@@ -11,7 +11,7 @@
 > as you use them. I'm looking for field testers for both tools:
 >
 > The first is a personal development harness — drop your materials in a
-> data hopper, run an intake interview, and get a CLAUDE.md, skill set,
+> background folder, run an intake interview, and get a CLAUDE.md, skill set,
 > and learning tracker calibrated to you. It models your learning
 > trajectory and self-calibrates over time. The second is a team
 > coordination layer that connects individual harnesses into a shared
@@ -55,7 +55,7 @@ It ships two interoperable Claude Code tools:
 
 1. **Personal development harness** — A Claude Code configuration that
    adapts to its user and maximizes their learning. Drop your materials
-   in a data hopper, run an intake interview, and get a CLAUDE.md, skill
+   in a background folder, run an intake interview, and get a CLAUDE.md, skill
    set, and learning tracker calibrated to you. The harness updates its
    model of the developer as they work and self-calibrates over time. My
    instance ("Roger") has been running this loop for three weeks. This week,
@@ -109,15 +109,15 @@ architecture fails at scale.
 
 ### Personal development harness
 
-- Fork/clone → dump your data in the hopper → run intake interview →
+- Fork/clone → drop your materials in background/ → run intake interview →
   personalized CLAUDE.md, skills, and learning tracker generated. Claude
   models your developmental trajectory and helps you achieve your goals
   through structured daily practice
-- Data hopper: a designated intake directory where the learner drops
+- Background folder: a designated intake directory where the learner drops
   whatever they have — resumes, project repos, writing samples, course
   transcripts, old code, conversation exports. The intake interview reads
   this material and synthesizes it into the learner profile. Richer input
-  produces a sharper starting model, but an empty hopper still works (the
+  produces a sharper starting model, but an empty folder still works (the
   interview asks questions to fill in gaps)
 - Working skills out of the box: debugger (guides problem decomposition),
   session-review (end-of-session quiz that updates the learning model),
@@ -129,7 +129,7 @@ architecture fails at scale.
 - Learning state persists in a structured file (scores per concept, gap
   classifications, session history) that the harness reads at session
   start to calibrate its responses
-- Privacy: learner profile, hopper, and learning state are .gitignored
+- Privacy: learner profile, background, and learning state are .gitignored
   and stay local. Nothing reaches a shared layer without explicit opt-in.
 
 ### Coordination layer

@@ -13,18 +13,18 @@ this document captures the build decisions and current state.
 ### Completed
 
 1. **`/intake` skill** — `.claude/skills/intake/SKILL.md`
-   Four-phase workflow: hopper scan → adaptive interview → synthesize
+   Four-phase workflow: background scan → adaptive interview → synthesize
    drafts → human-gated write. Generates CLAUDE.md, goals.md, arcs.md,
    current-state.md.
 
-2. **Data hopper convention** — `.hopper/` directory with `.gitkeep`.
+2. **Background folder convention** — `background/` directory with `.gitkeep`.
    Staging area for intake materials. Gitignored except the keep file.
 
 3. **Parameterized CLAUDE.md generation** — Built into intake Phase 3.
    Template mirrors Hart's working CLAUDE.md. Security section emitted
    verbatim as system invariant.
 
-4. **Privacy** — `.gitignore` updated: `learning/`, `.hopper/*`.
+4. **Privacy** — `.gitignore` updated: `learning/`, `background/*`.
 
 5. **Directory restructure** — `session-logs/` → `learning/`.
    All learning state now lives under `learning/`:
@@ -38,7 +38,7 @@ this document captures the build decisions and current state.
 6. **Developmental model** — `.claude/references/developmental-model.md`
    Generalized from roger's skill-tree.md. Static analytical framework:
    complexity/chunking dimensions, dependency types, ordering heuristic,
-   compounding engine. Referenced by intake for hopper analysis and
+   compounding engine. Referenced by intake for background analysis and
    interview calibration.
 
 7. **SuperWhisper** — "slash intake" → `/intake` registered.
@@ -46,9 +46,9 @@ this document captures the build decisions and current state.
 8. **Intake context management** — Sub-agent delegation, progressive
    note-taking, and resume protocol to keep the skill within context
    budget for non-technical users:
-   - Sub-agent for hopper analysis (raw materials never enter main
+   - Sub-agent for background analysis (raw materials never enter main
      agent context; conditional sub-sub-agent spawning for large
-     hoppers)
+     background folders)
    - Progressive note-taking to `learning/.intake-notes.md` after each
      interview domain (compression-resistant record)
    - Parallel sub-agent dispatch for synthesis (4 document drafts
@@ -57,7 +57,7 @@ this document captures the build decisions and current state.
      file, offers to resume or start fresh
    - Sub-agent dispatch reference: `.claude/skills/intake/subagents.md`
    - Failure handling: retry once, re-dispatch on second failure;
-     hopper failure degrades gracefully (accelerant, not gate)
+     background failure degrades gracefully (accelerant, not gate)
    - User communication during wait times
 
 9. **Session-review ↔ intake integration**
@@ -79,7 +79,7 @@ this document captures the build decisions and current state.
 10. **Install package directory structure** — `package/` now ships with
     `learning/` and `learning/session-logs/` via `.gitkeep` files. No
     skill has to create these directories. `.gitignore` uses the same
-    `*` / `!.gitkeep` pattern as `.hopper/`.
+    `*` / `!.gitkeep` pattern as `background/`.
 
 11. **Repo rename: maistro → maestro** — Migration script
     (`scripts/rename-to-maestro.sh`) renamed directory, updated Claude
@@ -163,7 +163,7 @@ learning/                     # per-user, gitignored
 
 projects/                     # per-project context (future)
 
-.hopper/                      # intake staging area, gitignored
+background/                      # intake staging area, gitignored
 ```
 
 **Three abstraction layers for learning state:**

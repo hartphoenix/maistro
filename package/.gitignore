@@ -8,5 +8,5 @@ learning/*
 !learning/session-logs/
 learning/session-logs/*
 !learning/session-logs/.gitkeep
-.hopper/*
-!.hopper/.gitkeep
+background/*
+!background/.gitkeep
