@@ -112,6 +112,25 @@ this document captures the build decisions and current state.
   structure (understand → explore approaches → capture → handoff) with
   the learner model as context instead of a team codebase.
 
+- **Agent feedback skill** — Replaces session-review Phase 4's strict
+  structural schema with a standalone skill that produces meaningful,
+  readable feedback reports. Key design decisions to make when building:
+  - **Trigger model:** Fires on surprise — when the agent encounters
+    harness behavior worth telling the developer about. Should activate
+    from session-review or independently during any session.
+  - **Signal type estimation:** The skill should classify what kind of
+    signal it's producing (file-state, instruction-ambiguity, workflow
+    friction, unexpected success, etc.) so the developer can triage.
+  - **Privacy boundary (relaxed):** More contentful than the current
+    Phase 4 schema. The agent writes a narrative report that's useful
+    without leaking sensitive learning data. The exact boundary gets
+    refined during skill design.
+  - **Replaces session-review Phase 4:** Once built, session-review's
+    Phase 4 delegates to this skill rather than composing the signal
+    inline.
+  - **Pre-deploy dependency:** The `rhhart/maestro-signals` repo must
+    exist and `gh` must be authenticated before this works end-to-end.
+
 ---
 
 ## Architecture decisions made today
