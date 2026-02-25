@@ -42,7 +42,7 @@ it cannot possess. See `design/design-principles.md` §1.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Emotional reflection skill | Built | Mirrors awareness state; knows its boundary with somatic/attachment work |
+| Emotional reflection skill | Deferred | Behavior embedded in Tutor personality; standalone skill not built. Mirrors awareness state; knows its boundary with somatic/attachment work |
 | Watch-for pattern recognition | Built | CLAUDE.md flags patterns that fragment awareness |
 | Experiment-first loop protection | Built | Preserves natural rhythm of awareness and attention |
 | Awareness state recognition | Not started | Can the system infer coherence/fragmentation from interaction patterns? |
@@ -168,7 +168,7 @@ Modular, swappable skills and personalities with clean interfaces. See
 `design/design-principles.md` §5.
 
 **Existing implementations:**
-- 8 built skills, each with SKILL.md in `.claude/skills/`
+- 10 built skills, each with SKILL.md in `.claude/skills/` (7 ship in package, 4 dev-only)
 - 1 built personality (Tutor), 2 planned (Creative Collaborator, Research Partner)
 - `design/build-registry.md` as skill/personality registry
 - design-skill meta-skill for building new skills
@@ -202,7 +202,7 @@ signal loss at team boundaries becomes the central problem. See
 - Session logs → session-review → current-state updates (learning state accumulates)
 - Workflow debugging during use (compound engineering workflows refined mid-session)
 - Dogfooding (design-skill reviewing itself against its own checklist)
-- Session-log-analyzer (captures observations across `/clear` boundaries)
+- Session-log analysis (behavior embedded in session-review, not a standalone skill)
 
 **Features to catch:**
 

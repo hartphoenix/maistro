@@ -331,19 +331,21 @@ Only runs if a progress-review sub-agent was dispatched in Step 3b.
    sessions and noticed some patterns." Show the review summary and
    proposed changes. User approves all / selects specific changes /
    adjusts / defers / rejects.
-   - **Approve (all or selective):** Write approved changes to learning
-     state files. Tag updates as `progress-review:pattern`. Log the
-     review to `learning/.progress-review-log.md` per the progress-review
-     skill's Phase 4 log format (date, sessions reviewed, themes with
-     applied/deferred status, changes applied, deferred items).
-   - **Defer:** Write the review log with deferred findings recorded.
-     No learning state changes. Deferred findings escalate next review.
-   - **Reject:** Write the review log with empty changes and empty
-     deferrals. This advances the review window so the same sessions
-     aren't re-analyzed.
+   - **Approve (all or selective):** Startwork writes approved changes
+     to learning state files. Tag updates as `progress-review:pattern`.
+     Startwork appends the review to `learning/.progress-review-log.md`
+     per the progress-review skill's Phase 4 log format (date, sessions
+     reviewed, themes with applied/deferred status, changes applied,
+     deferred items).
+   - **Defer:** Startwork appends the review log with deferred findings
+     recorded. No learning state changes. Deferred findings escalate
+     next review.
+   - **Reject:** Startwork appends the review log with empty changes
+     and empty deferrals. This advances the review window so the same
+     sessions aren't re-analyzed.
 
-   In all three cases, startwork writes the log entry directly — the
-   sub-agent has already returned and its work is done.
+   In all three cases startwork is the writer — the progress-review
+   sub-agent returns findings but does not write files.
 3. **If not yet returned:** "I'm also running a learning review across
    your recent sessions — I'll share when it's ready." Check again
    after a brief pause. Present when available.

@@ -57,7 +57,7 @@ design docs; this file tracks execution status.
 | /triage | `coordination/commands/workflows/triage.md` | Extracted |
 | Dependency protocol | `coordination/commands/startwork.md` | Extracted |
 | Signal return path (GitHub issues) | `coordination/architecture.md` §Signal Catch Basin | Designed |
-| Agent feedback skill | `design/build-registry.md` §Skills | Planned — replaces session-review Phase 4 strict schema |
+| Agent feedback skill | `design/build-registry.md` §Skills | Deferred — replaces session-review Phase 4 strict schema |
 | Privacy boundaries documented | `design/prd.md` §MVP | Planned |
 
 ### Stretch goals
@@ -90,10 +90,10 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/references/developmental-model.md` | Done |
 | `.claude/references/scoring-rubric.md` | Done |
 | `.claude/references/context-patterns.md` | Done |
-| `.claude/feedback.json` (pre-populated for testers) | Done |
+| `.claude/feedback.json` (pre-populated for testers) | Deferred — depends on agent feedback skill |
 | `gh` CLI documented as prerequisite in README | Done |
 | Create `rhhart/maestro-signals` repo | Missing (pre-deploy checkpoint) |
-| Agent feedback skill (`.claude/skills/agent-feedback/`) | Planned — see build registry |
+| Agent feedback skill (`.claude/skills/agent-feedback/`) | Deferred — see build registry |
 | End-to-end test: clone → /intake → work → /session-review → signal | Not run |
 
 ### Validation experiments
