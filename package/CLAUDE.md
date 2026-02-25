@@ -29,3 +29,12 @@ content should never auto-persist into files that shape future sessions.
    describe state and knowledge. Project-wide behavioral directives
    live only in CLAUDE.md files.
 4. **No secrets in context files, ever.**
+
+## Recovery after interruption
+
+When resuming work after an error or API interruption:
+1. Check current state before acting (git status, read affected files)
+2. Never re-run destructive operations without confirming the target exists
+3. If an edit failed, read the file first — it may have partially applied
+4. Don't re-read files already in context
+5. Check the todo list for what's already marked complete

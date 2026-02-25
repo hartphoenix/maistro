@@ -138,6 +138,33 @@ this document captures the build decisions and current state.
   - **Pre-deploy dependency:** The `rhhart/maestro-signals` repo must
     exist and `gh` must be authenticated before this works end-to-end.
 
+- **Install pipeline** (`scripts/bootstrap.ts`) — Bun script: copies
+  `package/` to a target directory, verifies structure, prints "run
+  /intake." The spec → build → instance pattern applied to the harness
+  itself. Serves the "README + single-action initialization flow" item
+  from the Tuesday remaining list.
+
+- **Install verification** (`scripts/test-install.ts`) — Bun script:
+  scaffolds a temp harness from `package/`, checks file structure
+  against expected manifest (all skills, references, .gitkeep dirs,
+  feedback.json, tutor-posture.md), reports pass/fail. First pass is
+  structural only; later: simulate intake and verify output schema.
+  Serves the "End-to-end test" checklist item (structural half).
+
+- **Inter-skill data contracts** (`package/.claude/references/data-contracts.md`)
+  — Schemas for current-state.md, session log frontmatter, goals.md,
+  arcs.md: required fields, optional fields, types, which skills
+  read vs. write. Includes a personality interface section extending
+  the tutor-posture.md pattern (what a personality shares vs. what it
+  varies). Ships in package; mirrored to `.claude/references/`.
+
+- **Session-review observability hooks** — Extend session log
+  frontmatter with: `skills-invoked` (list), `gap-types-addressed`
+  (counts by type), and `interventions` (optional, when session-review
+  can infer effectiveness). Lightweight — a few extra YAML fields, not
+  a new skill. Generates continuous data that feeds validation
+  experiments 5, 6, and 7. See `design/validation-plan.md` §7b.
+
 ---
 
 ## Architecture decisions made today
@@ -163,7 +190,7 @@ learning/                     # per-user, gitignored
 
 projects/                     # per-project context (future)
 
-background/                      # intake staging area, gitignored
+background/                   # intake staging area, gitignored
 ```
 
 **Three abstraction layers for learning state:**
@@ -180,7 +207,12 @@ background/                      # intake staging area, gitignored
 ## Wednesday–Saturday targets
 
 See `design/schedule.md` for full milestone table. Key:
-- Wed: Install package complete (README + init flow), solo `/startwork`
-- Thu: Coordination layer installable, signal return path, docs
-- Fri: Demo prep, peer testing, iterate on feedback
-- Sat: Demo
+- Wed 2/25: Install package complete. Solo /startwork built. P10 teacher
+  relationship designed. Persona audit (tutor-posture.md, skill edits).
+  Infrastructure patterns registered in design docs. (Done)
+- Thu 2/26: Teacher-relationship MVP (publish + read-back + config).
+  Signal repo created. Install pipeline + verification scripts. E2E
+  test run.
+- Fri 2/27: Peer testing doubles as first teacher-student exchange.
+  Iterate on feedback. Demo prep.
+- Sat 2/28: Demo.

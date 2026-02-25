@@ -93,14 +93,15 @@ shared or ambient context is human-gated. See `coordination/architecture.md` §5
 | Compaction protocols | Built | `/clear` + artifact handoff |
 | Selective skill loading | Built | Skills load by description match, not bulk |
 | Session-log preservation across `/clear` | Designed | Captures human observations across context boundaries |
-| Solo startwork (pre-work check) | Designed | Computes the gap, composes a session briefing. Full design: `design/startwork.md`. |
-| Compounding indicators | Not started | Is this session's attention building on the last, or starting from scratch? |
+| Solo startwork (pre-work check) | Built | `.claude/skills/startwork/`. Computes the gap, composes a session briefing. Full design: `design/startwork.md`. |
+| Compounding indicators | Partial | Session-level compounding not yet built, but progress-review detects compounding breakdown at arc level. See P6. |
 | Context budget awareness | Not started | Can the system estimate remaining budget and prioritize? |
 | Attention cost accounting | Not started | What is the attentional cost of a skill invocation, a memory load, a sub-agent spawn? |
 | Joint attention mapping | Not started | Where is the human's attention? Where is the agent's? Are they aligned or usefully divergent? |
 | Context quality metrics | Not started | What would "well-composed attention" mean, measurably? High value but long time-to-value. |
 | Context budget measurement | Not started | Instrument token consumption per skill, per memory load, per CLAUDE.md section. See `design/validation-plan.md` §5 |
 | Redundancy audit (prompt pattern or skill) | Not started | Checks CLAUDE.md and skills for content the model already knows or can discover. See `design/validation-plan.md` §5 |
+| Inter-skill data contracts | Planned | Explicit schemas for current-state.md, session logs, goals.md, arcs.md. Skills reference contracts instead of inferring format. `package/.claude/references/data-contracts.md`. Also serves P5. |
 
 ---
 
@@ -168,8 +169,9 @@ Modular, swappable skills and personalities with clean interfaces. See
 `design/design-principles.md` §5.
 
 **Existing implementations:**
-- 10 built skills, each with SKILL.md in `.claude/skills/` (7 ship in package, 4 dev-only)
+- 11 built skills, each with SKILL.md in `.claude/skills/` (7 ship in package, 4 dev-only)
 - 1 built personality (Tutor), 2 planned (Creative Collaborator, Research Partner)
+- Persona reference: `package/.claude/references/tutor-posture.md` (shipped in package, all skills audited)
 - `design/build-registry.md` as skill/personality registry
 - design-skill meta-skill for building new skills
 
@@ -182,8 +184,9 @@ Modular, swappable skills and personalities with clean interfaces. See
 | Skill ↔ personality independence | Built | Any personality invokes any skill |
 | Skill discovery / activation by description | Built | Claude Code matches on frontmatter description |
 | Skill composition (skill chains) | Not started | Can skills call other skills? e.g., debugger → diagram |
-| Personality parameter extraction | Not started | What in the Tutor personality is Hart-specific vs. generalizable? |
+| Personality parameter extraction | Done | Generalized from roger's Tutor Posture to `package/.claude/references/tutor-posture.md`. All shipping skills audited for persona consistency. |
 | Skill proliferation audit | Not started | Are all skills earning their context cost? See `design/validation-plan.md` §6 |
+| Inter-skill data contracts | Planned | Shared schema definitions decoupling skill implementations. Personality interface section extends tutor-posture.md pattern. Also serves P2. |
 | Skill templates / generators | Partial | design-skill guides creation but doesn't scaffold files |
 
 ---
@@ -221,6 +224,7 @@ signal loss at team boundaries becomes the central problem. See
 | Regression detection | Built | Detected by progress-review concept lens (score drop ≥ 2 on previously-solid concept). `.claude/skills/progress-review/` |
 | Compounding indicators | Partial | Progress-review detects compounding breakdown (arc touched in many sessions but not advancing). Full session-level compounding indicators not yet built. |
 | Solo compound engineer (weekly review) | Built | `.claude/skills/progress-review/`. Cross-session pattern analysis dispatched from startwork or invoked standalone. Reads session logs, detects stalls/regressions/drift/readiness, proposes learning state updates. |
+| System observability hooks | Planned | Session-review logs skill usage, gap types, intervention effectiveness in session log frontmatter. Continuous data stream for validation experiments 5, 6, 7. See `design/validation-plan.md` §7b. |
 | Archive-not-delete lifecycle | Not started | Move ephemeral docs to archive rather than deleting. Prevents signal loss from premature cleanup. |
 
 ---
@@ -340,7 +344,7 @@ Features that don't yet have a clear home or that span multiple principles.
 |---------|----------------------|-------|
 | Multi-Claude orchestration (game-Claude + Roger) | Attention, Composability | Two instances with different attentional roles and shared filesystem. See `coordination/architecture.md` §5 |
 | Corpus miner | Self-improvement, Attention | Personal archive as searchable knowledge base. Built. Useful for retrospective capture. |
-| Handoff test skill | Attention, Human authority | Audit artifacts for self-containedness before context loss. |
+| Handoff test skill | Attention, Human authority | Built. `coordination/skills/handoff-test/`. Audit artifacts for self-containedness before context loss. |
 | Cross-domain bridge detection | Developmental model, Self-improvement | Exaptation mining from corpus |
 | Awareness practice catalog | Awareness, Play | Which practices restore coherence and cultivate the explore state? |
 | Multi-user learning layer | Self-improvement, Composability, P10 | Distributed P6: keeping the embedding loop closed across team boundaries. See `coordination/architecture.md` §4. Depends on solo P6 features as prototypes. Teacher-student exchange (P10) is a specialization of this. |

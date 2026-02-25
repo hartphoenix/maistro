@@ -5,7 +5,7 @@ coordination layer for Claude Code.
 
 Two interoperable tools that learn as they are used:
 
-1. **Personal development harness** — Drop materials in a background folder,
+1. **Personal development harness** — Drop materials in the background folder,
    run an intake interview, get a CLAUDE.md, skills, and learning
    tracker calibrated to you. The harness updates its model as you work
    and self-calibrates over time.
@@ -48,3 +48,12 @@ Feature registry organized by principle: `design/harness-features.md`.
 - **Surprise-triggered capture.** When you encounter something in this
   project that surprises you, alert the developer and describe what you
   expected vs. what you found. This is how the system learns.
+
+### Recovery after interruption
+
+When resuming after an error or API interruption:
+1. Check current state before acting (git status, read affected files)
+2. Never re-run destructive operations without confirming the target exists
+3. If an edit failed, read the file first — it may have partially applied
+4. Don't re-read files already in context
+5. Check the todo list for what's already marked complete
