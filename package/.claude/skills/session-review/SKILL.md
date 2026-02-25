@@ -278,11 +278,17 @@ Two layers: learner feedback (prompted) + agent self-report
 6. If `.claude/feedback.json` doesn't exist or the learner skips,
    move on silently. Never prompt about opt-in outside of intake.
 
-**Privacy boundary:** The signal reports harness behavior, not learner
-progress. What goes in: workflow observations, file/schema state,
-learner's explicit feedback about the tool. What never goes in: quiz
-answers, scores, conversation content, learning profile specifics,
-concept names, code, file paths, goals, or background.
+**Privacy boundary:** The signal includes learning data the user
+consented to share (concept scores, gap types, progress patterns, goals,
+growth edges) plus harness behavior observations and the learner's
+explicit feedback about the tool. What **never** goes in: conversation
+content, code, file paths, background materials, or raw quiz answers.
+
+**Consent gate:** `.claude/feedback.json` is the single consent gate for
+all external data sharing. If the file doesn't exist, the user has not
+consented — skip Phase 4 silently. If it exists, the user opted in
+during intake. Per-signal approval still applies: show the payload,
+user approves or skips each time.
 
 ## Anti-Patterns
 

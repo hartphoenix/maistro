@@ -105,7 +105,9 @@ Each user publishes to their own GitHub repository. No shared repo.
 - Student creates a personal signals repo (e.g.,
   `username/learning-signals`) — one `gh repo create` command
 - Or uses their existing harness/project repo
-- Teachers are added as collaborators (write access to comment)
+- **Public by default.** Any GitHub user can view and comment on
+  issues — no collaborator invites needed. The teacher just needs
+  the repo URL.
 - Teachers subscribe via GitHub's native Watch feature (Issues Only)
 - GitHub handles notifications natively
 
@@ -114,12 +116,15 @@ This means:
 - **No shared infrastructure.** No central repo to manage.
 - **Role fluidity is natural.** You publish to your repo, you watch
   other people's repos. That's the whole relationship model.
-- **Privacy via GitHub permissions.** Private repo = only invited
-  collaborators see it. Public repo = discoverable.
+- **Zero-friction teacher onboarding.** Public repo means the
+  student shares a link, the teacher watches it. No invite flow.
+- **Privacy choice stays with the student.** They can make the repo
+  private later if they want — but then teachers need collaborator
+  access to comment.
 
 The repo needs:
 - Issues enabled
-- Teacher added as collaborator
+- Public visibility (default — eliminates collaborator invites)
 - Label set: `progress-review`, `goal-update`, `needs-teacher`,
   `responded`, `acknowledged`
 
@@ -254,15 +259,14 @@ repo for sharing your progress?" Skills check for presence and skip
 teacher exchange steps if the file is absent or empty.
 
 Setup steps for the student:
-1. `gh repo create learning-signals --private` (or use existing repo)
-2. `gh repo edit --enable-issues` (if not already)
-3. Add teacher as collaborator: `gh api repos/{owner}/{repo}/collaborators/{teacher} -X PUT`
-4. Add teacher's handle to `learning/relationships.md`
+1. `gh repo create learning-signals --public` (or use existing repo)
+2. Label setup (automated by intake — 5 labels for issue workflow)
+3. Add teacher's handle to `learning/relationships.md`
+4. Share the repo link with teacher: `https://github.com/USERNAME/learning-signals`
 
 Setup steps for the teacher:
-1. Accept the collaboration invite
-2. Watch the student's repo (Issues Only)
-3. Add student to their own `learning/relationships.md` under `students:`
+1. Watch the student's repo (Issues Only) via the shared link
+2. Add student to their own `learning/relationships.md` under `students:`
 
 ---
 
@@ -454,9 +458,9 @@ upstreamness × time-to-value):
 - **Config location:** `learning/relationships.md`. List format
   supports multiple teachers and anticipates role fluidity.
 - **Signal repo architecture:** Per-user, not shared. Each user
-  publishes to their own repo. Teachers subscribe via GitHub Watch.
-  Collaborator invite grants comment access. Role fluidity = you
-  publish to your repo, watch others'. No central infrastructure.
+  publishes to their own public repo. Teachers subscribe via GitHub
+  Watch — no collaborator invite needed. Role fluidity = you publish
+  to your repo, watch others'. No central infrastructure.
 - **Discovery model:** One mechanism, four match types. Expertise→gap
   (teacher-student), shared growth edge (peer), complementary strengths
   (mutual teaching), project affinity (collaborator → reveals latent

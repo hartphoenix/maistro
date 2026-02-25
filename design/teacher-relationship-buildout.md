@@ -72,9 +72,10 @@ order: higher items unblock lower ones.
   startwork: `gh issue list --repo signal_repo --label responded`,
   read comments, surface guidance in session plan.
 
-- [ ] **11. Label protocol setup** — Create labels on user's signal
+- [x] **11. Label protocol setup** — Create labels on user's signal
   repo: `progress-review`, `goal-update`, `needs-teacher`,
   `responded`, `acknowledged`. One-time `gh label create` commands.
+  Done — labels created on `hartphoenix/learning-signals`.
 
 ### Relationship scoping decision
 
