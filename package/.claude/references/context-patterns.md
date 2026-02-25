@@ -23,7 +23,7 @@ paths, reads and analyzes in isolation, returns a structured report.
 Main agent works from the report.
 
 **When to use:** Any skill that needs to process unstructured input —
-hopper files, session logs, multi-file codebases, research materials.
+background files, session logs, multi-file codebases, research materials.
 
 **Key constraint:** "Do not draft the document yourself — keep the
 main context clean." If a sub-agent fails, retry or dispatch fresh.
@@ -125,7 +125,7 @@ depth — don't re-ask what's already well-established, do probe
 what's uncertain.
 
 **When to use:** Any skill where upstream analysis gates downstream
-interaction depth — hopper analysis → interview, log scan →
+interaction depth — background analysis → interview, log scan →
 weekly review, codebase audit → refactor planning.
 
 ---

@@ -8,5 +8,5 @@ bun.lockb
 
 # Learner profile (personal, not shared)
 learning/
-.hopper/*
-!.hopper/.gitkeep
+background/*
+!background/.gitkeep

@@ -26,7 +26,7 @@ design docs; this file tracks execution status.
 
 | Task | Spec | Status |
 |------|------|--------|
-| Data hopper + intake interview | `design/prd.md` §MVP | Done |
+| Background folder + intake interview | `design/prd.md` §MVP | Done |
 | Parameterized CLAUDE.md generation | `design/prd.md` §MVP | Done |
 | Skills out of the box (debugger, session-review, quick-ref) | `design/build-registry.md` | Done |
 | Intake ↔ session-review integration | Shared scoring rubric, evidence tagging, goals/arcs lifecycle | Done |
@@ -93,9 +93,9 @@ What ships in `package/` — everything a new user needs to clone and go.
 |------|--------|
 | `README.md` (quick start, what intake creates, privacy) | Done |
 | `CLAUDE.md` (template, replaced by intake) | Done |
-| `.gitignore` (learning/, .hopper/) | Done |
+| `.gitignore` (learning/, background/) | Done |
 | `learning/` + `learning/session-logs/` (with .gitkeep) | Done |
-| `.hopper/` (with .gitkeep) | Done |
+| `background/` (with .gitkeep) | Done |
 | `.claude/skills/intake/` | Done |
 | `.claude/skills/session-review/` | Done |
 | `.claude/skills/startwork/` | Done |
