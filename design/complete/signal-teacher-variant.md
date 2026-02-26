@@ -34,7 +34,7 @@ Presented to learner for approval, then posted via:
 
 ```
 gh issue create \
-  --repo [repo from feedback.json] \
+  --repo [repo from consent.json] \
   --title "[signal] YYYY-MM-DD" \
   --body "[snapshot + optional notes]"
 ```

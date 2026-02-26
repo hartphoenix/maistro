@@ -107,7 +107,7 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/references/scoring-rubric.md` | Done |
 | `.claude/references/context-patterns.md` | Done |
 | `.claude/references/tutor-posture.md` | Done |
-| `.claude/feedback.json` (no default — created by intake on consent) | Done |
+| `.claude/consent.json` (no default — created by intake on consent) | Done |
 | `.claude/hooks/session-start.sh` (conditional onboarding hook) | Done |
 | `.claude/skills/handoff-test/` | Done |
 | `gh` CLI documented as prerequisite in README | Done |

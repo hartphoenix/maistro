@@ -147,7 +147,7 @@ this document captures the build decisions and current state.
 - **Install verification** (`scripts/test-install.ts`) — Bun script:
   scaffolds a temp harness from `package/`, checks file structure
   against expected manifest (all skills, references, .gitkeep dirs,
-  feedback.json, tutor-posture.md), reports pass/fail. First pass is
+  consent.json, tutor-posture.md), reports pass/fail. First pass is
   structural only; later: simulate intake and verify output schema.
   Serves the "End-to-end test" checklist item (structural half).
 

@@ -128,7 +128,7 @@ root above — not from the current working directory:
 - \`learning/*\` → \`$HARNESS_ROOT/learning/*\`
 - \`background/*\` → \`$HARNESS_ROOT/background/*\`
 - \`.claude/references/*\` → \`$HARNESS_ROOT/package/.claude/references/*\`
-- \`.claude/feedback.json\` → \`$HARNESS_ROOT/package/.claude/feedback.json\`
+- \`.claude/consent.json\` → \`$HARNESS_ROOT/package/.claude/consent.json\`
 
 When a skill says "read learning/current-state.md", read
 \`$HARNESS_ROOT/learning/current-state.md\`.

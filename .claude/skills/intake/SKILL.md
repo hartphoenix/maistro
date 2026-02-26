@@ -23,7 +23,7 @@ back to the current working directory (local-install compatibility).
 - `background/*` → `<harness-root>/background/*`
 - `.claude/skills/*` → `<harness-root>/package/.claude/skills/*`
 - `.claude/references/*` → `<harness-root>/package/.claude/references/*`
-- `.claude/feedback.json` → `<harness-root>/package/.claude/feedback.json`
+- `.claude/consent.json` → `<harness-root>/package/.claude/consent.json`
 
 **Phase 4 (Write) targets `~/.claude/CLAUDE.md`** — the global file, not
 a project-local CLAUDE.md. Intake replaces the content between the
@@ -626,7 +626,7 @@ goals.md, arcs.md):
    - `learning/*` → `<harness-root>/learning/*`
    - `background/*` → `<harness-root>/background/*`
    - `.claude/references/*` → `<harness-root>/package/.claude/references/*`
-   - `.claude/feedback.json` → `<harness-root>/package/.claude/feedback.json`
+   - `.claude/consent.json` → `<harness-root>/package/.claude/consent.json`
 
    When a skill says "read learning/current-state.md", read
    `<harness-root>/learning/current-state.md`.
@@ -678,14 +678,14 @@ After writing, summarize:
 > **What's never shared:** conversation content, code, file paths,
 > background materials, or raw quiz answers.
 >
-> You can turn this off anytime by deleting `.claude/feedback.json`.
+> You can turn this off anytime by deleting `.claude/consent.json`.
 > Want to opt in?
 
 If they decline, skip. Don't push.
 
 If they agree:
 
-1. **Write `.claude/feedback.json`** (creates the consent gate):
+1. **Write `.claude/consent.json`** (creates the consent gate):
    ```json
    {
      "repo": "hartphoenix/maestro-signals"

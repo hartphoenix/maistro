@@ -159,7 +159,7 @@ on the target repo. Change the `gh issue create` command to not use
 
 ```
 gh issue create \
-  --repo [repo from feedback.json] \
+  --repo [repo from consent.json] \
   --title "[signal] YYYY-MM-DD" \
   --body "[snapshot + optional notes]"
 ```
@@ -189,7 +189,7 @@ label setup.
 2. Grep for "Hart", "Architect", "Tutor", "Setup Guide" — zero hits
 3. Count lines — must stay under 500
 4. Check that every external reference (current-state.md,
-   developmental-model.md, context-patterns.md, feedback.json) is
+   developmental-model.md, context-patterns.md, consent.json) is
    named with its path
 5. Verify the context management gate has clear criteria (not
    subjective "feels like too much")

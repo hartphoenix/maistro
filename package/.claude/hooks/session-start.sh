@@ -55,7 +55,7 @@ fi
 # ── Condition 2: Intake was interrupted ───────────────────────────────
 
 if [ -f "$LEARNING_DIR/.intake-notes.md" ]; then
-  PHASE=$(head -20 "$LEARNING_DIR/.intake-notes.md" | grep -oP '(?<=phase: ).*' || echo "")
+  PHASE=$(head -20 "$LEARNING_DIR/.intake-notes.md" | sed -n 's/.*phase: //p' || echo "")
   if [ -n "$PHASE" ] && [ "$PHASE" != "complete" ]; then
     CONTEXT_PARTS+=("Intake was started but not finished (stopped at phase: $PHASE). Offer to resume with /intake — it will pick up where it left off.")
   fi

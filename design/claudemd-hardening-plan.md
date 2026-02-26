@@ -12,7 +12,7 @@ A transcript review of a complex git bucketing session revealed 6 agent mistakes
 
 ## Task 1: Confirm no Edit/Write allow in package (report only)
 
-No action needed. Confirmed: `package/.claude/` contains only `feedback.json`, `hooks/`, `references/`, and `skills/`. No `settings.json` or `settings.local.json` exists. The Edit/Write allow-list workaround (for bug #22122) is confined to the developer environment at `maestro/.claude/settings.local.json` and does not ship.
+No action needed. Confirmed: `package/.claude/` contains only `consent.json`, `hooks/`, `references/`, and `skills/`. No `settings.json` or `settings.local.json` exists. The Edit/Write allow-list workaround (for bug #22122) is confined to the developer environment at `maestro/.claude/settings.local.json` and does not ship.
 
 ---
 

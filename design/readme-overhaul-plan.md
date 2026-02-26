@@ -1,83 +1,50 @@
-# Maestro Harness
+# Plan: README Overhaul + License + Launch Readiness Fixes
 
-A personal development harness for Claude Code. It learns how you learn,
-tracks your growth, and adapts its behavior to where you are right now.
+## Context
 
-Drop some materials, run a 15-minute interview, and get a system that
-sharpens itself every time you use it.
+Launch readiness audit surfaced 4 blockers and 7 warnings. One-shot
+fixes already applied (consent.json rename, handoff-test mirror,
+grep -oP platform fix). Remaining work is README documentation and a
+license decision.
 
-## Prerequisites
+This plan covers all remaining items. The README edits are
+interdependent (new sections reference each other), so they're planned
+as a single coordinated pass.
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and working
-- [GitHub CLI (`gh`)](https://cli.github.com/) installed and authenticated — used
-  for usage signals. Run `gh auth status` to check. If you need to set it up:
-  [GitHub CLI quickstart](https://docs.github.com/en/github-cli/github-cli/quickstart)
-- [`jq`](https://jqlang.github.io/jq/download/) — used by the installer for safe JSON manipulation
-- `git` — you probably already have this
+---
 
-Tested on macOS. Linux should work — all scripts use portable bash
-and POSIX utilities. Windows users: use WSL.
+## 1. License file (B1)
 
-## Install
+**Decision needed from Hart.** Present options in layman's terms:
 
-```bash
-git clone https://github.com/hartphoenix/maestro ~/maestro
-cd ~/maestro && bash scripts/bootstrap.sh
-```
+- **MIT** — "Anyone can use, copy, modify, sell. They just have to
+  include your copyright notice. Most popular open-source license.
+  Used by React, Node, Rails." Pick this if you want maximum adoption.
+- **Apache 2.0** — Like MIT but also includes a patent grant (protects
+  users from patent claims) and requires stating changes. Pick this if
+  you want corporate-friendly with slightly more protection.
+- **GPL v3** — Anyone can use and modify, but if they distribute a
+  modified version they must also open-source it under GPL. Pick this
+  if you want to ensure derivatives stay open.
+- **Proprietary / All Rights Reserved** — No one can use without your
+  permission. Pick this if you want to control distribution.
 
-Bootstrap does three things:
-1. Registers skills globally so they're available in any project
-2. Registers a session-start hook that checks your learning state
-3. Writes a path-resolution section to `~/.claude/CLAUDE.md`
+**Recommendation:** MIT. The harness is a personal tool — adoption
+matters more than control. MIT is one line plus a copyright notice.
 
-Everything is tracked in a manifest (`~/.config/maestro/manifest.json`)
-and backed up. Run `bash scripts/uninstall.sh` to reverse it cleanly.
+**Action:** Create `LICENSE` at repo root with Hart's chosen license.
 
-## Quick start
+---
 
-### 1. (Optional) Load your background
+## 2. Learning loop section (B2)
 
-Drop files into `~/maestro/background/` before running intake. The more
-signal you provide, the sharper your starting profile:
+**What:** Add a new `## The learning loop` section after "Quick start"
+(before "Update"). This is the unified explanation of how the cycle
+works.
 
-- **Code you've written** — shows what you can build and how you think
-- **Resumes or portfolios** — background, experience, trajectory
-- **Writing samples** — communication style, how you explain things
-- **Conversation exports** — past Claude/ChatGPT transcripts that show
-  your working patterns
-- **Course materials** — syllabi, assignments, lecture notes for what
-  you're currently learning
-
-The background folder is optional. If you skip it, the interview covers
-everything — it just takes a few more questions.
-
-### 2. Run intake
-
-Start Claude Code in **any project directory** and run:
+**Content structure:**
 
 ```
-/intake
-```
-
-The intake interview has four phases:
-
-1. **Discover** — scans your background materials (if any) to build a
-   starting picture
-2. **Interview** — conversational, ~10-15 minutes. Covers your
-   background, goals, current skills, how you learn, and how you like
-   to work
-3. **Synthesize** — generates your personalized configuration and
-   learning state
-4. **Write** — presents everything for your approval before writing
-   any files
-
-Nothing is written without your explicit OK.
-
-### 3. Start working
-
-After intake, use Claude Code normally in any project. The harness works
-in the background. See **The learning loop** below.
-
 ## The learning loop
 
 The harness improves your profile every time you use it. Here's the
@@ -98,41 +65,23 @@ cycle:
 The more sessions you complete, the sharper the system gets. Concept
 scores are quiz-verified, not self-reported — so the profile converges
 on reality.
-
-## Update
-
-```bash
-cd ~/maestro && git pull
 ```
 
-Skills update immediately. Learning state (`~/maestro/learning/`) is
-never overwritten by pull — it's gitignored.
+**Also:** Remove the inline learning loop description from the
+"3. Start working" subsection (lines 81-85) to avoid duplication.
+Replace with a forward-reference: "See **The learning loop** below."
 
-If you set `"updates": "notify"` (default), the harness tells you when
-updates are available at session start.
+---
 
-## Uninstall
+## 3. Skills table (B3)
 
-```bash
-bash ~/maestro/scripts/uninstall.sh
+**What:** Replace the current `## Skills included` table with a
+categorized table. All 8 skills. No "how to call" column since all
+use `/skill-name`. Add a note about auto-dispatch.
+
+**Structure:**
+
 ```
-
-Removes the settings.json entries, the CLAUDE.md section, and the
-config directory. Learning state is preserved — you're told where it
-is and can delete it manually.
-
-## What intake creates
-
-| File | Purpose |
-|------|---------|
-| `CLAUDE.md` | Personalized configuration — how the system behaves toward you |
-| `learning/goals.md` | Your aspirations as states of being, not skill checklists |
-| `learning/arcs.md` | Capability clusters — groups of skills serving your goals |
-| `learning/current-state.md` | Concept inventory — scores, gap types, evidence sources |
-
-After sessions, `/session-review` also creates session logs in
-`learning/session-logs/`.
-
 ## Skills
 
 All skills are invoked with `/skill-name` in Claude Code.
@@ -166,7 +115,18 @@ Some skills run automatically without you invoking them:
   is stale
 - **quick-ref** and **debugger** activate contextually based on what
   you're doing — no slash command needed
+```
 
+---
+
+## 4. Undocumented features (B4)
+
+**What:** Add brief documentation for 6 features that exist in code
+but aren't in the README.
+
+**Where:** New subsection `## Under the hood` after the skills section.
+
+```
 ## Under the hood
 
 These files are created and managed by skills during normal use.
@@ -189,36 +149,21 @@ When you open Claude Code, a hook runs automatically. It checks:
 - Whether a previous `/intake` was interrupted (offers to resume)
 - Whether your learning profile is stale (suggests `/startwork`)
 - Whether harness updates are available (if `"updates": "notify"`)
-
-## Privacy
-
-Your learning profile stays local by default:
-
-- `background/` and `learning/` are gitignored out of the box
-- During intake, you choose whether `CLAUDE.md` is shared or private
-- Nothing leaves your machine without your explicit action
-
-## Recommended: Install a command guard
-
-AI coding agents occasionally attempt destructive commands — `git reset
---hard`, `rm -rf`, force pushes — that can destroy uncommitted work in
-seconds. This is a [known class of issue](https://github.com/anthropics/claude-code/issues/7232)
-across all AI coding tools.
-
-[DCG (Destructive Command Guard)](https://github.com/Dicklesworthstone/destructive_command_guard?tab=readme-ov-file#dcg-destructive-command-guard)
-intercepts these before execution and explains what the agent was trying
-to do. Install it once and it protects all your projects:
-
-```bash
-curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/destructive_command_guard/main/install.sh?$(date +%s)" | bash -s -- --easy-mode
 ```
 
-**When DCG blocks an agent command:** read DCG's explanation of what it
-intercepted. If the command is legitimately needed — for example,
-reverting a mistake the agent just made — run it yourself in the
-terminal. Otherwise, let the block stand and tell the agent to find an
-alternative approach.
+---
 
+## 5. Data sharing section update (Option B + W3)
+
+**What:** Rewrite the `## Data sharing (optional)` section to:
+1. Explain that signal dispatch is currently one-way (option B)
+2. Explain that `hartphoenix/maestro-signals` is the developer's repo
+   for feedback that improves the harness code
+3. Note that teacher response loop is designed and coming
+
+**Replacement content:**
+
+```
 ## Data sharing (optional)
 
 During `/intake`, you'll be asked if you want to share learning data
@@ -252,14 +197,15 @@ it on GitHub. Add their GitHub handle to `learning/relationships.md`
 and `/progress-review` will assign issues to them automatically.
 
 To opt out of all data sharing, delete `.claude/consent.json`.
+```
 
-## Everything is editable
+---
 
-The intake gives you a starting point, not a lock-in. Every generated
-file is plain markdown. Edit your `CLAUDE.md` to change how the system
-behaves. Edit `learning/current-state.md` to correct a score. The
-system reads what's there — if you change it, it adapts.
+## 6. Troubleshooting section (W5)
 
+**What:** Brief troubleshooting section after "Everything is editable."
+
+```
 ## Troubleshooting
 
 **Intake interrupted mid-interview:** Run `/intake` again. It detects
@@ -274,3 +220,39 @@ review needs the profile that intake creates.
 **Update check not working:** Verify your maestro directory is a git
 repo with a remote: `cd ~/maestro && git remote -v`. The hook fetches
 in the background — it won't block your session.
+```
+
+---
+
+## 7. Platform note
+
+**What:** Add one line to Prerequisites noting platform support.
+
+After the prerequisites list, add:
+
+```
+Tested on macOS. Linux should work — all scripts use portable bash
+and POSIX utilities. Windows users: use WSL.
+```
+
+---
+
+## File changes summary
+
+| File | Change |
+|------|--------|
+| `LICENSE` | New file — chosen license text |
+| `package/README.md` | Sections 2-7 above (learning loop, skills table, under the hood, data sharing rewrite, troubleshooting, platform note) |
+
+---
+
+## Verification
+
+1. Read the final README top to bottom — confirm it flows linearly
+   for a new user (install → intake → work → review → plan → reflect)
+2. Verify all 8 skills appear in the skills table
+3. Verify all 6 undocumented features appear in "Under the hood"
+4. Grep for "feedback.json" — confirm zero results (already done)
+5. Confirm data sharing section mentions `hartphoenix/maestro-signals`
+   by name and explains it's for developer improvement
+6. Confirm option B language is honest about one-way dispatch
