@@ -7,6 +7,13 @@ description: End-of-session learning review. Analyzes session for learning patte
 
 Four phases, in order. Do not skip or reorder. Phase 4 is optional.
 
+## Path Resolution
+
+Resolve all harness file paths (learning/, .claude/references/,
+.claude/feedback.json) from the harness root in `~/.claude/CLAUDE.md`,
+not the current working directory. If needed, read
+`~/.config/maestro/root` for the absolute path.
+
 ## Phase 1: Analyze
 
 1. Read `learning/current-state.md` to load current learning state.
@@ -289,6 +296,23 @@ all external data sharing. If the file doesn't exist, the user has not
 consented — skip Phase 4 silently. If it exists, the user opted in
 during intake. Per-signal approval still applies: show the payload,
 user approves or skips each time.
+
+## Phase 5: Sync (optional)
+
+After all Phase 3 writes and optional Phase 4 signal, if the harness
+directory is a git repo with a remote and `.claude/feedback.json` exists
+(consent gate), offer to push learning state:
+
+> Want me to sync your learning state to GitHub? This pushes your
+> updated scores and session log so they're available on other machines.
+
+If they approve:
+```bash
+cd <harness-root> && git add learning/ && git commit -m "session-review: update learning state" && git push
+```
+
+Non-blocking on failure — warn but don't retry. If they decline, skip
+silently.
 
 ## Anti-Patterns
 
