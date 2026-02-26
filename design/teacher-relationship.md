@@ -478,7 +478,8 @@ upstreamness × time-to-value):
   Gentle prompt? Let it be?
 - Integration with bootcamp structure: does the cohort itself become
   a network of teaching relationships, with the instructor as one
-  node among many rather than the sole teacher?
+  node among many rather than the sole teacher? → Now partially
+  addressed in `design/platform-layer.md` (courses, cohorts, schools).
 - **Teacher expertise validation:** The system's internal scores are
   self-referential — they measure performance within the harness, not
   expertise in the world. Teaching requires understanding beyond

@@ -207,3 +207,6 @@ See `design/schedule.md` for the living task tracker with current status.
   pedagogical intuitions. How well does the tutor adapt to someone who
   doesn't share that? Can it hold the expert-teacher role on its own, or
   does it need a user who already knows how to be taught?
+- **Platform layer:** Courses, schools, cohorts as GitHub-native
+  entities. Early design captured in `design/platform-layer.md`
+  (2026-02-25).
