@@ -3,7 +3,7 @@
 # Registers skills globally, writes path resolution to ~/.claude/CLAUDE.md,
 # and records everything in a manifest for clean uninstall.
 #
-# Usage: cd ~/weft && bash scripts/bootstrap.sh
+# Usage: bash package/scripts/bootstrap.sh  (run from the weft repo root)
 
 set -euo pipefail
 
@@ -24,7 +24,7 @@ check_cmd jq     "Install jq: https://jqlang.github.io/jq/download/"
 
 # ── Paths ─────────────────────────────────────────────────────────────
 
-HARNESS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+HARNESS_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 SKILLS_DIR="$HARNESS_ROOT/package/.claude/skills"
 HOOKS_DIR="$HARNESS_ROOT/package/.claude/hooks"
 CONFIG_DIR="$HOME/.config/weft"
@@ -60,6 +60,24 @@ if [ -f "$SETTINGS_FILE" ]; then
 else
   echo '{}' > "$SETTINGS_FILE"
   SETTINGS_BACKUP="(created)"
+fi
+
+# ── Migrate stale maestro entries ────────────────────────────────────
+
+# Remove any additionalDirectories containing /maestro/
+if jq -e '.permissions.additionalDirectories[]? | select(contains("/maestro/"))' "$SETTINGS_FILE" &>/dev/null; then
+  jq '.permissions.additionalDirectories = [
+    .permissions.additionalDirectories[] | select(contains("/maestro/") | not)
+  ]' "$SETTINGS_FILE" > "$SETTINGS_FILE.tmp" && mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+  echo "✓ Removed stale maestro entries from additionalDirectories"
+fi
+
+# Remove any SessionStart hooks containing /maestro/
+if jq -e '.hooks.SessionStart[]? | select(.command // "" | contains("/maestro/"))' "$SETTINGS_FILE" &>/dev/null; then
+  jq '.hooks.SessionStart = [
+    .hooks.SessionStart[] | select(.command // "" | contains("/maestro/") | not)
+  ]' "$SETTINGS_FILE" > "$SETTINGS_FILE.tmp" && mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+  echo "✓ Removed stale maestro hook from SessionStart"
 fi
 
 # Add skills path to additionalDirectories (idempotent)
@@ -147,12 +165,28 @@ if [ -f "$CLAUDE_MD" ]; then
   cp "$CLAUDE_MD" "$CLAUDE_MD_BACKUP"
 
   if grep -q '<!-- weft:start -->' "$CLAUDE_MD"; then
+    # Verify matched marker pair before replacing
+    START_COUNT=$(grep -c '<!-- weft:start -->' "$CLAUDE_MD" || true)
+    END_COUNT=$(grep -c '<!-- weft:end -->' "$CLAUDE_MD" || true)
+    if [ "$START_COUNT" -ne 1 ] || [ "$END_COUNT" -ne 1 ]; then
+      echo "Error: CLAUDE.md has malformed weft markers (start=$START_COUNT, end=$END_COUNT)."
+      echo "  Please fix manually, then re-run bootstrap."
+      exit 1
+    fi
+
     # Update: replace between markers (in place)
-    awk -v section="$SECTION" '
-      /<!-- weft:start -->/ { print section; skip=1; next }
+    SECTION_TMP=$(mktemp)
+    printf '%s\n' "$SECTION" > "$SECTION_TMP"
+    awk -v sfile="$SECTION_TMP" '
+      /<!-- weft:start -->/ {
+        while ((getline line < sfile) > 0) print line
+        close(sfile)
+        skip=1; next
+      }
       /<!-- weft:end -->/ { skip=0; next }
       !skip { print }
     ' "$CLAUDE_MD" > "$CLAUDE_MD.tmp"
+    rm -f "$SECTION_TMP"
     mv "$CLAUDE_MD.tmp" "$CLAUDE_MD"
     CLAUDE_MD_ACTION="replaced_section"
     echo "✓ Updated weft section in CLAUDE.md"
@@ -225,5 +259,5 @@ echo "    3. (Optional) Drop materials in background/ first"
 echo "       for a sharper starting profile"
 echo ""
 echo "  To update:    cd $HARNESS_ROOT && git pull"
-echo "  To uninstall: bash $HARNESS_ROOT/scripts/uninstall.sh"
+echo "  To uninstall: bash $HARNESS_ROOT/package/scripts/uninstall.sh"
 echo ""

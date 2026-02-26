@@ -2,8 +2,7 @@
 # Weft harness uninstaller.
 # Reads the manifest and reverses exactly what bootstrap.sh did.
 #
-# Usage: bash scripts/uninstall.sh
-#   (or: bash ~/weft/scripts/uninstall.sh)
+# Usage: bash package/scripts/uninstall.sh  (run from the weft repo root)
 
 set -euo pipefail
 
@@ -55,6 +54,23 @@ if [ -f "$SETTINGS_FILE" ]; then
   else
     echo "  Session-start hook not found in settings.json — skipping"
   fi
+  # Also clean up any stale maestro entries
+  MAESTRO_FOUND=false
+  if jq -e '.permissions.additionalDirectories[]? | select(contains("/maestro/"))' "$SETTINGS_FILE" &>/dev/null; then
+    jq '.permissions.additionalDirectories = [
+      .permissions.additionalDirectories[] | select(contains("/maestro/") | not)
+    ]' "$SETTINGS_FILE" > "$SETTINGS_FILE.tmp" && mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+    MAESTRO_FOUND=true
+  fi
+  if jq -e '.hooks.SessionStart[]? | select(.command // "" | contains("/maestro/"))' "$SETTINGS_FILE" &>/dev/null; then
+    jq '.hooks.SessionStart = [
+      .hooks.SessionStart[] | select(.command // "" | contains("/maestro/") | not)
+    ]' "$SETTINGS_FILE" > "$SETTINGS_FILE.tmp" && mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+    MAESTRO_FOUND=true
+  fi
+  if [ "$MAESTRO_FOUND" = true ]; then
+    echo "✓ Removed stale maestro entries from settings.json"
+  fi
 else
   echo "  settings.json not found — skipping"
 fi
@@ -63,19 +79,29 @@ fi
 
 if [ -f "$CLAUDE_MD" ]; then
   if grep -q '<!-- weft:start -->' "$CLAUDE_MD"; then
-    awk '
-      /<!-- weft:start -->/ { skip=1; next }
-      /<!-- weft:end -->/ { skip=0; next }
-      !skip { print }
-    ' "$CLAUDE_MD" > "$CLAUDE_MD.tmp"
-
-    # Check if the file is now effectively empty (only whitespace)
-    if [ -z "$(tr -d '[:space:]' < "$CLAUDE_MD.tmp")" ]; then
-      rm "$CLAUDE_MD" "$CLAUDE_MD.tmp"
-      echo "✓ Deleted CLAUDE.md (was weft-only content)"
+    START_COUNT=$(grep -c '<!-- weft:start -->' "$CLAUDE_MD" || true)
+    END_COUNT=$(grep -c '<!-- weft:end -->' "$CLAUDE_MD" || true)
+    if [ "$START_COUNT" -ne 1 ] || [ "$END_COUNT" -ne 1 ]; then
+      echo "Warning: CLAUDE.md has malformed weft markers (start=$START_COUNT, end=$END_COUNT)."
+      echo "  Skipping marker-based removal. Check the file manually."
     else
-      mv "$CLAUDE_MD.tmp" "$CLAUDE_MD"
-      echo "✓ Removed weft section from CLAUDE.md"
+      awk '
+        /<!-- weft:start -->/ { skip=1; next }
+        /<!-- weft:end -->/ { skip=0; next }
+        !skip { print }
+      ' "$CLAUDE_MD" > "$CLAUDE_MD.tmp"
+
+      # Trim trailing blank lines left after section removal
+      printf '%s\n' "$(cat "$CLAUDE_MD.tmp")" > "$CLAUDE_MD.tmp"
+
+      # Check if the file is now effectively empty (only whitespace)
+      if [ -z "$(tr -d '[:space:]' < "$CLAUDE_MD.tmp")" ]; then
+        rm "$CLAUDE_MD" "$CLAUDE_MD.tmp"
+        echo "✓ Deleted CLAUDE.md (was weft-only content)"
+      else
+        mv "$CLAUDE_MD.tmp" "$CLAUDE_MD"
+        echo "✓ Removed weft section from CLAUDE.md"
+      fi
     fi
   else
     echo "  No weft section found in CLAUDE.md — skipping"
