@@ -26,6 +26,10 @@ echo "║  Renaming maestro → weft-dev                    ║"
 echo "╚══════════════════════════════════════════════════╝"
 echo ""
 
+# cd into the repo so gh and git commands work regardless of how the
+# script was invoked (e.g. bash ~/maestro/scripts/rename-to-weft.sh)
+cd "$REPO_DIR"
+
 # ── Step 1: Rename GitHub repo ────────────────────────────────────────
 
 echo "Step 1: Renaming GitHub repo..."
@@ -40,7 +44,6 @@ echo ""
 # ── Step 2: Update git remote ────────────────────────────────────────
 
 echo "Step 2: Updating git remote URL..."
-cd "$REPO_DIR"
 git remote set-url origin https://github.com/hartphoenix/weft-dev.git
 echo "  ✓ Remote origin → https://github.com/hartphoenix/weft-dev.git"
 echo ""
@@ -62,10 +65,20 @@ if [ -d "$OLD_CONFIG" ]; then
     echo "  ✓ Updated $NEW_CONFIG/root → $NEW_DIR"
   fi
 
-  # Update manifest.json marker references
+  # Update manifest.json: markers (maestro→weft) and harness_root path
   if [ -f "$NEW_CONFIG/manifest.json" ]; then
-    sed -i '' 's/maestro/weft/g' "$NEW_CONFIG/manifest.json"
-    echo "  ✓ Updated manifest.json marker references"
+    # Update marker strings: <!-- maestro:start --> etc.
+    sed -i '' 's/<!-- maestro:/<!-- weft:/g' "$NEW_CONFIG/manifest.json"
+    # Update harness_root to the new folder path (maestro → weft-dev)
+    if command -v jq &>/dev/null; then
+      jq --arg new "$NEW_DIR" '.harness_root = $new' "$NEW_CONFIG/manifest.json" \
+        > "$NEW_CONFIG/manifest.json.tmp" \
+        && mv "$NEW_CONFIG/manifest.json.tmp" "$NEW_CONFIG/manifest.json"
+    else
+      # Fallback: sed the path segment (maestro → weft-dev, not weft)
+      sed -i '' "s|/maestro\"|/weft-dev\"|g" "$NEW_CONFIG/manifest.json"
+    fi
+    echo "  ✓ Updated manifest.json (markers + harness_root)"
   fi
 else
   echo "  ⚠ No config directory at $OLD_CONFIG — skipping"
@@ -98,14 +111,15 @@ if [ -f "$CLAUDE_MD" ]; then
   # Replace section header
   sed -i '' 's/## Maestro Harness/## Weft Harness/g' "$CLAUDE_MD"
 
-  # Replace harness root path (old maestro path → new weft-dev path)
+  # Replace harness root path. Two strategies:
+  # 1. Try exact match with resolved path (works when casing matches)
   sed -i '' "s|$REPO_DIR|$NEW_DIR|g" "$CLAUDE_MD"
-
-  # Catch any remaining maestro references in the weft section
-  # (only between markers, but sed doesn't easily do ranges — the
-  # in-repo files were already renamed, so this catches path refs)
+  # 2. Catch /maestro path segments regardless of parent dir casing
+  #    (macOS is case-insensitive, so pwd casing may differ from
+  #    the path bootstrap.sh originally wrote to CLAUDE.md)
   sed -i '' "s|/maestro/|/weft-dev/|g" "$CLAUDE_MD"
   sed -i '' 's|/maestro$|/weft-dev|g' "$CLAUDE_MD"
+  sed -i '' 's|/maestro`|/weft-dev`|g' "$CLAUDE_MD"
 
   echo "  ✓ Updated markers, section header, and harness root path"
 else
