@@ -11,6 +11,26 @@ and composes a briefing. Phase 5 (Progress Review) fires only when
 enough sessions have accumulated, running in the background during
 Phases 2-4 and presenting findings after the session plan is confirmed.
 
+## Path Resolution
+
+Resolve all harness file paths (learning/, .claude/references/,
+.claude/feedback.json) from the harness root in `~/.claude/CLAUDE.md`,
+not the current working directory. If needed, read
+`~/.config/maestro/root` for the absolute path.
+
+## Phase 0: Sync (pre-gather)
+
+If the harness directory is a git repo with a remote, pull latest
+learning state before reading it:
+
+```bash
+cd <harness-root> && git pull --ff-only 2>/dev/null
+```
+
+Silent on failure — the session still works with local state. This
+ensures cross-machine sync when the learner has pushed learning state
+from another device.
+
 ## Phase 1: Gather
 
 Read all local data sources. Fail fast and degrade gracefully — every

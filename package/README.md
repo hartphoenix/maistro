@@ -12,14 +12,30 @@ sharpens itself every time you use it.
 - [GitHub CLI (`gh`)](https://cli.github.com/) installed and authenticated — used
   for usage signals. Run `gh auth status` to check. If you need to set it up:
   [GitHub CLI quickstart](https://docs.github.com/en/github-cli/github-cli/quickstart)
-- A project directory (new or existing)
+- [`jq`](https://jqlang.github.io/jq/download/) — used by the installer for safe JSON manipulation
+- `git` — you probably already have this
+
+## Install
+
+```bash
+git clone https://github.com/hartphoenix/maestro ~/maestro
+cd ~/maestro && bash scripts/bootstrap.sh
+```
+
+Bootstrap does three things:
+1. Registers skills globally so they're available in any project
+2. Registers a session-start hook that checks your learning state
+3. Writes a path-resolution section to `~/.claude/CLAUDE.md`
+
+Everything is tracked in a manifest (`~/.config/maestro/manifest.json`)
+and backed up. Run `bash scripts/uninstall.sh` to reverse it cleanly.
 
 ## Quick start
 
 ### 1. (Optional) Load your background
 
-Drop files into `background/` before running intake. The more signal you
-provide, the sharper your starting profile:
+Drop files into `~/maestro/background/` before running intake. The more
+signal you provide, the sharper your starting profile:
 
 - **Code you've written** — shows what you can build and how you think
 - **Resumes or portfolios** — background, experience, trajectory
@@ -33,6 +49,8 @@ The background folder is optional. If you skip it, the interview covers
 everything — it just takes a few more questions.
 
 ### 2. Run intake
+
+Start Claude Code in **any project directory** and run:
 
 ```
 /intake
@@ -54,8 +72,8 @@ Nothing is written without your explicit OK.
 
 ### 3. Start working
 
-After intake, use Claude Code normally. The harness works in the
-background:
+After intake, use Claude Code normally in any project. The harness works
+in the background:
 
 - **Skills activate contextually** — when you hit an error, the
   debugger skill shapes the response. When you ask a quick question,
@@ -65,6 +83,28 @@ background:
   concepts, and updates your learning state.
 - **Your profile sharpens over time** — concept scores, gap
   classifications, and growth trajectories update session by session.
+
+## Update
+
+```bash
+cd ~/maestro && git pull
+```
+
+Skills update immediately. Learning state (`~/maestro/learning/`) is
+never overwritten by pull — it's gitignored.
+
+If you set `"updates": "notify"` (default), the harness tells you when
+updates are available at session start.
+
+## Uninstall
+
+```bash
+bash ~/maestro/scripts/uninstall.sh
+```
+
+Removes the settings.json entries, the CLAUDE.md section, and the
+config directory. Learning state is preserved — you're told where it
+is and can delete it manually.
 
 ## What intake creates
 

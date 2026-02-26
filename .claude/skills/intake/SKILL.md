@@ -9,6 +9,33 @@ Onboard a new learner. Five phases, in order. Do not skip or reorder.
 
 ---
 
+## Path Resolution
+
+This skill reads and writes files in the maestro harness directory, which
+may not be the current working directory.
+
+**To find the harness root:** Read `~/.config/maestro/root`. If the file
+exists, use its contents as the absolute path. If it doesn't exist, fall
+back to the current working directory (local-install compatibility).
+
+**All file paths in this skill resolve from the harness root:**
+- `learning/*` → `<harness-root>/learning/*`
+- `background/*` → `<harness-root>/background/*`
+- `.claude/skills/*` → `<harness-root>/package/.claude/skills/*`
+- `.claude/references/*` → `<harness-root>/package/.claude/references/*`
+- `.claude/feedback.json` → `<harness-root>/package/.claude/feedback.json`
+
+**Phase 4 (Write) targets `~/.claude/CLAUDE.md`** — the global file, not
+a project-local CLAUDE.md. Intake replaces the content between the
+`<!-- maestro:start -->` and `<!-- maestro:end -->` markers with a
+personalized version. See Phase 4 for details.
+
+**Skip .gitignore steps.** The global install doesn't need gitignore
+entries — learning state lives in the harness directory, not in user
+projects.
+
+---
+
 ## Phase 0: Resume Check
 
 Before starting intake, check if `learning/.intake-notes.md` exists.
@@ -554,52 +581,69 @@ before writing.
 
 Before writing, check whether target files already exist:
 
-**If `CLAUDE.md` exists at project root:**
-- Show the user and offer three options:
-  1. **Merge** — present a diff of what would change, section by section.
-     Write only what the user approves.
-  2. **Backup and replace** — move existing to `CLAUDE.md.backup`, write
-     new file.
-  3. **Skip** — don't write CLAUDE.md. Still write other files if
-     approved.
+**CLAUDE.md** — intake writes to `~/.claude/CLAUDE.md` (the global
+file), replacing the content between `<!-- maestro:start -->` and
+`<!-- maestro:end -->` markers. The markers were placed by bootstrap.sh.
+- If the markers exist: replace everything between them (inclusive) with
+  the personalized section (see 4b.1 for the template).
+- If no markers found but the file exists: append the personalized
+  section with markers.
+- If no file exists: create it with the personalized section.
 
 **If `learning/` directory has existing files** (current-state.md,
 goals.md, arcs.md):
 - Warn the user. For each file, offer to merge or skip.
 
-**If `.gitignore` exists:**
-- Don't show the file or name it. Just confirm intent (see 4b.6).
-
 ### 4b. Write approved files
 
-1. Write `CLAUDE.md` at project root (or merge, or skip — per user
-   choice).
+1. Write the personalized maestro section to `~/.claude/CLAUDE.md`
+   between the markers. The personalized section includes:
+   - The path resolution block (retained verbatim from bootstrap)
+   - User-specific sections from synthesis (User, Calibration,
+     Preferences, Conventions, Communication, Teaching Mode)
+   - System invariants (Security, Recovery, Complex operations,
+     Unexpected behavior — emitted verbatim)
+
+   The full section template between markers:
+
+   ```markdown
+   <!-- maestro:start -->
+   <!-- maestro:section-version:2 -->
+   [Full personalized CLAUDE.md content from 3a synthesis]
+
+   ## Maestro Harness
+
+   **Harness root:** <harness-root>
+
+   ### Path resolution
+
+   When skills reference harness files, resolve paths from the harness
+   root above — not from the current working directory:
+
+   - `learning/*` → `<harness-root>/learning/*`
+   - `background/*` → `<harness-root>/background/*`
+   - `.claude/references/*` → `<harness-root>/package/.claude/references/*`
+   - `.claude/feedback.json` → `<harness-root>/package/.claude/feedback.json`
+
+   When a skill says "read learning/current-state.md", read
+   `<harness-root>/learning/current-state.md`.
+
+   ### Architecture
+
+   Skills: `<harness-root>/package/.claude/skills/` (registered globally)
+   References: `<harness-root>/package/.claude/references/`
+   Learning state: `<harness-root>/learning/`
+   Background materials: `<harness-root>/background/`
+   <!-- maestro:end -->
+   ```
+
+   Note: section-version bumps to 2 (personalized replaces generic).
+
 2. Create `learning/` and `learning/session-logs/` directories if they
-   don't exist.
+   don't exist (resolve from harness root).
 3. Write `learning/goals.md`.
 4. Write `learning/arcs.md`.
 5. Write `learning/current-state.md`.
-6. Append privacy patterns to `.gitignore`. Frame it for the user in
-   plain language — don't name the file or assume they know what it does:
-
-   > I'm going to make sure your personal learning data stays private
-   > and doesn't get shared if you push this project to GitHub. Okay
-   > to proceed?
-
-   If they approve, append:
-
-   ```gitignore
-   # Learner profile (personal, not shared)
-   learning/
-   background/
-   ```
-
-7. Ask about CLAUDE.md privacy the same way:
-
-   > Do you want your personal configuration file shared if you push
-   > this project, or kept just for you?
-
-   If local, add `CLAUDE.md` to `.gitignore` as well.
 
 ### 4c. Wrap up
 
