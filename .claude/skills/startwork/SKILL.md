@@ -16,7 +16,7 @@ Phases 2-4 and presenting findings after the session plan is confirmed.
 Resolve all harness file paths (learning/, .claude/references/,
 .claude/consent.json) from the harness root in `~/.claude/CLAUDE.md`,
 not the current working directory. If needed, read
-`~/.config/maestro/root` for the absolute path.
+`~/.config/weft/root` for the absolute path.
 
 ## Phase 0: Sync (pre-gather)
 
@@ -312,7 +312,7 @@ attention with low cost of failure.
    new territory
 
 ### Also on your radar
-- Maestro: solo startwork design (serves a different goal —
+- Weft: solo startwork design (serves a different goal —
   "build tools that compound learning")
 - Stale todo from Friday: error handling refactor (48h old)
 

@@ -12,7 +12,7 @@ Four phases, in order. Do not skip or reorder. Phase 4 is optional.
 Resolve all harness file paths (learning/, .claude/references/,
 .claude/consent.json) from the harness root in `~/.claude/CLAUDE.md`,
 not the current working directory. If needed, read
-`~/.config/maestro/root` for the absolute path.
+`~/.config/weft/root` for the absolute path.
 
 ## Phase 1: Analyze
 

@@ -1,4 +1,4 @@
-# Maestro Harness
+# Weft Harness
 
 A personal development harness for Claude Code. Run `/intake` to begin.
 

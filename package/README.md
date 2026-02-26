@@ -1,4 +1,4 @@
-# Maestro Harness
+# Weft Harness
 
 A personal development harness for Claude Code. It learns how you learn,
 tracks your growth, and adapts its behavior to where you are right now.
@@ -21,8 +21,8 @@ and POSIX utilities. Windows users: use WSL.
 ## Install
 
 ```bash
-git clone https://github.com/hartphoenix/maestro ~/maestro
-cd ~/maestro && bash scripts/bootstrap.sh
+git clone https://github.com/hartphoenix/weft ~/weft
+cd ~/weft && bash scripts/bootstrap.sh
 ```
 
 Bootstrap does three things:
@@ -30,14 +30,14 @@ Bootstrap does three things:
 2. Registers a session-start hook that checks your learning state
 3. Writes a path-resolution section to `~/.claude/CLAUDE.md`
 
-Everything is tracked in a manifest (`~/.config/maestro/manifest.json`)
+Everything is tracked in a manifest (`~/.config/weft/manifest.json`)
 and backed up. Run `bash scripts/uninstall.sh` to reverse it cleanly.
 
 ## Quick start
 
 ### 1. (Optional) Load your background
 
-Drop files into `~/maestro/background/` before running intake. The more
+Drop files into `~/weft/background/` before running intake. The more
 signal you provide, the sharper your starting profile:
 
 - **Code you've written** — shows what you can build and how you think
@@ -102,10 +102,10 @@ on reality.
 ## Update
 
 ```bash
-cd ~/maestro && git pull
+cd ~/weft && git pull
 ```
 
-Skills update immediately. Learning state (`~/maestro/learning/`) is
+Skills update immediately. Learning state (`~/weft/learning/`) is
 never overwritten by pull — it's gitignored.
 
 If you set `"updates": "notify"` (default), the harness tells you when
@@ -114,7 +114,7 @@ updates are available at session start.
 ## Uninstall
 
 ```bash
-bash ~/maestro/scripts/uninstall.sh
+bash ~/weft/scripts/uninstall.sh
 ```
 
 Removes the settings.json entries, the CLAUDE.md section, and the
@@ -225,7 +225,7 @@ During `/intake`, you'll be asked if you want to share learning data
 to GitHub. One question, one consent. If you opt in:
 
 **Developer signals** — at the end of each `/session-review`, a short
-signal is posted to the developer's repo (`hartphoenix/maestro-signals`)
+signal is posted to the developer's repo (`hartphoenix/weft-signals`)
 with your feedback on how the tool worked, plus learning metrics
 (concept scores, gap types, progress patterns). This data helps improve
 the harness — it's how bugs get found and skills get sharpened. You see
@@ -265,12 +265,12 @@ system reads what's there — if you change it, it adapts.
 **Intake interrupted mid-interview:** Run `/intake` again. It detects
 the interrupted state and offers to resume where you left off.
 
-**Skills not activating:** Run `bash ~/maestro/scripts/bootstrap.sh`
+**Skills not activating:** Run `bash ~/weft/scripts/bootstrap.sh`
 to re-register. Bootstrap is idempotent — safe to run multiple times.
 
 **Session-review says no learning state:** Run `/intake` first. The
 review needs the profile that intake creates.
 
-**Update check not working:** Verify your maestro directory is a git
-repo with a remote: `cd ~/maestro && git remote -v`. The hook fetches
+**Update check not working:** Verify your weft directory is a git
+repo with a remote: `cd ~/weft && git remote -v`. The hook fetches
 in the background — it won't block your session.

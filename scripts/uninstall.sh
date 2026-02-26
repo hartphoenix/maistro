@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Maestro harness uninstaller.
+# Weft harness uninstaller.
 # Reads the manifest and reverses exactly what bootstrap.sh did.
 #
 # Usage: bash scripts/uninstall.sh
-#   (or: bash ~/maestro/scripts/uninstall.sh)
+#   (or: bash ~/weft/scripts/uninstall.sh)
 
 set -euo pipefail
 
-CONFIG_DIR="$HOME/.config/maestro"
+CONFIG_DIR="$HOME/.config/weft"
 MANIFEST_FILE="$CONFIG_DIR/manifest.json"
 SETTINGS_FILE="$HOME/.claude/settings.json"
 CLAUDE_MD="$HOME/.claude/CLAUDE.md"
@@ -15,13 +15,13 @@ CLAUDE_MD="$HOME/.claude/CLAUDE.md"
 # ── Check for manifest ────────────────────────────────────────────────
 
 if [ ! -f "$MANIFEST_FILE" ]; then
-  echo "No maestro installation found (no manifest at $MANIFEST_FILE)."
+  echo "No weft installation found (no manifest at $MANIFEST_FILE)."
   echo "Nothing to uninstall."
   exit 0
 fi
 
 HARNESS_ROOT=$(jq -r '.harness_root' "$MANIFEST_FILE")
-echo "Uninstalling maestro harness (root: $HARNESS_ROOT)"
+echo "Uninstalling weft harness (root: $HARNESS_ROOT)"
 echo ""
 
 # ── Remove skills entry from settings.json ────────────────────────────
@@ -59,26 +59,26 @@ else
   echo "  settings.json not found — skipping"
 fi
 
-# ── Remove maestro section from CLAUDE.md ─────────────────────────────
+# ── Remove weft section from CLAUDE.md ─────────────────────────────
 
 if [ -f "$CLAUDE_MD" ]; then
-  if grep -q '<!-- maestro:start -->' "$CLAUDE_MD"; then
+  if grep -q '<!-- weft:start -->' "$CLAUDE_MD"; then
     awk '
-      /<!-- maestro:start -->/ { skip=1; next }
-      /<!-- maestro:end -->/ { skip=0; next }
+      /<!-- weft:start -->/ { skip=1; next }
+      /<!-- weft:end -->/ { skip=0; next }
       !skip { print }
     ' "$CLAUDE_MD" > "$CLAUDE_MD.tmp"
 
     # Check if the file is now effectively empty (only whitespace)
     if [ -z "$(tr -d '[:space:]' < "$CLAUDE_MD.tmp")" ]; then
       rm "$CLAUDE_MD" "$CLAUDE_MD.tmp"
-      echo "✓ Deleted CLAUDE.md (was maestro-only content)"
+      echo "✓ Deleted CLAUDE.md (was weft-only content)"
     else
       mv "$CLAUDE_MD.tmp" "$CLAUDE_MD"
-      echo "✓ Removed maestro section from CLAUDE.md"
+      echo "✓ Removed weft section from CLAUDE.md"
     fi
   else
-    echo "  No maestro section found in CLAUDE.md — skipping"
+    echo "  No weft section found in CLAUDE.md — skipping"
   fi
 else
   echo "  CLAUDE.md not found — skipping"
@@ -98,7 +98,7 @@ fi
 
 echo ""
 echo "────────────────────────────────────────────────────"
-echo "  Maestro harness uninstalled"
+echo "  Weft harness uninstalled"
 echo "────────────────────────────────────────────────────"
 echo ""
 echo "  Backups (available until config dir is removed):"

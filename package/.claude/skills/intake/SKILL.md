@@ -11,10 +11,10 @@ Onboard a new learner. Five phases, in order. Do not skip or reorder.
 
 ## Path Resolution
 
-This skill reads and writes files in the maestro harness directory, which
+This skill reads and writes files in the weft harness directory, which
 may not be the current working directory.
 
-**To find the harness root:** Read `~/.config/maestro/root`. If the file
+**To find the harness root:** Read `~/.config/weft/root`. If the file
 exists, use its contents as the absolute path. If it doesn't exist, fall
 back to the current working directory (local-install compatibility).
 
@@ -27,7 +27,7 @@ back to the current working directory (local-install compatibility).
 
 **Phase 4 (Write) targets `~/.claude/CLAUDE.md`** — the global file, not
 a project-local CLAUDE.md. Intake replaces the content between the
-`<!-- maestro:start -->` and `<!-- maestro:end -->` markers with a
+`<!-- weft:start -->` and `<!-- weft:end -->` markers with a
 personalized version. See Phase 4 for details.
 
 **Skip .gitignore steps.** The global install doesn't need gitignore
@@ -585,8 +585,8 @@ before writing.
 Before writing, check whether target files already exist:
 
 **CLAUDE.md** — intake writes to `~/.claude/CLAUDE.md` (the global
-file), replacing the content between `<!-- maestro:start -->` and
-`<!-- maestro:end -->` markers. The markers were placed by bootstrap.sh.
+file), replacing the content between `<!-- weft:start -->` and
+`<!-- weft:end -->` markers. The markers were placed by bootstrap.sh.
 - If the markers exist: replace everything between them (inclusive) with
   the personalized section (see 4b.1 for the template).
 - If no markers found but the file exists: append the personalized
@@ -599,7 +599,7 @@ goals.md, arcs.md):
 
 ### 4b. Write approved files
 
-1. Write the personalized maestro section to `~/.claude/CLAUDE.md`
+1. Write the personalized weft section to `~/.claude/CLAUDE.md`
    between the markers. The personalized section includes:
    - The path resolution block (retained verbatim from bootstrap)
    - User-specific sections from synthesis (User, Calibration,
@@ -610,11 +610,11 @@ goals.md, arcs.md):
    The full section template between markers:
 
    ```markdown
-   <!-- maestro:start -->
-   <!-- maestro:section-version:2 -->
+   <!-- weft:start -->
+   <!-- weft:section-version:2 -->
    [Full personalized CLAUDE.md content from 3a synthesis]
 
-   ## Maestro Harness
+   ## Weft Harness
 
    **Harness root:** <harness-root>
 
@@ -637,7 +637,7 @@ goals.md, arcs.md):
    References: `<harness-root>/package/.claude/references/`
    Learning state: `<harness-root>/learning/`
    Background materials: `<harness-root>/background/`
-   <!-- maestro:end -->
+   <!-- weft:end -->
    ```
 
    Note: section-version bumps to 2 (personalized replaces generic).
@@ -688,7 +688,7 @@ If they agree:
 1. **Write `.claude/consent.json`** (creates the consent gate):
    ```json
    {
-     "repo": "hartphoenix/maestro-signals"
+     "repo": "hartphoenix/weft-signals"
    }
    ```
 
