@@ -162,7 +162,23 @@ Body: what happened, quiz results table, learning patterns, key files, remaining
 ### current-state.md (`learning/current-state.md`)
 
 Update quizzed concepts: score, gap, last-quizzed, increment
-times-quizzed, append to history. Tag every score update with its
+times-quizzed, append to history.
+
+Each concept is a YAML list entry under `concepts:`:
+
+~~~yaml
+  - name: concept-name
+    score: 3
+    gap: conceptual        # omit or use -- when score >= 4
+    source: session-review:quiz
+    last-updated: YYYY-MM-DD
+    last-quizzed: YYYY-MM-DD
+    times-quizzed: 1
+    history:
+      - { date: YYYY-MM-DD, score: 3, note: "brief qualitative note" }
+~~~
+
+Tag every score update with its
 evidence source per `.claude/references/scoring-rubric.md`:
 
 - `session-review:quiz` — scored from a quiz answer (default for this

@@ -501,19 +501,22 @@ evidence source tags.
 
 Template:
 
-```markdown
+```yaml
 # Current State
+#
+# Scores: 0-5 (see .claude/references/scoring-rubric.md)
+#   0 = not encountered, 1 = heard of, 2 = attempted with help,
+#   3 = can do with effort, 4 = fluent, 5 = can teach
+#
+# Gap types (when score < 4): conceptual | procedural | recall
+# Source tags: intake:artifact | intake:self-report | intake:inferred
 
-Scores: 0 = not encountered, 1 = heard of, 2 = attempted with help,
-3 = can do with effort, 4 = fluent, 5 = can teach.
-
-Gap types: conceptual (mental model wrong), procedural (right concept,
-wrong execution), recall (can't reproduce).
-
-## Concepts
-
-| Concept | Score | Gap | Source | Last Updated |
-|---------|-------|-----|--------|--------------|
+concepts:
+  - name: concept-name
+    score: 3
+    gap: procedural
+    source: intake:artifact
+    last-updated: YYYY-MM-DD
 ```
 
 Populate entries from concrete evidence in the interview. Guidelines:

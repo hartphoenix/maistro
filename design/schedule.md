@@ -115,7 +115,7 @@ What ships in `package/` — everything a new user needs to clone and go.
 | Agent feedback skill (`.claude/skills/agent-feedback/`) | Deferred — see build registry |
 | `scripts/bootstrap.ts` (install pipeline) | Planned |
 | `scripts/test-install.ts` (install verification) | Planned |
-| `package/.claude/references/data-contracts.md` | Planned |
+| `package/.claude/references/data-contracts.md` | Planned — YAML schema for current-state.md defined in intake SKILL.md §3d |
 | End-to-end test: clone → /intake → work → /session-review → signal | Not run |
 
 ### Validation experiments
