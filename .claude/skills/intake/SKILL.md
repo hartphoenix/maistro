@@ -641,7 +641,7 @@ If they agree:
 1. **Write `.claude/feedback.json`** (creates the consent gate):
    ```json
    {
-     "repo": "rhhart/maestro-signals"
+     "repo": "hartphoenix/maestro-signals"
    }
    ```
 
