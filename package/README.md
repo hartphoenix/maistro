@@ -25,10 +25,15 @@ git clone https://github.com/hartphoenix/weft ~/weft
 cd ~/weft && bash scripts/bootstrap.sh
 ```
 
-Bootstrap does three things:
+You can clone anywhere — bootstrap resolves paths from wherever you
+run it. `~/weft` is the recommended default, and this README uses it
+in all examples.
+
+Bootstrap does four things:
 1. Registers skills globally so they're available in any project
 2. Registers a session-start hook that checks your learning state
 3. Writes a path-resolution section to `~/.claude/CLAUDE.md`
+4. Creates a config directory (`~/.config/weft/`) with your update preference
 
 Everything is tracked in a manifest (`~/.config/weft/manifest.json`)
 and backed up. Run `bash scripts/uninstall.sh` to reverse it cleanly.
@@ -99,33 +104,19 @@ The more sessions you complete, the sharper the system gets. Concept
 scores are quiz-verified, not self-reported — so the profile converges
 on reality.
 
-## Update
+## Privacy
 
-```bash
-cd ~/weft && git pull
-```
+Your learning profile stays local by default:
 
-Skills update immediately. Learning state (`~/weft/learning/`) is
-never overwritten by pull — it's gitignored.
-
-If you set `"updates": "notify"` (default), the harness tells you when
-updates are available at session start.
-
-## Uninstall
-
-```bash
-bash ~/weft/scripts/uninstall.sh
-```
-
-Removes the settings.json entries, the CLAUDE.md section, and the
-config directory. Learning state is preserved — you're told where it
-is and can delete it manually.
+- `background/` and `learning/` are gitignored out of the box
+- During intake, you choose whether your `~/.claude/CLAUDE.md` content is shared or private
+- Nothing leaves your machine without your explicit action
 
 ## What intake creates
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Personalized configuration — how the system behaves toward you |
+| `~/.claude/CLAUDE.md` | Personalized configuration (written within `<!-- weft -->` markers, won't overwrite your other content) |
 | `learning/goals.md` | Your aspirations as states of being, not skill checklists |
 | `learning/arcs.md` | Capability clusters — groups of skills serving your goals |
 | `learning/current-state.md` | Concept inventory — scores, gap types, evidence sources |
@@ -154,6 +145,7 @@ All skills are invoked with `/skill-name` in Claude Code.
 | **debugger** | Visibility-first debugging — gets the full error before guessing |
 | **lesson-scaffold** | Restructures learning materials around what you already know |
 | **handoff-test** | Audits your work artifacts for self-containedness before context is lost |
+| **handoff-prompt** | Generates a handoff prompt for the next agent when context is running low |
 
 ### Automatic dispatch
 
@@ -167,57 +159,33 @@ Some skills run automatically without you invoking them:
 - **quick-ref** and **debugger** activate contextually based on what
   you're doing — no slash command needed
 
-## Under the hood
+## Everything is editable
 
-These files are created and managed by skills during normal use.
-You don't need to touch them, but knowing they exist helps if you're
-debugging or customizing.
+The intake gives you a starting point, not a lock-in. Every generated
+file is plain markdown. Edit `~/.claude/CLAUDE.md` to change how the system
+behaves. Edit `learning/current-state.md` to correct a score. The
+system reads what's there — if you change it, it adapts.
 
-| File | Created by | Purpose |
-|------|-----------|---------|
-| `learning/session-logs/YYYY-MM-DD.md` | session-review | One file per reviewed session. YAML frontmatter + markdown body. |
-| `learning/scaffolds/` | lesson-scaffold | Restructured learning materials with concept classifications |
-| `learning/relationships.md` | intake (if opted in) | Teacher/mentor handles and signal repo config |
-| `learning/.intake-notes.md` | intake | Resume checkpoint if intake is interrupted mid-interview |
-| `learning/.progress-review-log.md` | progress-review | Tracks review windows and deferred findings |
+## Update
 
-### Session-start hook
+```bash
+cd ~/weft && git pull
+```
 
-When you open Claude Code, a hook runs automatically. It checks:
+Skills update immediately — they're loaded from the clone directory,
+so a pull is all it takes. Learning state (`~/weft/learning/`) is
+never overwritten by pull — it's gitignored.
 
-- Whether you've run `/intake` yet (suggests it if not)
-- Whether a previous `/intake` was interrupted (offers to resume)
-- Whether your learning profile is stale (suggests `/startwork`)
-- Whether harness updates are available (if `"updates": "notify"`)
-
-## Privacy
-
-Your learning profile stays local by default:
-
-- `background/` and `learning/` are gitignored out of the box
-- During intake, you choose whether `CLAUDE.md` is shared or private
-- Nothing leaves your machine without your explicit action
+If you set `"updates": "notify"` (default), the harness tells you when
+updates are available at session start.
 
 ## Recommended: Install a command guard
 
-AI coding agents occasionally attempt destructive commands — `git reset
---hard`, `rm -rf`, force pushes — that can destroy uncommitted work in
-seconds. This is a [known class of issue](https://github.com/anthropics/claude-code/issues/7232)
-across all AI coding tools.
-
-[DCG (Destructive Command Guard)](https://github.com/Dicklesworthstone/destructive_command_guard?tab=readme-ov-file#dcg-destructive-command-guard)
-intercepts these before execution and explains what the agent was trying
-to do. Install it once and it protects all your projects:
-
-```bash
-curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/destructive_command_guard/main/install.sh?$(date +%s)" | bash -s -- --easy-mode
-```
-
-**When DCG blocks an agent command:** read DCG's explanation of what it
-intercepted. If the command is legitimately needed — for example,
-reverting a mistake the agent just made — run it yourself in the
-terminal. Otherwise, let the block stand and tell the agent to find an
-alternative approach.
+AI coding agents occasionally attempt destructive commands (`git reset
+--hard`, `rm -rf`, force pushes). [DCG (Destructive Command Guard)](https://github.com/Dicklesworthstone/destructive_command_guard)
+intercepts these before execution. Install it once and it protects all
+your projects — see the [DCG README](https://github.com/Dicklesworthstone/destructive_command_guard?tab=readme-ov-file#dcg-destructive-command-guard)
+for setup instructions.
 
 ## Data sharing (optional)
 
@@ -251,14 +219,40 @@ see it when you check your progress repo.
 it on GitHub. Add their GitHub handle to `learning/relationships.md`
 and `/progress-review` will assign issues to them automatically.
 
-To opt out of all data sharing, delete `.claude/consent.json`.
+To opt out of all data sharing, delete `~/weft/.claude/consent.json`.
 
-## Everything is editable
+## Under the hood
 
-The intake gives you a starting point, not a lock-in. Every generated
-file is plain markdown. Edit your `CLAUDE.md` to change how the system
-behaves. Edit `learning/current-state.md` to correct a score. The
-system reads what's there — if you change it, it adapts.
+These files are created and managed by skills during normal use.
+You don't need to touch them, but knowing they exist helps if you're
+debugging or customizing.
+
+| File | Created by | Purpose |
+|------|-----------|---------|
+| `learning/session-logs/YYYY-MM-DD.md` | session-review | One file per reviewed session. YAML frontmatter + markdown body. |
+| `learning/scaffolds/` | lesson-scaffold | Restructured learning materials with concept classifications |
+| `learning/relationships.md` | intake (if opted in) | Teacher/mentor handles and signal repo config |
+| `learning/.intake-notes.md` | intake | Resume checkpoint if intake is interrupted mid-interview |
+| `learning/.progress-review-log.md` | progress-review | Tracks review windows and deferred findings |
+
+### Session-start hook
+
+When you open Claude Code, a hook runs automatically. It checks:
+
+- Whether you've run `/intake` yet (suggests it if not)
+- Whether a previous `/intake` was interrupted (offers to resume)
+- Whether your learning profile is stale (suggests `/startwork`)
+- Whether harness updates are available (if `"updates": "notify"`)
+
+## Uninstall
+
+```bash
+bash ~/weft/scripts/uninstall.sh
+```
+
+Removes the settings.json entries, the CLAUDE.md section, and the
+config directory. Learning state is preserved — you're told where it
+is and can delete it manually.
 
 ## Troubleshooting
 

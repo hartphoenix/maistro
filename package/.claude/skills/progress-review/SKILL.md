@@ -56,7 +56,7 @@ Proceed to Phase 1 with whatever data is available.
 
 ## Phase 1: Analyze
 
-Single-pass analysis across three lenses. Returns findings only — zero
+Single-pass analysis across four lenses. Returns findings only — zero
 file writes.
 
 ### Deferred finding check
@@ -130,6 +130,42 @@ Data: `learning/goals.md`, `learning/arcs.md`, session log frontmatter
 
 If `goals.md` is missing: goal lens skipped.
 
+### Learner model lens
+
+Detects patterns in learner behavior that should update the CLAUDE.md
+predictive sections. Reads enrichment principles from
+`.claude/references/claude-md-template.md` and the user's current
+`~/.claude/CLAUDE.md` (weft section).
+
+- **Recurring learning mechanics** (2+ sessions): the learner
+  consistently acquires understanding through a specific pattern not
+  yet captured in "How {name} learns."
+- **Recurring unblocking patterns** (2+ sessions): the same
+  intervention type works repeatedly — not yet in "How {name} gets
+  unblocked."
+- **Error shape patterns**: mistakes cluster in a recognizable shape
+  across sessions (e.g., "correct structure, wrong boundary" or
+  "right concept, wrong execution order").
+- **Strength evidence accumulation**: a prior-domain capability
+  surfaces in multiple sessions — warrants a "Strengths" entry or
+  upgrade.
+- **Model contradictions** (3+ sessions): an existing CLAUDE.md entry
+  doesn't match observed behavior. Higher threshold because
+  contradictions modify existing entries.
+
+**If predictive sections are missing** from the CLAUDE.md (predates the
+learner model template): propose creating them when cross-session
+evidence supports entries. Organic migration, same as session-review.
+
+**Threshold:** 2+ sessions for new entries (higher than session-review's
+single-session threshold). Contradictions require 3+ sessions.
+
+Data: `~/.claude/CLAUDE.md` (weft section), session log bodies and
+frontmatter, `.claude/references/claude-md-template.md` (enrichment
+principles).
+
+If CLAUDE.md weft section is missing: learner model lens skipped.
+
 ---
 
 ## Phase 2: Synthesize
@@ -143,6 +179,7 @@ Group findings into themes. **3-5 themes maximum.** For each theme:
   - `state-update` — score adjustment, gap reclassification
   - `arc-update` — readiness transition, dependency reorder
   - `goal-update` — drift correction, reframing
+  - `model-update` — CLAUDE.md learner model entry (add, upgrade, or correct)
   - `process-suggestion` — workflow change, focus shift
 - **Draft file changes** where applicable: show current value →
   proposed value, with one-line rationale
@@ -194,8 +231,10 @@ Apply approved changes only.
 ### State file updates
 
 Write approved changes to `learning/current-state.md`,
-`learning/arcs.md`, and/or `learning/goals.md`. Tag every score update
-with `progress-review:pattern`.
+`learning/arcs.md`, `learning/goals.md`, and/or `~/.claude/CLAUDE.md`
+(weft section, for `model-update` actions). Tag every score update
+with `progress-review:pattern`. CLAUDE.md changes follow the same
+human-gated approval flow as all other state file updates.
 
 ### Review log
 

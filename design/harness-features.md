@@ -101,6 +101,8 @@ shared or ambient context is human-gated. See `coordination/architecture.md` §5
 | Context quality metrics | Not started | What would "well-composed attention" mean, measurably? High value but long time-to-value. |
 | Context budget measurement | Not started | Instrument token consumption per skill, per memory load, per CLAUDE.md section. See `design/validation-plan.md` §5 |
 | Redundancy audit (prompt pattern or skill) | Not started | Checks CLAUDE.md and skills for content the model already knows or can discover. See `design/validation-plan.md` §5 |
+| Handoff test skill | Built | `package/.claude/skills/handoff-test/`. Audits artifacts for self-containedness before context loss. Ships in package. Also serves P7. |
+| Handoff prompt skill | Built | `package/.claude/skills/handoff-prompt/`. Generates handoff prompt for next agent from session memory. Ships in package. |
 | Inter-skill data contracts | Planned | Explicit schemas for current-state.md, session logs, goals.md, arcs.md. Skills reference contracts instead of inferring format. `package/.claude/references/data-contracts.md`. Also serves P5. |
 
 ---
@@ -344,7 +346,6 @@ Features that don't yet have a clear home or that span multiple principles.
 |---------|----------------------|-------|
 | Multi-Claude orchestration (game-Claude + Roger) | Attention, Composability | Two instances with different attentional roles and shared filesystem. See `coordination/architecture.md` §5 |
 | Corpus miner | Self-improvement, Attention | Personal archive as searchable knowledge base. Built. Useful for retrospective capture. |
-| Handoff test skill | Attention, Human authority | Built. `coordination/skills/handoff-test/`. Audit artifacts for self-containedness before context loss. |
 | Cross-domain bridge detection | Developmental model, Self-improvement | Exaptation mining from corpus |
 | Awareness practice catalog | Awareness, Play | Which practices restore coherence and cultivate the explore state? |
 | Multi-user learning layer | Self-improvement, Composability, P10 | Distributed P6: keeping the embedding loop closed across team boundaries. See `coordination/architecture.md` §4. Depends on solo P6 features as prototypes. Teacher-student exchange (P10) is a specialization of this. |

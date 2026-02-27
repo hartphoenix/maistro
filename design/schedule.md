@@ -80,7 +80,7 @@ design docs; this file tracks execution status.
 
 | Task | Spec | Status |
 |------|------|--------|
-| Installation package | `design/prd.md` §Stretch | In progress — see checklist below |
+| Installation package | `design/prd.md` §Stretch | Done — bootstrap.sh + uninstall.sh shipped. test-install.ts and data-contracts.md remain planned. |
 | Solo compound engineer (weekly review) | `design/harness-features.md` §P6 | Done — built as progress-review, integrated into startwork Phase 5 |
 | Team compound engineering workflow | `coordination/commands/workflows/compound.md` | Extracted |
 | Compounding indicators | `design/harness-features.md` §P6 | Partial — progress-review detects compounding breakdown |
@@ -112,8 +112,11 @@ What ships in `package/` — everything a new user needs to clone and go.
 | `.claude/skills/handoff-test/` | Done |
 | `gh` CLI documented as prerequisite in README | Done |
 | Signal repo setup documented in README (per-user, `gh repo create`) | Done |
+| `.claude/skills/handoff-prompt/` | Done |
+| `.claude/references/claude-md-template.md` | Done |
 | Agent feedback skill (`.claude/skills/agent-feedback/`) | Deferred — see build registry |
-| `scripts/bootstrap.ts` (install pipeline) | Planned |
+| `scripts/bootstrap.sh` (install pipeline) | Done — shell script, copies weft section to CLAUDE.md, registers skills/hooks |
+| `scripts/uninstall.sh` (clean removal) | Done — strips weft section, removes settings.json entries |
 | `scripts/test-install.ts` (install verification) | Planned |
 | `package/.claude/references/data-contracts.md` | Planned — YAML schema for current-state.md defined in intake SKILL.md §3d |
 | End-to-end test: clone → /intake → work → /session-review → signal | Not run |

@@ -224,6 +224,43 @@ evolve gradually, not session-by-session.
 These files are consumed by the startwork skill for daily priority
 computation — keeping them accurate matters.
 
+### CLAUDE.md enrichment check
+
+After the goals/arcs check, check whether the session produced evidence
+for the learner model sections in `~/.claude/CLAUDE.md` (weft section).
+
+1. Read enrichment principles from
+   `.claude/references/claude-md-template.md` (the preamble section).
+2. Read the user's current `~/.claude/CLAUDE.md` (weft section between
+   `<!-- weft:start -->` and `<!-- weft:end -->`).
+3. Look for session evidence of:
+   - A learning mechanic observed (→ "How {name} learns")
+   - An unblocking pattern observed (→ "How {name} gets unblocked")
+   - A prior-domain strength actively deployed (→ "Strengths")
+   - An existing entry contradicted by session behavior
+
+**If predictive sections are missing** (CLAUDE.md predates the learner
+model template): create the sections when you have concrete evidence to
+populate them. Propose adding the section header and initial entries.
+This is organic migration — don't prompt the user to re-run intake.
+
+**Threshold:** concrete single-session evidence. One clear observation
+is enough for a new entry.
+
+**When proposing updates:**
+- **New entry:** show the proposed entry with its evidence citation.
+- **Upgrade:** show the current entry and the proposed replacement.
+  The replacement must be at least as informative (replace, don't
+  accumulate — per enrichment principles).
+- **Contradiction:** show the existing entry, the contradicting
+  evidence, and a proposed revision.
+
+The user approves, edits, or skips each proposed change.
+
+**Most sessions produce no CLAUDE.md updates. That's correct.** Only
+propose when evidence is concrete and the entry would change agent
+behavior.
+
 ## Phase 4: Signal (optional)
 
 If `.claude/consent.json` exists, offer to send a developer signal to
