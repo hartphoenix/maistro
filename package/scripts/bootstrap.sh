@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Maestro harness installer.
+# Weft harness installer.
 # Registers skills globally, writes path resolution to ~/.claude/CLAUDE.md,
 # and records everything in a manifest for clean uninstall.
 #
-# Usage: cd ~/maestro && bash scripts/bootstrap.sh
+# Usage: bash package/scripts/bootstrap.sh  (run from the weft repo root)
 
 set -euo pipefail
 
@@ -24,10 +24,10 @@ check_cmd jq     "Install jq: https://jqlang.github.io/jq/download/"
 
 # ── Paths ─────────────────────────────────────────────────────────────
 
-HARNESS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+HARNESS_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 SKILLS_DIR="$HARNESS_ROOT/package/.claude/skills"
 HOOKS_DIR="$HARNESS_ROOT/package/.claude/hooks"
-CONFIG_DIR="$HOME/.config/maestro"
+CONFIG_DIR="$HOME/.config/weft"
 BACKUP_DIR="$CONFIG_DIR/backups"
 CLAUDE_DIR="$HOME/.claude"
 SETTINGS_FILE="$CLAUDE_DIR/settings.json"
@@ -38,7 +38,7 @@ TIMESTAMP=$(date +%s)
 # Verify the skills directory exists (sanity check)
 if [ ! -d "$SKILLS_DIR" ]; then
   echo "Error: Skills directory not found at $SKILLS_DIR"
-  echo "Are you running this from the maestro repo root?"
+  echo "Are you running this from the weft repo root?"
   exit 1
 fi
 
@@ -60,6 +60,24 @@ if [ -f "$SETTINGS_FILE" ]; then
 else
   echo '{}' > "$SETTINGS_FILE"
   SETTINGS_BACKUP="(created)"
+fi
+
+# ── Migrate stale maestro entries ────────────────────────────────────
+
+# Remove any additionalDirectories containing /maestro/
+if jq -e '.permissions.additionalDirectories[]? | select(contains("/maestro/"))' "$SETTINGS_FILE" &>/dev/null; then
+  jq '.permissions.additionalDirectories = [
+    .permissions.additionalDirectories[] | select(contains("/maestro/") | not)
+  ]' "$SETTINGS_FILE" > "$SETTINGS_FILE.tmp" && mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+  echo "✓ Removed stale maestro entries from additionalDirectories"
+fi
+
+# Remove any SessionStart hooks containing /maestro/
+if jq -e '.hooks.SessionStart[]? | select(.command // "" | contains("/maestro/"))' "$SETTINGS_FILE" &>/dev/null; then
+  jq '.hooks.SessionStart = [
+    .hooks.SessionStart[] | select(.command // "" | contains("/maestro/") | not)
+  ]' "$SETTINGS_FILE" > "$SETTINGS_FILE.tmp" && mv "$SETTINGS_FILE.tmp" "$SETTINGS_FILE"
+  echo "✓ Removed stale maestro hook from SessionStart"
 fi
 
 # Add skills path to additionalDirectories (idempotent)
@@ -114,9 +132,9 @@ CLAUDE_MD_ACTION=""
 CLAUDE_MD_BACKUP="$BACKUP_DIR/CLAUDE.md.$TIMESTAMP"
 
 SECTION=$(cat <<SECTION_EOF
-<!-- maestro:start -->
-<!-- maestro:section-version:1 -->
-## Maestro Harness
+<!-- weft:start -->
+<!-- weft:section-version:1 -->
+## Weft Harness
 
 **Harness root:** $HARNESS_ROOT
 
@@ -128,7 +146,7 @@ root above — not from the current working directory:
 - \`learning/*\` → \`$HARNESS_ROOT/learning/*\`
 - \`background/*\` → \`$HARNESS_ROOT/background/*\`
 - \`.claude/references/*\` → \`$HARNESS_ROOT/package/.claude/references/*\`
-- \`.claude/feedback.json\` → \`$HARNESS_ROOT/package/.claude/feedback.json\`
+- \`.claude/consent.json\` → \`$HARNESS_ROOT/package/.claude/consent.json\`
 
 When a skill says "read learning/current-state.md", read
 \`$HARNESS_ROOT/learning/current-state.md\`.
@@ -139,41 +157,57 @@ Skills: \`$HARNESS_ROOT/package/.claude/skills/\` (registered globally)
 References: \`$HARNESS_ROOT/package/.claude/references/\`
 Learning state: \`$HARNESS_ROOT/learning/\`
 Background materials: \`$HARNESS_ROOT/background/\`
-<!-- maestro:end -->
+<!-- weft:end -->
 SECTION_EOF
 )
 
 if [ -f "$CLAUDE_MD" ]; then
   cp "$CLAUDE_MD" "$CLAUDE_MD_BACKUP"
 
-  if grep -q '<!-- maestro:start -->' "$CLAUDE_MD"; then
+  if grep -q '<!-- weft:start -->' "$CLAUDE_MD"; then
+    # Verify matched marker pair before replacing
+    START_COUNT=$(grep -c '<!-- weft:start -->' "$CLAUDE_MD" || true)
+    END_COUNT=$(grep -c '<!-- weft:end -->' "$CLAUDE_MD" || true)
+    if [ "$START_COUNT" -ne 1 ] || [ "$END_COUNT" -ne 1 ]; then
+      echo "Error: CLAUDE.md has malformed weft markers (start=$START_COUNT, end=$END_COUNT)."
+      echo "  Please fix manually, then re-run bootstrap."
+      exit 1
+    fi
+
     # Update: replace between markers (in place)
-    awk -v section="$SECTION" '
-      /<!-- maestro:start -->/ { print section; skip=1; next }
-      /<!-- maestro:end -->/ { skip=0; next }
+    SECTION_TMP=$(mktemp)
+    printf '%s\n' "$SECTION" > "$SECTION_TMP"
+    awk -v sfile="$SECTION_TMP" '
+      /<!-- weft:start -->/ {
+        while ((getline line < sfile) > 0) print line
+        close(sfile)
+        skip=1; next
+      }
+      /<!-- weft:end -->/ { skip=0; next }
       !skip { print }
     ' "$CLAUDE_MD" > "$CLAUDE_MD.tmp"
+    rm -f "$SECTION_TMP"
     mv "$CLAUDE_MD.tmp" "$CLAUDE_MD"
     CLAUDE_MD_ACTION="replaced_section"
-    echo "✓ Updated maestro section in CLAUDE.md"
+    echo "✓ Updated weft section in CLAUDE.md"
   else
     # Append section
     printf '\n%s\n' "$SECTION" >> "$CLAUDE_MD"
     CLAUDE_MD_ACTION="appended_section"
-    echo "✓ Appended maestro section to CLAUDE.md"
+    echo "✓ Appended weft section to CLAUDE.md"
   fi
 else
   # Create new file
   printf '%s\n' "$SECTION" > "$CLAUDE_MD"
   CLAUDE_MD_ACTION="created"
   CLAUDE_MD_BACKUP="(created)"
-  echo "✓ Created CLAUDE.md with maestro section"
+  echo "✓ Created CLAUDE.md with weft section"
 fi
 
 CHANGES=$(echo "$CHANGES" | jq --arg file "$CLAUDE_MD" --arg action "$CLAUDE_MD_ACTION" --arg bak "$CLAUDE_MD_BACKUP" '. + [{
   file: $file,
   action: $action,
-  markers: ["<!-- maestro:start -->", "<!-- maestro:end -->"],
+  markers: ["<!-- weft:start -->", "<!-- weft:end -->"],
   backup: $bak
 }]')
 
@@ -206,7 +240,7 @@ echo "✓ Verified learning/ and background/ directories"
 
 echo ""
 echo "════════════════════════════════════════════════════"
-echo "  Maestro harness installed"
+echo "  Weft harness installed"
 echo "════════════════════════════════════════════════════"
 echo ""
 echo "  Harness root:  $HARNESS_ROOT"
@@ -225,5 +259,5 @@ echo "    3. (Optional) Drop materials in background/ first"
 echo "       for a sharper starting profile"
 echo ""
 echo "  To update:    cd $HARNESS_ROOT && git pull"
-echo "  To uninstall: bash $HARNESS_ROOT/scripts/uninstall.sh"
+echo "  To uninstall: bash $HARNESS_ROOT/package/scripts/uninstall.sh"
 echo ""

@@ -1,4 +1,4 @@
-# Maestro
+# Weft
 
 A fractal learning engine — personal development harness + team
 coordination layer for Claude Code.

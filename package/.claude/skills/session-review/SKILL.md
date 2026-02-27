@@ -10,9 +10,9 @@ Four phases, in order. Do not skip or reorder. Phase 4 is optional.
 ## Path Resolution
 
 Resolve all harness file paths (learning/, .claude/references/,
-.claude/feedback.json) from the harness root in `~/.claude/CLAUDE.md`,
+.claude/consent.json) from the harness root in `~/.claude/CLAUDE.md`,
 not the current working directory. If needed, read
-`~/.config/maestro/root` for the absolute path.
+`~/.config/weft/root` for the absolute path.
 
 ## Phase 1: Analyze
 
@@ -162,7 +162,23 @@ Body: what happened, quiz results table, learning patterns, key files, remaining
 ### current-state.md (`learning/current-state.md`)
 
 Update quizzed concepts: score, gap, last-quizzed, increment
-times-quizzed, append to history. Tag every score update with its
+times-quizzed, append to history.
+
+Each concept is a YAML list entry under `concepts:`:
+
+~~~yaml
+  - name: concept-name
+    score: 3
+    gap: conceptual        # omit or use -- when score >= 4
+    source: session-review:quiz
+    last-updated: YYYY-MM-DD
+    last-quizzed: YYYY-MM-DD
+    times-quizzed: 1
+    history:
+      - { date: YYYY-MM-DD, score: 3, note: "brief qualitative note" }
+~~~
+
+Tag every score update with its
 evidence source per `.claude/references/scoring-rubric.md`:
 
 - `session-review:quiz` — scored from a quiz answer (default for this
@@ -208,16 +224,53 @@ evolve gradually, not session-by-session.
 These files are consumed by the startwork skill for daily priority
 computation — keeping them accurate matters.
 
+### CLAUDE.md enrichment check
+
+After the goals/arcs check, check whether the session produced evidence
+for the learner model sections in `~/.claude/CLAUDE.md` (weft section).
+
+1. Read enrichment principles from
+   `.claude/references/claude-md-template.md` (the preamble section).
+2. Read the user's current `~/.claude/CLAUDE.md` (weft section between
+   `<!-- weft:start -->` and `<!-- weft:end -->`).
+3. Look for session evidence of:
+   - A learning mechanic observed (→ "How {name} learns")
+   - An unblocking pattern observed (→ "How {name} gets unblocked")
+   - A prior-domain strength actively deployed (→ "Strengths")
+   - An existing entry contradicted by session behavior
+
+**If predictive sections are missing** (CLAUDE.md predates the learner
+model template): create the sections when you have concrete evidence to
+populate them. Propose adding the section header and initial entries.
+This is organic migration — don't prompt the user to re-run intake.
+
+**Threshold:** concrete single-session evidence. One clear observation
+is enough for a new entry.
+
+**When proposing updates:**
+- **New entry:** show the proposed entry with its evidence citation.
+- **Upgrade:** show the current entry and the proposed replacement.
+  The replacement must be at least as informative (replace, don't
+  accumulate — per enrichment principles).
+- **Contradiction:** show the existing entry, the contradicting
+  evidence, and a proposed revision.
+
+The user approves, edits, or skips each proposed change.
+
+**Most sessions produce no CLAUDE.md updates. That's correct.** Only
+propose when evidence is concrete and the entry would change agent
+behavior.
+
 ## Phase 4: Signal (optional)
 
-If `.claude/feedback.json` exists, offer to send a developer signal to
+If `.claude/consent.json` exists, offer to send a developer signal to
 the harness developer. This signal answers "is the harness working
 well?" — not "how is the learner doing?"
 
 Two layers: learner feedback (prompted) + agent self-report
 (auto-generated), composed into a single issue.
 
-1. Read `.claude/feedback.json` to get the target repo.
+1. Read `.claude/consent.json` to get the target repo.
 
 2. **Prompt for learner feedback.** Ask these questions — the learner
    can answer any, all, or none:
@@ -277,12 +330,12 @@ Two layers: learner feedback (prompted) + agent self-report
 
    ```
    gh issue create \
-     --repo [repo from feedback.json] \
+     --repo [repo from consent.json] \
      --title "[signal] YYYY-MM-DD" \
      --body "[composed signal]"
    ```
 
-6. If `.claude/feedback.json` doesn't exist or the learner skips,
+6. If `.claude/consent.json` doesn't exist or the learner skips,
    move on silently. Never prompt about opt-in outside of intake.
 
 **Privacy boundary:** The signal includes learning data the user
@@ -291,7 +344,7 @@ growth edges) plus harness behavior observations and the learner's
 explicit feedback about the tool. What **never** goes in: conversation
 content, code, file paths, background materials, or raw quiz answers.
 
-**Consent gate:** `.claude/feedback.json` is the single consent gate for
+**Consent gate:** `.claude/consent.json` is the single consent gate for
 all external data sharing. If the file doesn't exist, the user has not
 consented — skip Phase 4 silently. If it exists, the user opted in
 during intake. Per-signal approval still applies: show the payload,
@@ -300,7 +353,7 @@ user approves or skips each time.
 ## Phase 5: Sync (optional)
 
 After all Phase 3 writes and optional Phase 4 signal, if the harness
-directory is a git repo with a remote and `.claude/feedback.json` exists
+directory is a git repo with a remote and `.claude/consent.json` exists
 (consent gate), offer to push learning state:
 
 > Want me to sync your learning state to GitHub? This pushes your

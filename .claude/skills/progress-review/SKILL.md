@@ -277,7 +277,7 @@ the skill can offer.
 Progress-review may publish to the learner's signal repo (Phase 5,
 when built). All external signal paths obey one consent gate:
 
-- **Check `.claude/feedback.json`.** If absent, the user has not
+- **Check `.claude/consent.json`.** If absent, the user has not
   consented to data sharing — skip all external publishing silently.
 - **Check `learning/relationships.md`.** If absent or has no
   `signal_repo`, skip teacher-facing publishing silently.

@@ -113,17 +113,26 @@ Dispatch up to 4 Task sub-agents in parallel
 
 Every synthesis agent receives:
 1. The full contents of `learning/.intake-notes.md`
-2. Its specific template and guidelines (copied from SKILL.md sections
-   3a-3d at dispatch time — the main agent includes the relevant
-   section text in the prompt)
+2. Its specific template and guidelines
 
 Additionally:
 - **Arcs agent** and **current-state agent**: instruct them to read
   `.claude/references/developmental-model.md` before drafting.
-- **CLAUDE.md agent**: remind it that the Security section is a system
-  invariant — emit verbatim, do not personalize.
+  Include the relevant SKILL.md section (3c or 3d) in the prompt.
+- **Goals agent**: include SKILL.md section 3b in the prompt.
+- **CLAUDE.md agent**: instruct it to read
+  `.claude/references/claude-md-template.md`. It follows the synthesis
+  annotations (HTML comments) in the template to populate each section.
+  Additional instructions:
+  - Strip all HTML comments from output
+  - Stop after Teaching Mode — do not emit system invariants
+  - Prioritize specificity and agent-actionability in the predictive
+    sections ("How {name} learns", "How {name} gets unblocked",
+    "Strengths") — each entry should change how an agent behaves
 
 ### Dispatch prompt pattern
+
+**For goals, arcs, and current-state agents:**
 
 ```
 You are drafting a [document name] for a new learner based on their
@@ -137,7 +146,7 @@ document.
 
 ## Template and guidelines
 
-[Paste the relevant section from SKILL.md: 3a, 3b, 3c, or 3d]
+[Paste the relevant section from SKILL.md: 3b, 3c, or 3d]
 
 ---
 
@@ -152,6 +161,33 @@ For the arcs and current-state agents, prepend:
 ```
 Before drafting, read `.claude/references/developmental-model.md` to
 inform your analysis of capability clusters and scoring context.
+```
+
+**For the CLAUDE.md agent:**
+
+```
+You are drafting a personalized CLAUDE.md for a new learner based on
+their intake interview. Below are the full intake notes.
+
+[Paste full contents of learning/.intake-notes.md]
+
+---
+
+Read `.claude/references/claude-md-template.md` for the template
+structure and synthesis annotations (HTML comments). Follow the
+annotations to populate each section from the intake notes.
+
+Rules:
+- Strip all HTML comments from your output
+- Stop after Teaching Mode — do not emit system invariants
+- Prioritize the three predictive sections: "How {name} learns",
+  "How {name} gets unblocked", and "Strengths". Each entry must be
+  predictive (changes agent behavior), not merely descriptive
+- Minimum: at least 1 entry each in "How learns" and "How gets
+  unblocked". Strengths can be sparse if evidence is thin.
+- Use evidence from the intake notes — do not invent or speculate
+
+**Do NOT write any files. Return the draft as text only.**
 ```
 
 ### After receiving drafts

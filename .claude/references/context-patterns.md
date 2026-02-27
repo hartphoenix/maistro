@@ -1,7 +1,7 @@
 # Context Management Patterns
 
 Design patterns for skills that handle large inputs, multi-phase
-workflows, or parallel synthesis. Extracted from the maestro intake
+workflows, or parallel synthesis. Extracted from the weft intake
 skill (Feb 2024) where these patterns were discovered under real
 context pressure — non-technical users who can't manage their own
 context window.

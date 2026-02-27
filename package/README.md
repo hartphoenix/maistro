@@ -1,4 +1,4 @@
-# Maestro Harness
+# Weft Harness
 
 A personal development harness for Claude Code. It learns how you learn,
 tracks your growth, and adapts its behavior to where you are right now.
@@ -15,26 +15,34 @@ sharpens itself every time you use it.
 - [`jq`](https://jqlang.github.io/jq/download/) — used by the installer for safe JSON manipulation
 - `git` — you probably already have this
 
+Tested on macOS. Linux should work — all scripts use portable bash
+and POSIX utilities. Windows users: use WSL.
+
 ## Install
 
 ```bash
-git clone https://github.com/hartphoenix/maestro ~/maestro
-cd ~/maestro && bash scripts/bootstrap.sh
+git clone https://github.com/hartphoenix/weft ~/weft
+cd ~/weft && bash scripts/bootstrap.sh
 ```
 
-Bootstrap does three things:
+You can clone anywhere — bootstrap resolves paths from wherever you
+run it. `~/weft` is the recommended default, and this README uses it
+in all examples.
+
+Bootstrap does four things:
 1. Registers skills globally so they're available in any project
 2. Registers a session-start hook that checks your learning state
 3. Writes a path-resolution section to `~/.claude/CLAUDE.md`
+4. Creates a config directory (`~/.config/weft/`) with your update preference
 
-Everything is tracked in a manifest (`~/.config/maestro/manifest.json`)
+Everything is tracked in a manifest (`~/.config/weft/manifest.json`)
 and backed up. Run `bash scripts/uninstall.sh` to reverse it cleanly.
 
 ## Quick start
 
 ### 1. (Optional) Load your background
 
-Drop files into `~/maestro/background/` before running intake. The more
+Drop files into `~/weft/background/` before running intake. The more
 signal you provide, the sharper your starting profile:
 
 - **Code you've written** — shows what you can build and how you think
@@ -73,44 +81,42 @@ Nothing is written without your explicit OK.
 ### 3. Start working
 
 After intake, use Claude Code normally in any project. The harness works
-in the background:
+in the background. See **The learning loop** below.
 
-- **Skills activate contextually** — when you hit an error, the
-  debugger skill shapes the response. When you ask a quick question,
-  quick-ref answers tersely. You don't invoke them manually.
-- **Run `/session-review` at the end of sessions** — this is the
-  learning loop. It analyzes what you worked on, quizzes you on key
-  concepts, and updates your learning state.
-- **Your profile sharpens over time** — concept scores, gap
-  classifications, and growth trajectories update session by session.
+## The learning loop
 
-## Update
+The harness improves your profile every time you use it. Here's the
+cycle:
 
-```bash
-cd ~/maestro && git pull
-```
+1. **Work** — use Claude Code normally in any project
+2. **Review** — run `/session-review` when you finish a work session.
+   It analyzes what you did, quizzes you on 4-6 concepts, and updates
+   your scores and gap classifications.
+3. **Plan** — next time you start working, `/startwork` reads your
+   updated state and proposes what to focus on. It runs automatically
+   at session start via the hook, or invoke it directly.
+4. **Reflect** — after 3+ sessions, `/startwork` automatically
+   dispatches `/progress-review` to detect cross-session patterns:
+   stalls, regressions, goal drift, arc readiness. You can also run
+   `/progress-review` directly anytime.
 
-Skills update immediately. Learning state (`~/maestro/learning/`) is
-never overwritten by pull — it's gitignored.
+The more sessions you complete, the sharper the system gets. Concept
+scores are quiz-verified, not self-reported — so the profile converges
+on reality.
 
-If you set `"updates": "notify"` (default), the harness tells you when
-updates are available at session start.
+## Privacy
 
-## Uninstall
+Your learning profile stays local by default:
 
-```bash
-bash ~/maestro/scripts/uninstall.sh
-```
-
-Removes the settings.json entries, the CLAUDE.md section, and the
-config directory. Learning state is preserved — you're told where it
-is and can delete it manually.
+- `background/` and `learning/` are gitignored out of the box
+- During intake, you choose whether your `~/.claude/CLAUDE.md` content is shared or private
+- Nothing leaves your machine without your explicit action
 
 ## What intake creates
 
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Personalized configuration — how the system behaves toward you |
+| `~/.claude/CLAUDE.md` | Personalized configuration (written within `<!-- weft -->` markers, won't overwrite your other content) |
 | `learning/goals.md` | Your aspirations as states of being, not skill checklists |
 | `learning/arcs.md` | Capability clusters — groups of skills serving your goals |
 | `learning/current-state.md` | Concept inventory — scores, gap types, evidence sources |
@@ -118,78 +124,147 @@ is and can delete it manually.
 After sessions, `/session-review` also creates session logs in
 `learning/session-logs/`.
 
-## Skills included
+## Skills
+
+All skills are invoked with `/skill-name` in Claude Code.
+
+### Core loop
 
 | Skill | What it does |
 |-------|-------------|
-| **intake** | Onboarding interview that bootstraps your profile |
+| **intake** | Onboarding interview — bootstraps your profile from background materials and conversation |
 | **session-review** | End-of-session analysis, quiz, and learning state update |
+| **startwork** | Session planner — reads your state and proposes what to focus on |
+| **progress-review** | Cross-session pattern analysis — detects stalls, regressions, and goal drift |
+
+### Working tools
+
+| Skill | What it does |
+|-------|-------------|
 | **quick-ref** | Fast, direct answers. Flags structural gaps in one sentence. |
-| **debugger** | Visibility-first debugging. Gets the full error before guessing. |
+| **debugger** | Visibility-first debugging — gets the full error before guessing |
 | **lesson-scaffold** | Restructures learning materials around what you already know |
-| **startwork** | Session planner. Reads your state and proposes what to work on. |
-| **progress-review** | Cross-session pattern analysis. Detects stalls, regressions, and goal drift that single sessions miss. Runs automatically via startwork when enough sessions accumulate, or invoke directly. |
+| **handoff-test** | Audits your work artifacts for self-containedness before context is lost |
+| **handoff-prompt** | Generates a handoff prompt for the next agent when context is running low |
 
-## Privacy
+### Automatic dispatch
 
-Your learning profile stays local by default:
+Some skills run automatically without you invoking them:
 
-- `background/` and `learning/` are gitignored out of the box
-- During intake, you choose whether `CLAUDE.md` is shared or private
-- Nothing leaves your machine without your explicit action
+- **startwork** dispatches **progress-review** when 3+ sessions have
+  accumulated since the last review
+- The **session-start hook** checks your learning state and suggests
+  `/intake` if you haven't run it, or `/startwork` if your profile
+  is stale
+- **quick-ref** and **debugger** activate contextually based on what
+  you're doing — no slash command needed
+
+## Everything is editable
+
+The intake gives you a starting point, not a lock-in. Every generated
+file is plain markdown. Edit `~/.claude/CLAUDE.md` to change how the system
+behaves. Edit `learning/current-state.md` to correct a score. The
+system reads what's there — if you change it, it adapts.
+
+## Update
+
+```bash
+cd ~/weft && git pull
+```
+
+Skills update immediately — they're loaded from the clone directory,
+so a pull is all it takes. Learning state (`~/weft/learning/`) is
+never overwritten by pull — it's gitignored.
+
+If you set `"updates": "notify"` (default), the harness tells you when
+updates are available at session start.
 
 ## Recommended: Install a command guard
 
-AI coding agents occasionally attempt destructive commands — `git reset
---hard`, `rm -rf`, force pushes — that can destroy uncommitted work in
-seconds. This is a [known class of issue](https://github.com/anthropics/claude-code/issues/7232)
-across all AI coding tools.
-
-[DCG (Destructive Command Guard)](https://github.com/Dicklesworthstone/destructive_command_guard?tab=readme-ov-file#dcg-destructive-command-guard)
-intercepts these before execution and explains what the agent was trying
-to do. Install it once and it protects all your projects:
-
-```bash
-curl -fsSL "https://raw.githubusercontent.com/Dicklesworthstone/destructive_command_guard/main/install.sh?$(date +%s)" | bash -s -- --easy-mode
-```
-
-**When DCG blocks an agent command:** read DCG's explanation of what it
-intercepted. If the command is legitimately needed — for example,
-reverting a mistake the agent just made — run it yourself in the
-terminal. Otherwise, let the block stand and tell the agent to find an
-alternative approach.
+AI coding agents occasionally attempt destructive commands (`git reset
+--hard`, `rm -rf`, force pushes). [DCG (Destructive Command Guard)](https://github.com/Dicklesworthstone/destructive_command_guard)
+intercepts these before execution. Install it once and it protects all
+your projects — see the [DCG README](https://github.com/Dicklesworthstone/destructive_command_guard?tab=readme-ov-file#dcg-destructive-command-guard)
+for setup instructions.
 
 ## Data sharing (optional)
 
 During `/intake`, you'll be asked if you want to share learning data
-to GitHub. One question, one consent. If you opt in, two things happen:
+to GitHub. One question, one consent. If you opt in:
 
-1. **Developer signals** — at the end of each `/session-review`, a
-   short signal is posted to the developer's repo with your feedback on
-   how the tool worked, plus learning metrics (concept scores, gap
-   types, progress patterns). You see every signal before it sends and
-   approve or skip each one.
+**Developer signals** — at the end of each `/session-review`, a short
+signal is posted to the developer's repo (`hartphoenix/weft-signals`)
+with your feedback on how the tool worked, plus learning metrics
+(concept scores, gap types, progress patterns). This data helps improve
+the harness — it's how bugs get found and skills get sharpened. You see
+every signal before it sends and approve or skip each one.
 
-2. **Progress repo** — a public GitHub repo is created on your account
-   (`your-username/learning-signals`). When you run `/progress-review`,
-   a summary posts there. Teachers, mentors, or peers can watch the
-   repo and comment with guidance — `/startwork` surfaces their
-   responses in your next session.
+**Progress repo** — a public GitHub repo is created on your account
+(`your-username/learning-signals`). When you run `/progress-review`,
+a summary posts there. Teachers, mentors, or peers can watch the repo
+and comment with guidance.
 
 **What's shared:** concept scores, gap types, progress patterns, goals,
 and growth edges.
 **What's never shared:** conversation content, code, file paths,
 background materials, or raw quiz answers.
 
+**Current status:** Signal dispatch (you → developer) works now.
+The teacher response loop (teacher comments → surfaced in your next
+`/startwork`) is designed and coming in a future update. For now,
+teacher feedback works through normal GitHub issue comments — you'll
+see it when you check your progress repo.
+
 **To invite a teacher:** send them your progress repo link. They Watch
 it on GitHub. Add their GitHub handle to `learning/relationships.md`
 and `/progress-review` will assign issues to them automatically.
 
-To opt out of all data sharing, delete `.claude/feedback.json`.
+To opt out of all data sharing, delete `~/weft/.claude/consent.json`.
 
-## Everything is editable
+## Under the hood
 
-The intake gives you a starting point, not a lock-in. Every generated
-file is plain markdown. Edit your `CLAUDE.md` to change how the system
-behaves. Edit `learning/current-state.md` to correct a score. The
-system reads what's there — if you change it, it adapts.
+These files are created and managed by skills during normal use.
+You don't need to touch them, but knowing they exist helps if you're
+debugging or customizing.
+
+| File | Created by | Purpose |
+|------|-----------|---------|
+| `learning/session-logs/YYYY-MM-DD.md` | session-review | One file per reviewed session. YAML frontmatter + markdown body. |
+| `learning/scaffolds/` | lesson-scaffold | Restructured learning materials with concept classifications |
+| `learning/relationships.md` | intake (if opted in) | Teacher/mentor handles and signal repo config |
+| `learning/.intake-notes.md` | intake | Resume checkpoint if intake is interrupted mid-interview |
+| `learning/.progress-review-log.md` | progress-review | Tracks review windows and deferred findings |
+
+### Session-start hook
+
+When you open Claude Code, a hook runs automatically. It checks:
+
+- Whether you've run `/intake` yet (suggests it if not)
+- Whether a previous `/intake` was interrupted (offers to resume)
+- Whether your learning profile is stale (suggests `/startwork`)
+- Whether harness updates are available (if `"updates": "notify"`)
+
+## Uninstall
+
+```bash
+bash ~/weft/scripts/uninstall.sh
+```
+
+Removes the settings.json entries, the CLAUDE.md section, and the
+config directory. Learning state is preserved — you're told where it
+is and can delete it manually.
+
+## Troubleshooting
+
+**Intake interrupted mid-interview:** Run `/intake` again. It detects
+the interrupted state and offers to resume where you left off.
+
+**Skills not activating:** Run `bash ~/weft/scripts/bootstrap.sh`
+to re-register. Bootstrap is idempotent — safe to run multiple times.
+
+**Session-review says no learning state:** Run `/intake` first. The
+review needs the profile that intake creates.
+
+**Update check not working:** Verify your weft directory is a git
+repo with a remote: `cd ~/weft && git remote -v`. The hook fetches
+in the background — it won't block your session.

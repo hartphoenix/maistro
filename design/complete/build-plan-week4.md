@@ -147,7 +147,7 @@ this document captures the build decisions and current state.
 - **Install verification** (`scripts/test-install.ts`) — Bun script:
   scaffolds a temp harness from `package/`, checks file structure
   against expected manifest (all skills, references, .gitkeep dirs,
-  feedback.json, tutor-posture.md), reports pass/fail. First pass is
+  consent.json, tutor-posture.md), reports pass/fail. First pass is
   structural only; later: simulate intake and verify output schema.
   Serves the "End-to-end test" checklist item (structural half).
 
@@ -201,6 +201,14 @@ background/                   # intake staging area, gitignored
 **Static vs. dynamic split:**
 - `.claude/references/` — system knowledge, doesn't change per user
 - `learning/` — user state, changes every session
+
+**current-state.md format: YAML, not markdown table.**
+Intake seeds current-state.md as YAML (list of concept entries under
+`concepts:` key). Session-review adds `times-quizzed`, `history`, and
+`note` fields per concept — fields that don't fit in a table. Future
+enrichments (complexity, chunking, next-move from the research
+synthesis) are additively extensible in YAML without breaking existing
+entries. Roger's live instance validated this format across 20+ sessions.
 
 ---
 

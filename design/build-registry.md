@@ -19,8 +19,8 @@ each personality using the interview protocol in
 
 ## Skills
 
-Ships = included in install package. Dev-only = used during harness
-development, not shipped to end users.
+Ships = included in install package (9 skills ship as of 2026-02-26).
+Dev-only = used during harness development, not shipped to end users.
 
 | Skill | Usage | Status | Ships | Location |
 |-------|-------|--------|-------|----------|
@@ -36,6 +36,7 @@ development, not shipped to end users.
 | Design Iterate | — | Built | Dev-only | `.claude/skills/design-iterate/` |
 | Design Skill | — | Built | Dev-only | `.claude/skills/design-skill/` |
 | Handoff Test | — | Built | Yes | `package/.claude/skills/handoff-test/`. Also in `coordination/skills/handoff-test/`. Audits artifacts for self-containedness before context loss. Wired to `PreCompact` hook (context injection). |
+| Handoff Prompt | — | Built | Yes | `package/.claude/skills/handoff-prompt/`. Generates a complete handoff prompt for the next agent from session memory. Conserves context before compaction or `/clear`. |
 | Project Brainstorm | — | Planned | — | Solo version: takes learner goals + growth edge, explores project ideas, produces project brief with schedule, definitions of done, and requirements. Adapt from `coordination/commands/workflows/brainstorm.md`. |
 | Agent Feedback | — | Deferred | — | Produces meaningful feedback reports for the harness developer. Replaces session-review Phase 4's strict structural schema with a richer signal. Fires on surprise: when the agent encounters something worth telling the developer about, it estimates signal type and composes a report. Readable, contentful — not just structural metrics. Privacy-aware but not so strict it strips all useful data. Triggerable from session-review or independently when surprising harness behavior occurs. **Calibration loop:** checks for discrepancies between lesson-scaffold predictions (concept classifications, predicted difficulty) and session-review outcomes (actual quiz scores, observed struggles). Scaffold said "solid" but learner struggled → classification model needs tuning. Scaffold said "prerequisite gap" but learner handled it → model underestimated. These discrepancies are a first-class signal type. |
 | SessionStart Hook | — | Built | Yes | `package/.claude/hooks/session-start.sh`. Conditional onboarding: checks learning state, suggests /intake, /startwork, or /lesson-scaffold. Schedule deadline nudge stubbed (blocked on project-brainstorm). See `design/hooks-research.md` §5.1. |
@@ -52,7 +53,9 @@ development, not shipped to end users.
 
 | Script | Status | Notes |
 |--------|--------|-------|
-| `scripts/bootstrap.ts` | Planned | Install pipeline. Copies `package/` to target dir, verifies structure, prints next step. Spec → build → instance for the harness. |
+| `package/scripts/bootstrap.sh` | Built | Install pipeline. Writes weft section to global CLAUDE.md, registers skills/hooks in settings.json, records manifest. Hardened with marker validation and path reconciliation. |
+| `package/scripts/uninstall.sh` | Built | Clean removal. Strips weft section from CLAUDE.md, removes settings.json entries, cleans stale maestro remnants. |
+| `scripts/rename-to-weft.sh` | Built | One-time migration script (maestro → weft). Dev-only. |
 | `scripts/test-install.ts` | Planned | Install verification. Scaffolds temp harness from `package/`, checks file structure against expected manifest, reports pass/fail. |
 
 ---

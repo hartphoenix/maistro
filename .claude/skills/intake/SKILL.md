@@ -11,10 +11,10 @@ Onboard a new learner. Five phases, in order. Do not skip or reorder.
 
 ## Path Resolution
 
-This skill reads and writes files in the maestro harness directory, which
+This skill reads and writes files in the weft harness directory, which
 may not be the current working directory.
 
-**To find the harness root:** Read `~/.config/maestro/root`. If the file
+**To find the harness root:** Read `~/.config/weft/root`. If the file
 exists, use its contents as the absolute path. If it doesn't exist, fall
 back to the current working directory (local-install compatibility).
 
@@ -23,11 +23,11 @@ back to the current working directory (local-install compatibility).
 - `background/*` → `<harness-root>/background/*`
 - `.claude/skills/*` → `<harness-root>/package/.claude/skills/*`
 - `.claude/references/*` → `<harness-root>/package/.claude/references/*`
-- `.claude/feedback.json` → `<harness-root>/package/.claude/feedback.json`
+- `.claude/consent.json` → `<harness-root>/package/.claude/consent.json`
 
 **Phase 4 (Write) targets `~/.claude/CLAUDE.md`** — the global file, not
 a project-local CLAUDE.md. Intake replaces the content between the
-`<!-- maestro:start -->` and `<!-- maestro:end -->` markers with a
+`<!-- weft:start -->` and `<!-- weft:end -->` markers with a
 personalized version. See Phase 4 for details.
 
 **Skip .gitignore steps.** The global install doesn't need gitignore
@@ -501,19 +501,22 @@ evidence source tags.
 
 Template:
 
-```markdown
+```yaml
 # Current State
+#
+# Scores: 0-5 (see .claude/references/scoring-rubric.md)
+#   0 = not encountered, 1 = heard of, 2 = attempted with help,
+#   3 = can do with effort, 4 = fluent, 5 = can teach
+#
+# Gap types (when score < 4): conceptual | procedural | recall
+# Source tags: intake:artifact | intake:self-report | intake:inferred
 
-Scores: 0 = not encountered, 1 = heard of, 2 = attempted with help,
-3 = can do with effort, 4 = fluent, 5 = can teach.
-
-Gap types: conceptual (mental model wrong), procedural (right concept,
-wrong execution), recall (can't reproduce).
-
-## Concepts
-
-| Concept | Score | Gap | Source | Last Updated |
-|---------|-------|-----|--------|--------------|
+concepts:
+  - name: concept-name
+    score: 3
+    gap: procedural
+    source: intake:artifact
+    last-updated: YYYY-MM-DD
 ```
 
 Populate entries from concrete evidence in the interview. Guidelines:
@@ -582,8 +585,8 @@ before writing.
 Before writing, check whether target files already exist:
 
 **CLAUDE.md** — intake writes to `~/.claude/CLAUDE.md` (the global
-file), replacing the content between `<!-- maestro:start -->` and
-`<!-- maestro:end -->` markers. The markers were placed by bootstrap.sh.
+file), replacing the content between `<!-- weft:start -->` and
+`<!-- weft:end -->` markers. The markers were placed by bootstrap.sh.
 - If the markers exist: replace everything between them (inclusive) with
   the personalized section (see 4b.1 for the template).
 - If no markers found but the file exists: append the personalized
@@ -596,7 +599,7 @@ goals.md, arcs.md):
 
 ### 4b. Write approved files
 
-1. Write the personalized maestro section to `~/.claude/CLAUDE.md`
+1. Write the personalized weft section to `~/.claude/CLAUDE.md`
    between the markers. The personalized section includes:
    - The path resolution block (retained verbatim from bootstrap)
    - User-specific sections from synthesis (User, Calibration,
@@ -607,11 +610,11 @@ goals.md, arcs.md):
    The full section template between markers:
 
    ```markdown
-   <!-- maestro:start -->
-   <!-- maestro:section-version:2 -->
+   <!-- weft:start -->
+   <!-- weft:section-version:2 -->
    [Full personalized CLAUDE.md content from 3a synthesis]
 
-   ## Maestro Harness
+   ## Weft Harness
 
    **Harness root:** <harness-root>
 
@@ -623,7 +626,7 @@ goals.md, arcs.md):
    - `learning/*` → `<harness-root>/learning/*`
    - `background/*` → `<harness-root>/background/*`
    - `.claude/references/*` → `<harness-root>/package/.claude/references/*`
-   - `.claude/feedback.json` → `<harness-root>/package/.claude/feedback.json`
+   - `.claude/consent.json` → `<harness-root>/package/.claude/consent.json`
 
    When a skill says "read learning/current-state.md", read
    `<harness-root>/learning/current-state.md`.
@@ -634,7 +637,7 @@ goals.md, arcs.md):
    References: `<harness-root>/package/.claude/references/`
    Learning state: `<harness-root>/learning/`
    Background materials: `<harness-root>/background/`
-   <!-- maestro:end -->
+   <!-- weft:end -->
    ```
 
    Note: section-version bumps to 2 (personalized replaces generic).
@@ -675,17 +678,17 @@ After writing, summarize:
 > **What's never shared:** conversation content, code, file paths,
 > background materials, or raw quiz answers.
 >
-> You can turn this off anytime by deleting `.claude/feedback.json`.
+> You can turn this off anytime by deleting `.claude/consent.json`.
 > Want to opt in?
 
 If they decline, skip. Don't push.
 
 If they agree:
 
-1. **Write `.claude/feedback.json`** (creates the consent gate):
+1. **Write `.claude/consent.json`** (creates the consent gate):
    ```json
    {
-     "repo": "hartphoenix/maestro-signals"
+     "repo": "hartphoenix/weft-signals"
    }
    ```
 
