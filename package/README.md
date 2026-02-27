@@ -132,32 +132,32 @@ All skills are invoked with `/skill-name` in Claude Code.
 
 | Skill | What it does |
 |-------|-------------|
-| **intake** | Onboarding interview — bootstraps your profile from background materials and conversation |
-| **session-review** | End-of-session analysis, quiz, and learning state update |
-| **startwork** | Session planner — reads your state and proposes what to focus on |
-| **progress-review** | Cross-session pattern analysis — detects stalls, regressions, and goal drift |
+| **/intake** | Onboarding interview — bootstraps your profile from background materials and conversation |
+| **/startwork** | Session planner — reads your state and proposes what to focus on |
+| **/session-review** | End-of-session analysis, quiz, and learning state update |
+| **/progress-review** | Cross-session pattern analysis — detects stalls, regressions, and goal drift |
 
 ### Working tools
 
 | Skill | What it does |
 |-------|-------------|
-| **quick-ref** | Fast, direct answers. Flags structural gaps in one sentence. |
-| **debugger** | Visibility-first debugging — gets the full error before guessing |
-| **lesson-scaffold** | Restructures learning materials around what you already know |
-| **handoff-test** | Audits your work artifacts for self-containedness before context is lost |
-| **handoff-prompt** | Generates a handoff prompt for the next agent when context is running low |
+| **/lesson-scaffold** | Paste a URL to a lesson plan or tutorial – Adapts the plan to fit your learning style & goals. |
+| **/quick-ref** | Fast, direct answers. Flags structural gaps in one sentence. |
+| **/debugger** | Visibility-first debugging — gets the full error before guessing |
+| **/handoff-test** | Run this to audit Claude's work artifacts for self-containedness before compaction/clear, so the next session or agent starts with a full game plan. |
+| **/handoff-prompt** | Run this to generate a handoff prompt for the next agent when context is running low |
 
 ### Automatic dispatch
 
 Some skills run automatically without you invoking them:
 
-- **startwork** dispatches **progress-review** when 3+ sessions have
-  accumulated since the last review
+- **/startwork** dispatches **/progress-review** when 3+ sessions have
+  accumulated since the last review, but you can also run it yourself.
 - The **session-start hook** checks your learning state and suggests
   `/intake` if you haven't run it, or `/startwork` if your profile
-  is stale
-- **quick-ref** and **debugger** activate contextually based on what
-  you're doing — no slash command needed
+  hasn't updated recently.
+- **/quick-ref** and **/debugger** activate contextually based on what
+  you're doing — no slash command needed.
 
 ## Everything is editable
 
@@ -190,7 +190,7 @@ for setup instructions.
 ## Data sharing (optional)
 
 During `/intake`, you'll be asked if you want to share learning data
-to GitHub. One question, one consent. If you opt in:
+to GitHub. If you opt in:
 
 **Developer signals** — at the end of each `/session-review`, a short
 signal is posted to the developer's repo (`hartphoenix/weft-signals`)
