@@ -308,7 +308,7 @@ the human relationships that supply what the harness cannot: belonging,
 witnessing, true expertise, valid teacherly authority, and wisdom.
 See `design/design-principles.md` §10.
 
-Full design: `design/teacher-relationship.md`.
+Full design: `design/teacher-role/teacher-relationship.md`.
 
 **Existing implementations:**
 - Structured learner state (current-state.md, goals.md, arcs.md) — the
@@ -322,7 +322,7 @@ Full design: `design/teacher-relationship.md`.
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Teacher-student exchange protocol (GitHub Issues) | Designed | Student shares progress reviews; teacher responds with guidance; harness surfaces responses at session start. See `design/teacher-relationship.md` §Protocol. |
+| Teacher-student exchange protocol (GitHub Issues) | Designed | Student shares progress reviews; teacher responds with guidance; harness surfaces responses at session start. See `design/teacher-role/teacher-relationship.md` §Protocol. |
 | Teacher opt-in configuration | Designed | Teacher's GitHub handle + per-user signal repo stored in `learning/relationships.md`. Enables publish/read-back cycle. |
 | Startwork teacher-response check | Designed | Startwork reads teacher comments from GitHub Issues and surfaces guidance in session plan. |
 | Progress-review publish step | Designed | Optional Phase 5: posts progress summary as GitHub Issue with labels and teacher assignment. |

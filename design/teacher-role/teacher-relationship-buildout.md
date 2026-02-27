@@ -17,7 +17,7 @@ order: higher items unblock lower ones.
   emotional (belonging, witnessing) + directional (expertise, teacherly
   authority, wisdom, uncomputable problems). Updated in
   `design/design-principles.md`. Propagated to P10 and
-  `design/teacher-relationship.md`.
+  `design/teacher-role/teacher-relationship.md`.
 
 - [x] **2. P10 as serving-layer principle** — Defined in
   `design/design-principles.md` §10. Registered in
@@ -25,14 +25,14 @@ order: higher items unblock lower ones.
   exchange, discovery, role fluidity.
 
 - [x] **3. Teacher-relationship design doc** — Drafted at
-  `design/teacher-relationship.md`. Covers needs analysis, protocol,
+  `design/teacher-role/teacher-relationship.md`. Covers needs analysis, protocol,
   MVP scope, architecture, privacy model, roadmap.
 
 - [x] **4. Consent and authority model** — Triad: teacher, student,
   domain. Authority is domain-specific, granted at-will, revocable.
   Student can defer or revoke. System does not arbitrate conflicts —
   presents teacher guidance as information, not instruction. Captured
-  in `design/teacher-relationship.md` §Consent and authority.
+  in `design/teacher-role/teacher-relationship.md` §Consent and authority.
 
 - [x] **7. Teacher opt-in configuration** — Lives in
   `learning/relationships.md`. List format supports multiple teachers
@@ -83,12 +83,12 @@ order: higher items unblock lower ones.
 subscription model (teacher subscribes to student's progress stream).
 Domain scope is emergent — teacher comments on what they know,
 ignores what they don't. Ad-hoc sharing is post-MVP, natural
-extension for the discovery layer. See `design/teacher-relationship.md`
+extension for the discovery layer. See `design/teacher-role/teacher-relationship.md`
 §Relationship scoping.
 
 ### Open questions (from design doc)
 
-Captured in `design/teacher-relationship.md` §Open questions. Not
+Captured in `design/teacher-role/teacher-relationship.md` §Open questions. Not
 blocking MVP but worth resolving before post-demo work:
 
 - Summary granularity: full detail vs. executive summary per
