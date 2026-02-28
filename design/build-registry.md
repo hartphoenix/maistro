@@ -46,6 +46,8 @@ Dev-only = used during harness development, not shipped to end users.
 | Setup Guide | — | Planned | — | Procedural, not Socratic. Ask for project structure, package.json, and goal upfront. |
 | Emotional Reflection | — | Deferred | — | Behavior embedded in Tutor personality; standalone skill not built. Attentive mirroring, not therapy. Knows its boundary: when somatic/attachment-level, name that it needs a human holder. Key principle (Thorson/Aletheia): mirroring itself is the intervention. |
 | Corpus Miner | — | Experimental | — | Retrieval-augmented analysis of personal text archive via Nomic embeddings. Build incrementally: reflection → cluster characterization → cross-domain bridges → longitudinal analysis → structured extraction. |
+| Celebrate Wins | — | Planned | — | Prompts student to mark milestones with a public post after great sessions or progress reviews. GitHub, social media, etc. Encourages celebrating growth and creates a rearview mirror of progress. Post-MVP. |
+| Relationship Setup | — | Planned | Yes | One-time handshake for teacher-student relationships: create private repo, add collaborator, store config in both harnesses. See `design/teacher-role/brainstorm-2026-02-27.md` §8. |
 
 ---
 

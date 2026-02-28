@@ -1,10 +1,16 @@
 # Teacher Role Design Review
 
 **Date:** 2026-02-27
+**Status:** Questions resolved — see `brainstorm-2026-02-27.md`
 **Context:** Post-launch assessment. Package shipped to `hartphoenix/weft`,
 3 testers onboarded. Teacher role infrastructure is the next build target.
 This review holds the existing design docs up against the design principles
 to identify alignment, gaps, and open questions before implementation.
+
+> **Note:** All gaps and questions identified below were resolved in the
+> 2026-02-27 brainstorm session. Decisions merged into
+> `teacher-relationship.md` (single source of truth). This document
+> remains useful as the analysis that prompted those decisions.
 
 ---
 
@@ -74,13 +80,14 @@ about this.
 
 ### Smaller tensions worth noting
 
-**3. Signal-teacher variant mismatch.** The `signal-teacher-variant.md`
+**3. Signal-teacher variant mismatch.** ~~The `signal-teacher-variant.md`
 (in `design/complete/`) describes a privacy-stripped structural signal
 (score distributions, no concept names). The teacher-relationship design
 describes a rich curated summary (goals, gaps, trajectory, asks). These
 are actually two different signal types for two different audiences
 (developer vs. teacher). The naming is confusing — the "teacher variant"
-isn't actually for teachers.
+isn't actually for teachers.~~ **Resolved:** Renamed to
+`public-signal.md`. See `brainstorm-2026-02-27.md` §5.
 
 **4. No feedback loop to teacher.** After startwork surfaces guidance,
 it labels the issue `acknowledged`. But "I saw it" != "it was useful."
@@ -132,8 +139,8 @@ All teacher-role design docs live in this directory:
   MVP scope, roadmap)
 - `teacher-relationship-buildout.md` — Implementation tracker
   (priority-sorted work items, done/pending status)
-- `signal-teacher-variant.md` — Structural signal schema (originally
-  for developer, not teacher — naming is misleading)
+- `public-signal.md` — Structural signal schema (for public/developer
+  consumption, not teachers — renamed from `signal-teacher-variant.md`)
 
 Related docs elsewhere (not moved, general-purpose):
 

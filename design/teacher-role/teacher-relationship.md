@@ -1,8 +1,9 @@
 # Teacher Relationship Layer
 
-**Status:** Design draft
+**Status:** Current design
 **Principle:** P10 — The system facilitates human teaching relationships
-**Demo target:** Saturday 2026-02-28
+**Last revised:** 2026-02-27 (brainstorm session — see
+`brainstorm-2026-02-27.md` for session record)
 
 ---
 
@@ -43,6 +44,8 @@ Two observations make this tractable:
 - Goals and how projects map to them
 - Progress-review output (stalls, regressions, breakthroughs)
 - Specific asks ("I'm stuck on X," "I need help scoping Y")
+- Concrete detail: what the student built, where they got stuck, what
+  they tried — enough that the teacher can respond at high resolution
 
 **Teacher → Student (push: "here's what I see")**
 - Goal refinement suggestions ("your goal says X but your work
@@ -51,6 +54,11 @@ Two observations make this tractable:
 - Project-goal alignment ("this project would serve your growth edge
   better")
 - Challenge calibration ("you're coasting" / "you're overwhelmed")
+
+**Student → Teacher (feedback loop: "did it land?")**
+- Whether teacher feedback was understood
+- What landed and what didn't ("I get this part, not that part")
+- Questions that emerged from the feedback
 
 **Discovery (pub: "here's what I offer / need")**
 - Student publishes: learning goals, growth edges, what kind of help
@@ -61,6 +69,7 @@ Two observations make this tractable:
 **Lifecycle**
 - Relationship initiation (teacher claims a student, or student
   requests a teacher)
+- Schedule establishment (student commitments + shared commitments)
 - Ongoing exchange (async — both are busy)
 - Relationship evolution (roles shift; the student teaches back)
 
@@ -79,285 +88,341 @@ The data exists. The gap is transport: getting it from the student's
 machine to somewhere a teacher can see it, and getting the teacher's
 response back into the student's session.
 
+### Dual audience
+
+Content that flows through the protocol reaches two readers: a human
+tutor who reads for context, relationship, nuance, and implicit
+content — and their harness, which speaks the full language of this
+system. This means the content should be high-fidelity and
+human-readable, but not rigidly templated. Over-specifying would
+constrain what's allowed to flow (the human reads between the lines;
+a strict schema strips that out). Under-specifying would degrade the
+signal (not enough context for the teacher to act on). Land in the
+middle: rich plain-English narrative with enough concrete detail that
+both the human and their agent can work with it.
+
 ---
 
 ## Protocol design
 
-### Transport: GitHub Issues
+### Transport: per-relationship private repo
 
-GitHub Issues is the transport layer. Rationale:
+Each teacher-student relationship gets its own private GitHub
+repository, hosted by the teacher. The student is added as a
+collaborator.
 
-- **Zero new dependencies.** `gh` CLI is already installed,
-  authenticated, and used by the signal return path.
-- **Full markdown.** Progress reviews render natively.
-- **Bidirectional.** Teacher comments on the issue. Agent reads
-  comments with `gh issue view --comments`.
-- **Structured workflow.** Labels provide state management without
-  building anything.
-- **Notifications built in.** GitHub emails the teacher. Discord
-  webhook optional as a faster ping.
-- **Searchable history.** Every exchange is permanent and filterable.
+**Why a per-relationship repo:**
 
-### Per-user signal repos
+- **Private by default.** Only the two parties see anything. Learning
+  data stays off the open internet.
+- **Bidirectional.** Both parties can push files and read each other's
+  contributions. No collaborator-access workarounds.
+- **Agent-native.** Git is the harness's native environment. Markdown
+  is the native format. The `gh` CLI is already authorized. Push/pull
+  is atomic and auditable.
+- **Zero new dependencies.** No additional auth, no external services,
+  no API integrations.
+- **Scales independently.** Adding a student doesn't touch any other
+  student's data. GitHub Free gives unlimited private repos (platform
+  limit: 100,000 per account).
+- **Auditable history.** Commit history = exchange history. Every
+  summary, every piece of feedback, permanently recorded and diffable.
+- **Clean separation.** If a student has multiple teachers, each
+  relationship has its own repo. No cross-contamination.
 
-Each user publishes to their own GitHub repository. No shared repo.
-
-- Student creates a personal signals repo (e.g.,
-  `username/learning-signals`) — one `gh repo create` command
-- Or uses their existing harness/project repo
-- **Public by default.** Any GitHub user can view and comment on
-  issues — no collaborator invites needed. The teacher just needs
-  the repo URL.
-- Teachers subscribe via GitHub's native Watch feature (Issues Only)
-- GitHub handles notifications natively
-
-This means:
-- **Student owns their data.** Signal repo lives on their account.
-- **No shared infrastructure.** No central repo to manage.
-- **Role fluidity is natural.** You publish to your repo, you watch
-  other people's repos. That's the whole relationship model.
-- **Zero-friction teacher onboarding.** Public repo means the
-  student shares a link, the teacher watches it. No invite flow.
-- **Privacy choice stays with the student.** They can make the repo
-  private later if they want — but then teachers need collaborator
-  access to comment.
-
-The repo needs:
-- Issues enabled
-- Public visibility (default — eliminates collaborator invites)
-- Label set: `progress-review`, `goal-update`, `needs-teacher`,
-  `responded`, `acknowledged`
+**Why not email/WhatsApp/Signal/etc.:** This is agent-to-agent
+communication mediated by humans, not human-to-human communication
+mediated by agents. Both parties have harnesses. The harness composes
+the summary, pushes it, and the other harness reads it, presents it,
+and tracks state changes from it. The humans review, direct, and add
+nuance — but the heavy lifting of composition, transport, and parsing
+is agent work. Git repos carry higher-fidelity structured data than
+any messaging platform, and agents can track and use every document
+pushed.
 
 ### Exchange flow
 
 ```
-Student session                    Student's signal repo            Teacher
-─────────────────                  ─────────────────                ─────────
+Student's harness              Relationship repo              Teacher's harness
+───────────────                (private, teacher-hosted)       ─────────────────
 
-/session-review or
 /progress-review
   ↓
 Phase 5: Publish
   ↓
-gh issue create ─────────────────→ Issue #42 on
-  --repo my/learning-signals       my/learning-signals
-  --label progress-review          "Progress Review: Feb 25"
-  --assignee teacher-handle        [goals, gaps, trajectory,
-  --body-file summary.md            specific asks]
-                                        │
-                                        │ ← GitHub Watch notification
-                                        │
-                                        ↓                    reads issue
-                                   Teacher comments ←──────── writes guidance
-                                     --label responded
-                                        │
-Next session:                           │
-/startwork                              │
-  ↓                                     │
-Check for responses ←───────────── gh issue list
-  --repo my/learning-signals         --label responded
-  ↓
-Surface teacher guidance
-  in session plan
-  ↓
-Student reads, works,
-session continues
+Compose summary ──────────→ Push progress summary
+  (plain English,              (markdown file)
+   high fidelity)                    │
+                                     │ ← GitHub notification
+                                     │
+                                     ↓
+                              Teacher's harness reads ──→ Contextualizes:
+                                summary                    "last time you said X
+                                     │                      → student reported Y
+                                     │                      → here's what changed"
+                                     │
+                              Teacher writes ────────────→ Push feedback
+                                feedback                     (markdown file)
+                                (through harness,                │
+                                 resolution-coached)             │
+                                     │                           │
+Next session:                        │                           │
+/startwork                           │                           │
+  ↓                                  │                           │
+Read feedback ←──────────────── Pull from repo                   │
+  ↓                                                              │
+Present verbatim                                                 │
+  in session plan                                                │
+  ↓                                                              │
+Student works, session continues                                 │
+  ↓                                                              │
+Harness prompts:                                                 │
+  "Did this land?"                                               │
+  ↓                                                              │
+Student responds ───────────→ Push "did it land?" ──────────→ Teacher sees
+  ("I get this part,            response                       how feedback
+   not that part")                                              was received
 ```
 
-### Label protocol
+### Relationship repo structure
 
-| Label | Meaning | Set by |
-|-------|---------|--------|
-| `progress-review` | A progress review for teacher consumption | Agent |
-| `goal-update` | Student's goals have changed; teacher should review | Agent |
-| `needs-teacher` | Student has a specific ask for the teacher | Agent or student |
-| `responded` | Teacher has provided guidance | Teacher |
-| `acknowledged` | Student has seen the teacher's response | Agent |
+Minimal. The student's actual learning state stays in their own harness
+repo; only curated artifacts cross over.
 
-### Relationship scoping
-
-Relationships are scoped by **time**, not by conceptual domain. Two
-access modes:
-
-1. **Subscription** (MVP) — Teacher subscribes to the student's
-   progress reviews. Ongoing until either party ends it. The teacher
-   receives the stream and responds to whatever is in their
-   wheelhouse. Domain scope is emergent: it's whatever the teacher
-   actually comments on.
-
-2. **Ad-hoc sharing** (post-MVP) — Student shares a specific artifact
-   with a specific person. One-off. No persistent relationship
-   needed. Natural extension for the discovery layer, where people
-   share outside established relationships.
-
-This avoids maintaining a conceptual taxonomy ("this relationship
-covers frontend development") that would be a headache to update as
-both parties grow and the relationship evolves. The teacher
-self-selects based on their own judgment about what they have
-expertise in.
-
-### Relationship types and discovery
-
-The same discovery mechanism supports four match types. All use the
-structured learner state the harness already produces — the difference
-is which signal drives the match.
-
-| Match type | Signal | Relationship |
-|-----------|--------|-------------|
-| Expertise → gap | My scores high where yours are low | Teacher-student (asymmetric authority) |
-| Shared growth edge | Our gaps overlap | Peer (symmetric) |
-| Complementary strengths | My strength is your gap, yours is mine | Mutual teaching (symmetric, role-fluid per domain) |
-| Project affinity | We're building similar things | Collaborator → reveals latent matches |
-
-**Peer relationships** are structurally distinct from teacher-student:
-authority is absent or negotiated per-task rather than granted and
-revoked. Peers find commonalities in their learning, exchange lessons
-learned, and co-create (group projects). The peer relationship bridges
-the personal harness and the coordination layer — it's how solo
-learners become collaborators.
-
-**Project affinity** is the most concrete discovery signal because it
-falls out of what people are already doing. Two people building similar
-projects start collaborating, and through that collaboration discover
-latent matches: "you're way better at this part" (complement), "we're
-both stuck on the same thing" (peer), "you've already solved what I
-need" (teacher). The coordination layer is therefore a discovery
-mechanism in its own right — the work reveals the relationship.
-
-**Complement matches** are peer and teacher simultaneously: each person
-teaches in their domain of strength and learns in their domain of
-weakness. This is role fluidity at its most natural.
-
-One discovery layer, one learner profile card, one discovery board.
-The match type determines the relationship shape, not the mechanism.
+```
+relationship-repo/
+├── summaries/          # Student pushes progress summaries
+│   ├── 2026-02-25.md
+│   └── 2026-02-27.md
+├── feedback/           # Teacher pushes feedback
+│   ├── 2026-02-26.md
+│   └── 2026-02-28.md
+├── responses/          # Student pushes "did it land?" responses
+│   └── 2026-02-27.md
+├── schedule.md         # Student commitments (visible to teacher)
+└── meetings/           # Shared commitment ICS files (teacher-owned)
+    └── weekly-checkin.ics
+```
 
 ### Configuration
 
-Stored in `learning/relationships.md` (anticipating role fluidity —
-the student may also be a teacher to others):
+Stored in `learning/relationships.md`:
 
 ```yaml
 # learning/relationships.md
 
-# Where I publish (my own repo)
-signal_repo: myusername/learning-signals
-
-# Who I learn from (they watch my repo; I've added them as collaborators)
+# Who I learn from
 teachers:
   - github_handle: teacher-username
-    discord_webhook: ""              # optional notification ping
+    relationship_repo: teacher-username/teacher-student-relationship
+    discord_webhook: ""  # optional notification ping
 
-# Who I teach (I watch their repos)
+# Who I teach (I host the relationship repos)
 students:
   - github_handle: student-username
-    repo: student-username/learning-signals
+    relationship_repo: my-username/student-relationship
 ```
 
 Human-editable. Intake prompts: "Do you have a teacher or mentor
-you'd like to connect with?" and "Do you want to create a signals
-repo for sharing your progress?" Skills check for presence and skip
+you'd like to connect with?" Skills check for presence and skip
 teacher exchange steps if the file is absent or empty.
 
-Setup steps for the student:
-1. `gh repo create learning-signals --public` (or use existing repo)
-2. Label setup (automated by intake — 5 labels for issue workflow)
-3. Add teacher's handle to `learning/relationships.md`
-4. Share the repo link with teacher: `https://github.com/USERNAME/learning-signals`
+### Setup (one-time handshake)
 
-Setup steps for the teacher:
-1. Watch the student's repo (Issues Only) via the shared link
-2. Add student to their own `learning/relationships.md` under `students:`
+A relationship setup skill walks both parties through this:
 
----
+**Teacher side:**
+1. Create private repo: `gh repo create student-relationship --private`
+2. Add student as collaborator: `gh api repos/OWNER/REPO/collaborators/STUDENT -f permission=push`
+3. Add student to `learning/relationships.md` under `students:`
 
-## MVP — Build for demo (Saturday 2/28)
+**Student side:**
+1. Accept collaborator invite
+2. Add teacher and repo to `learning/relationships.md` under `teachers:`
 
-### What to build
-
-**1. Progress-review publish step**
-
-Add an optional Phase 5 to `progress-review` (or a standalone
-`/share-progress` skill) that:
-- Composes a teacher-facing summary from the progress review output
-- Posts it as a GitHub Issue via `gh issue create`
-- Labels it `progress-review`, assigns to teacher handle
-- Confirms to the student what was shared
-
-The summary should be curated, not a raw dump. The teacher doesn't
-need every session log — they need: where the student is, where
-they're going, what's changed since last time, and where they're
-stuck.
-
-**2. Startwork teacher-response check**
-
-Add a step to `startwork` that:
-- Runs `gh issue list --label responded --state open` on the student's signal repo
-- If responses exist, reads the teacher's comments
-- Surfaces the guidance in the session plan: "Your teacher responded
-  to your Feb 25 review — they suggest focusing on component
-  composition before tackling useReducer."
-- After the student acknowledges, labels the issue `acknowledged`
-
-**3. Teacher opt-in configuration**
-
-Stored in `learning/relationships.md` (see §Configuration above).
-Contains the student's signal repo, teacher handles, and optionally
-students they teach. Intake asks about it. Skills check for presence
-and skip the teacher exchange steps if absent.
-
-### What to articulate (demo narrative, not code)
-
-- **Obligate student:** The teacher runs their own harness instance.
-  Same tools, same learning loop. The role is relational, not
-  structural.
-- **Discovery layer:** A skillshare/timeshare board where learner
-  profiles and teacher profiles are browsable. The structured data the
-  harness produces is the matching signal. Students find teachers by
-  growth edge; teachers find students by expertise overlap.
-- **Role fluidity:** User A learns React from User B, who learns
-  system design from User C. No separate accounts. The harness
-  identity is the person, not the role.
-- **Teacher-assisted intake:** Teacher conducts or completes the
-  intake interview, seeding the learner profile with higher-fidelity
-  observations than the student alone would produce.
-- **Teacher-assisted goal refinement:** Teacher reviews goals.md and
-  proposes course corrections. The agent surfaces these as proposals,
-  not mandates (P7: human authority is non-negotiable — applies to
-  both student and teacher authority over their own domains).
+Schedule setup happens during or shortly after the relationship
+handshake. See §Schedule for the framing principle.
 
 ---
 
-## Architecture notes
+## Content design
 
-### Relationship to the coordination layer
+### Outbound summary (student → teacher)
 
-The teacher-student channel is a specialization of the coordination
-protocol. The coordination layer connects harness instances for
-task-oriented work (file conflicts, dependency tracking, triage). The
-teacher relationship layer connects them for developmental work
-(goals, gaps, trajectory, guidance).
+The progress-review Phase 5 composes a teacher-facing summary. The
+format is intentionally not a rigid template — the dual audience (see
+§Needs analysis) reads for nuance and implicit content, not structured
+fields. A strict schema would strip exactly the signal that makes
+teacher feedback valuable.
 
-Both use GitHub Issues as transport. Both use structured markdown as
-the signal format. The difference is in what flows through the
-channel and who reads it.
+Design constraints:
 
-This means the coordination layer and teacher relationship layer share
-infrastructure but serve different principles:
-- Coordination → P5 (composable capabilities), P6 (self-improvement)
-- Teacher relationship → P10 (human teaching relationships)
+- **High fidelity.** Give the teacher enough signal that they can
+  respond at high resolution. Include what the student built, where
+  they got stuck, what they tried, what's changed since last time.
+- **Plain English.** Write for an intelligent specialist in the
+  relevant domain. Avoid internal harness jargon (stalls, regressions,
+  drift, readiness, compounding breakdown). Use natural language that
+  a human teacher would use.
+- **Enable specificity.** If the summary is too abstract, the teacher
+  can't give precise feedback even if they want to. Concrete detail
+  is what makes high-resolution feedback possible. (See §Teaching
+  principles — the feedback resolution model explains why.)
+- **Teacher's harness handles breakdown.** Assume the teacher has
+  their own harness for relevance realization and analysis. Give them
+  high-fidelity signal; let them do the interpretation.
 
-### Privacy model
+**Possible feature (post-MVP):** Teacher posts a preference for what
+they want to know about student progress. The composing agent checks
+for that preference and tailors the summary accordingly.
 
-- **Student controls what's shared.** The publish step is opt-in per
-  review. The student can edit the summary before it's posted. Nothing
-  is automatic.
-- **Teacher sees summaries, not raw state.** The teacher gets a curated
-  progress review, not direct access to `current-state.md` or session
-  logs. The agent composes the summary with appropriate abstraction.
-- **Learner profile cards (future)** are opt-in exports. The student
-  decides what's public and what's private.
+**Possible feature (post-MVP):** Student says what kind of feedback
+they're looking for. Optional. Helps the teacher aim their response.
 
-### Consent and authority
+### Inbound feedback (teacher → student)
+
+**Decision:** Present teacher comments verbatim. No agent parsing or
+categorization. Trust that comments from a teacher are intelligible,
+interpretable, and relevant. The teaching relationship contract makes
+this safe.
+
+The teacher gives feedback through their harness. The harness brings
+them the student's progress report and prompts: "How do you want to
+advise?" The harness can prompt for the kinds of feedback the student
+needs or has requested.
+
+Startwork surfaces teacher feedback with context:
+- The feedback itself (verbatim)
+- No categorization or interpretation by the agent
+
+### Feedback loop (first-class need)
+
+The feedback loop is load-bearing for the teaching relationship and
+is a first-class need, not a nice-to-have. When something is working
+or isn't, the teacher needs to know early, with as complete
+information as possible about what is or isn't working and why.
+
+This is P6 (system improves through use) applied to the teaching
+relationship itself. The teacher learns the student's needs better
+over time — and learns their own needs as a teacher better. What kind
+of feedback am I giving that lands? What kind doesn't? Where is my
+model of this student accurate and where is it off? The feedback loop
+is how teaching compounds rather than staying flat. Without it, the
+teacher gives guidance into a void and never learns whether their
+interventions matched the gap.
+
+**Student side:** After receiving teacher feedback, the harness
+prompts: "Did this land? Do you have any questions about it?" The
+student can respond with partial understanding ("I get this part, not
+that part"). The harness offers to share that response back to the
+teacher via the relationship repo.
+
+**Teacher side:** When a new progress summary arrives, the teacher's
+harness contextualizes it against the last exchange: "Here's what you
+said last time → here's what the student reported back → here's what's
+happened since." The teacher sees the student's trajectory relative
+to their own input — cause and effect between their feedback and the
+student's movement.
+
+### Teaching principles
+
+The feedback resolution model and the decoupling principle govern how
+feedback functions within and through the system. See
+`design/teaching-principles.md` for full definitions.
+
+**Feedback resolution model.** Valence (positive/negative) × resolution
+(vague/precise). Valence is data — preserve it exactly as felt.
+Resolution is the lever — always raise it. The relationship is the
+container that makes honest high-resolution feedback safe. Resolution
+operates at multiple scales (instance-level and pattern-level are both
+high-value). See `design/teaching-principles.md` §T1.
+
+**Agent as resolution coach.** When a teacher composes feedback through
+the harness, the harness can nudge toward higher resolution: "This
+comment is fairly general — could you be more precise about what you
+observed?" Never suggests shifting valence. Only prompts for precision.
+
+**Standalone reference:** `.claude/references/feedback-resolution-model.md`
+(to be created). Shared resource for both teachers and students.
+
+---
+
+## Schedule
+
+Schedule accountability is load-bearing for the teaching relationship.
+A student who knows the teacher will check in regularly is primed to
+expect higher performance of themselves and to keep pace with their
+practice as they've committed to. A teacher who has committed to a
+schedule stays engaged and accountable to the relationship. Both
+parties benefit from the structure — it's one of the load-bearing
+functions of the teacher-student relationship.
+
+**Setup framing: assume the sale.** When the harness prompts for
+schedule setup, don't ask "do you want to set up a schedule?" Ask
+"let's set up your check-in schedule — how often would you like to
+meet?" The question implies the schedule exists; the student chooses
+the cadence. This is a persuasion principle — the schedule is too
+important to make optional-sounding.
+
+### Student commitments (unilateral)
+
+Goal deadlines, practice cadence, practice patterns. The student owns
+these; the teacher has visibility for accountability and context.
+
+- Lives in the relationship repo as `schedule.md`
+- Student's harness updates it; teacher's harness reads it
+- Startwork checks against commitments: "You committed to X by
+  Friday — how's that going?"
+- Teacher cross-references schedule with learning state changes — if
+  learning stagnates, the schedule helps explain why
+
+### Shared commitments (negotiated, teacher-owned)
+
+Meetings, check-ins, reviews. Both parties commit. The teacher owns
+the meeting calendar — changes require teacher consent. This mirrors
+the authority model: the teacher has domain authority over their own
+time and the structure of the teaching engagement.
+
+- Harness helps negotiate: surfaces availability, proposes times
+- Output: ICS calendar events that both parties import to their own
+  calendars
+- ICS files live in the relationship repo (`meetings/`) as a record
+- Startwork checks proximity: "You have a check-in with [teacher] in
+  2 days — want to publish a progress summary beforehand?"
+
+**Nice-to-have (deferred):** Plugins/hooks for scheduling platforms,
+calendar invites, video conferencing integration.
+
+---
+
+## Consent and authority
+
+### Consent model
+
+Publishing is binary. The student decides whether to share learning
+data with a teacher, and the teacher gets all of it. No domain-level
+granularity.
+
+**Rationale:** Learning isn't domain-specific. It starts in one domain,
+ripples to others, is bridged by them. Domain-channel constraints would
+overburden both parties and assume too much about how learning works.
+If deeply personal learning content arises as a concern, granularity
+can be added later.
+
+### Teacher access depth
+
+The teacher gets deep access to the student's learning state throughout
+the relationship. Not surface data, not structural metadata — the
+actual learning state at the level of depth the student is operating
+at. The per-relationship private repo ensures this stays between
+teacher and student.
+
+This is distinct from the public signal (`public-signal.md`), which is
+a privacy-stripped structural snapshot (score distributions, no concept
+names) designed for public dashboards or developer/coordinator views.
+The two have nothing to do with each other.
+
+### Authority model
 
 The teaching relationship is a triad: teacher, student, and the
 domain being studied. The teacher's authority is domain-specific —
@@ -393,7 +458,127 @@ relationships do the work that matters.
 
 ---
 
-## Roadmap — Post-demo
+## Relationship types and discovery
+
+### Relationship scoping
+
+Relationships are scoped by **time**, not by conceptual domain. Two
+access modes:
+
+1. **Subscription** (MVP) — Teacher subscribes to the student's
+   progress reviews. Ongoing until either party ends it. The teacher
+   receives the stream and responds to whatever is in their
+   wheelhouse. Domain scope is emergent: it's whatever the teacher
+   actually comments on.
+
+2. **Ad-hoc sharing** (post-MVP) — Student shares a specific artifact
+   with a specific person. One-off. No persistent relationship
+   needed. Natural extension for the discovery layer, where people
+   share outside established relationships.
+
+### Match types
+
+The same discovery mechanism supports four match types. All use the
+structured learner state the harness already produces — the difference
+is which signal drives the match.
+
+| Match type | Signal | Relationship |
+|-----------|--------|-------------|
+| Expertise → gap | My scores high where yours are low | Teacher-student (asymmetric authority) |
+| Shared growth edge | Our gaps overlap | Peer (symmetric) |
+| Complementary strengths | My strength is your gap, yours is mine | Mutual teaching (symmetric, role-fluid per domain) |
+| Project affinity | We're building similar things | Collaborator → reveals latent matches |
+
+**Peer relationships** are structurally distinct from teacher-student:
+authority is absent or negotiated per-task rather than granted and
+revoked. Peers find commonalities in their learning, exchange lessons
+learned, and co-create (group projects).
+
+**Project affinity** is the most concrete discovery signal because it
+falls out of what people are already doing. Two people building similar
+projects start collaborating, and through that collaboration discover
+latent matches.
+
+**Complement matches** are peer and teacher simultaneously: each person
+teaches in their domain of strength and learns in their domain of
+weakness. This is role fluidity at its most natural.
+
+One discovery layer, one learner profile card, one discovery board.
+The match type determines the relationship shape, not the mechanism.
+
+---
+
+## Architecture notes
+
+### Relationship to the coordination layer
+
+The teacher-student channel is a specialization of the coordination
+protocol. The coordination layer connects harness instances for
+task-oriented work (file conflicts, dependency tracking, triage). The
+teacher relationship layer connects them for developmental work
+(goals, gaps, trajectory, guidance).
+
+Both use GitHub as transport. Both use structured markdown as the
+signal format. The difference is in what flows through the channel
+and who reads it.
+
+- Coordination → P5 (composable capabilities), P6 (self-improvement)
+- Teacher relationship → P10 (human teaching relationships)
+
+---
+
+## MVP scope
+
+### What to build
+
+**1. Relationship setup skill**
+
+One-time handshake that walks both parties through creating the
+private repo, adding the collaborator, and storing the config. See
+§Setup above.
+
+**2. Progress-review publish step (Phase 5)**
+
+Add Phase 5 to `progress-review` that:
+- Composes a teacher-facing summary in plain English, high fidelity
+- Pushes it to the relationship repo (`summaries/`)
+- Confirms to the student what was shared
+
+**3. Startwork teacher-response check**
+
+Add a step to `startwork` that:
+- Checks the relationship repo for new files in `feedback/`
+- If feedback exists, reads and presents it verbatim in the session
+  plan
+- After the student reads it, prompts: "Did this land? Any questions?"
+- If the student responds, pushes the response to `responses/`
+
+**4. Schedule setup**
+
+During relationship setup or first exchange:
+- Prompt student to document their practice commitments in
+  `schedule.md`
+- Prompt both parties to establish a meeting cadence
+- Generate ICS files for shared commitments
+
+### What to articulate (not code)
+
+- **Obligate student:** The teacher runs their own harness instance.
+  Same tools, same learning loop. The role is relational, not
+  structural.
+- **Discovery layer:** A skillshare/timeshare board where learner
+  profiles and teacher profiles are browsable. The structured data the
+  harness produces is the matching signal.
+- **Role fluidity:** User A learns React from User B, who learns
+  system design from User C. No separate accounts. The harness
+  identity is the person, not the role.
+- **Feedback resolution model:** Shared source of truth for how
+  feedback works. Both parties reference it. The harness coaches
+  toward higher resolution.
+
+---
+
+## Roadmap — Post-MVP
 
 Ordered by the feature-ordering heuristic (breadth × compounding ×
 upstreamness × time-to-value):
@@ -408,38 +593,40 @@ upstreamness × time-to-value):
    edited by the student. Serves all four match types.
 
 3. **Discovery board** — The matching layer. One mechanism, four match
-   types (expertise→gap, shared growth edge, complementary strengths,
-   project affinity). Profiles include both what you offer and what you
-   seek. Could be as simple as a GitHub Discussions category or as
-   complex as a web app with search and filtering. Start simple.
+   types. Profiles include both what you offer and what you seek.
+   Start simple.
 
-4. **Peer collaboration pathway** — Peers who discover shared growth
-   edges or project affinity can exchange lessons learned, share
-   session insights, and spin up group projects. The coordination
-   layer handles the co-creation workflow; the relationship layer
-   handles the discovery and ongoing learning exchange. Authority is
-   negotiated per-task, not granted/revoked as in teacher-student.
+4. **Agent as resolution coach** — Prompt teachers to raise feedback
+   resolution during composition. Never shift valence, only prompt for
+   precision. See `design/teaching-principles.md` §T1.
 
-5. **Teacher-published materials → lesson-scaffold** — Teacher
-   disseminates lesson plans and learning materials through the
-   subscription channel. Each student's harness runs them through
-   `/lesson-scaffold`, which reads the student's `current-state.md`
-   and classifies every concept relative to their level. Same lesson,
-   different scaffold per student. Connects the teacher's intentional
-   curriculum with per-student differentiation that the teacher
-   doesn't have to do manually.
+5. **Celebrate wins** — Prompt student to post milestones publicly
+   after great sessions or progress reviews. GitHub, social media, etc.
+   Creates a rearview mirror of progress and encourages celebrating
+   growth.
 
-6. **Teacher-assisted goal refinement** — Teacher reviews and proposes
-   changes to goals.md. The agent mediates: surfaces the proposal,
+6. **Peer collaboration pathway** — Peers who discover shared growth
+   edges or project affinity can exchange lessons learned and spin up
+   group projects.
+
+7. **Teacher-published materials → lesson-scaffold** — Teacher
+   disseminates lesson plans through the relationship repo. Each
+   student's harness runs them through `/lesson-scaffold`, producing a
+   personalized scaffold based on the student's current-state. Same
+   lesson, different scaffold per student.
+
+8. **Teacher-assisted goal refinement** — Teacher reviews goals.md and
+   proposes changes. The agent mediates: surfaces the proposal,
    explains the teacher's reasoning, lets the student decide.
 
-7. **Role fluidity tooling** — Make it easy for one person to be
-   student in one context and teacher in another. Might be as simple
-   as a config that lists your relationships and their directions.
+9. **Role fluidity tooling** — Make it easy for one person to be
+   student in one context and teacher in another.
 
-8. **Notification layer** — Discord webhooks, email digests, or
-   whatever the teacher prefers. Start with Discord (trivial) and
-   expand based on feedback.
+10. **Notification layer** — Discord webhooks, email digests, or
+    whatever the teacher prefers.
+
+11. **Calendar/scheduling platform integration** — Hooks for calendar
+    apps, video conferencing, shared calendar subscriptions.
 
 ---
 
@@ -451,49 +638,45 @@ upstreamness × time-to-value):
 - **Relationship scoping:** By time, not conceptual domain. Domain
   scope is emergent (teacher comments on what they know). See
   §Relationship scoping.
-- **Access mode (MVP):** Subscription. Teacher subscribes to student's
-  progress reviews. Ad-hoc sharing is post-MVP.
+- **Transport:** Per-relationship private repo, teacher-hosted. Student
+  added as collaborator. Replaces per-user signal repo model.
+- **Teacher access depth:** Deep access to learning state. Not
+  privacy-stripped. Private repo ensures confidentiality.
+- **Consent granularity:** Binary. Share or don't. No domain-level
+  granularity.
+- **Summary composition:** High-fidelity, plain English for an
+  intelligent specialist. Teacher's harness handles breakdown.
+- **Read-back integration:** Present teacher feedback verbatim. No
+  agent parsing.
+- **Feedback loop:** First-class need. Bidirectional. Student reports
+  whether feedback landed; teacher sees trajectory relative to their
+  input.
+- **Schedule:** Two entity types. Student commitments (unilateral, in
+  repo). Shared commitments (negotiated, teacher-owned ICS).
+- **Public signal:** Renamed from `signal-teacher-variant`. Structural
+  metadata for public/developer use. Unrelated to teacher relationship.
 - **Teacher suggestions:** Always proposals, never mandates. Agent
   presents them as information. P7 applies in both directions.
 - **Config location:** `learning/relationships.md`. List format
   supports multiple teachers and anticipates role fluidity.
-- **Signal repo architecture:** Per-user, not shared. Each user
-  publishes to their own public repo. Teachers subscribe via GitHub
-  Watch — no collaborator invite needed. Role fluidity = you publish
-  to your repo, watch others'. No central infrastructure.
-- **Discovery model:** One mechanism, four match types. Expertise→gap
-  (teacher-student), shared growth edge (peer), complementary strengths
-  (mutual teaching), project affinity (collaborator → reveals latent
-  matches). Same learner profile card, same discovery board, different
-  matching criteria.
+- **Discovery model:** One mechanism, four match types. Same learner
+  profile card, same discovery board, different matching criteria.
 
 ## Open questions
 
-- How much of the progress review should the teacher see? Full detail
-  vs. executive summary. Probably configurable per relationship.
-- What does the discovery board look like concretely? GitHub
-  Discussions category? A simple web page? A structured file in a
-  public repo?
 - How does the system handle a teacher who doesn't respond? Timeout?
   Gentle prompt? Let it be?
 - Integration with bootcamp structure: does the cohort itself become
-  a network of teaching relationships, with the instructor as one
-  node among many rather than the sole teacher? → Now partially
-  addressed in `design/platform-layer.md` (courses, cohorts, schools).
-- **Teacher expertise validation:** The system's internal scores are
-  self-referential — they measure performance within the harness, not
-  expertise in the world. Teaching requires understanding beyond
-  competence: knowing why something works, common failure modes, how
-  to sequence concepts for another person's learning. For the MVP
-  this is solved by trust (you add a teacher you already know). For
-  discovery at scale — where strangers match — teacher credibility
-  becomes load-bearing. Two viable directions: **outcomes** (students
-  who worked with this person improved — highest signal, hardest to
-  measure, still gameable) and **vouching** (social proof through
-  trusted networks — good when the network is good). External
-  credentials rejected as unreliable: fakeable, gameable, and often
-  poor proxies for actual teaching skill. Both viable directions need
-  careful design and selective deployment. The initial bootcamp cohort
-  is the right test bed: reputation is local, outcomes are visible in
-  real time, and vouching has teeth. Learn what validation looks like
-  there before generalizing. Unsolved, but integrity-critical.
+  a network of teaching relationships?
+- What does the discovery board look like concretely? GitHub
+  Discussions? A web page? A structured file in a public repo?
+- **Platform layer disconnect:** `design/platform-layer.md` describes
+  courses as GitHub repos with fork-based enrollment — a different
+  architecture from the per-relationship repo model. Not incompatible,
+  but not reconciled. Doesn't block MVP.
+- **Teacher expertise validation:** For MVP, solved by trust (you add
+  a teacher you already know). For discovery at scale, teacher
+  credibility becomes load-bearing. Two viable directions: outcomes
+  (students improved) and vouching (social proof through trusted
+  networks). The initial bootcamp cohort is the test bed. Unsolved,
+  but integrity-critical.
